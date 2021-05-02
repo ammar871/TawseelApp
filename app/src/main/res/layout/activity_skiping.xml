@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.SkipingActivity">
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:id="@+id/viewpager">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <LinearLayout
+
+            android:orientation="horizontal"
+            android:id="@+id/layout_docts"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/_90sdp">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/_30sdp">
+
+            <TextView
+                android:id="@+id/btn_next"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="التالى"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingStart="@dimen/_20ssp"
+                android:paddingEnd="@dimen/_20ssp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@drawable/gradinate_liner_blue"
+                android:textSize="@dimen/_18ssp" />
+            <TextView
+android:visibility="gone"
+                android:id="@+id/btn_start"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ابدأ الان "
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingStart="@dimen/_25ssp"
+                android:paddingEnd="@dimen/_25ssp"
+
+                android:textColor="@color/white"
+               android:drawableLeft="@drawable/ic_arrow_back_24px"
+                android:drawablePadding="8dp"
+                android:background="@drawable/gradinate_liner_blue"
+                android:textSize="@dimen/_18ssp" />
+            <TextView
+                android:id="@+id/btn_skip"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="تخطى"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingStart="@dimen/_20ssp"
+                android:gravity="center"
+                android:paddingEnd="@dimen/_20ssp"
+                android:textColor="@color/main2"
+                android:background="@drawable/draanle_white_corner"
+                android:textSize="@dimen/_18ssp" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

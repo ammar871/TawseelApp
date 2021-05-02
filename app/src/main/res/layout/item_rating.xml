@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_5sdp"
+
+    android:background="@color/color_backround"
+
+    >
+
+    <RelativeLayout
+        android:id="@+id/layout_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+
+
+        <FrameLayout
+            android:id="@+id/view_for_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="-15dp"
+            android:layout_toLeftOf="@id/imageView1"
+
+            android:background="@drawable/drawble_edit2"
+
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/tv_name_lable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:fontFamily="@font/medium"
+                    android:paddingTop="@dimen/_4sdp"
+
+                    android:text="عمر علي"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_messgee"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:fontFamily="@font/medium"
+                    android:maxLines="1"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:text="متى سنبدا العمل مباشرة ؟"
+                    android:textColor="@color/text_coloe"
+                    android:textSize="@dimen/_11sdp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_name_lable" />
+
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/tv_date_messgee"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:maxLines="1"
+                    android:rating="5"
+                    android:text="25/06/2019"
+                    android:textColor="@color/login_color2"
+                    android:theme="@style/RatingBar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </FrameLayout>
+
+        <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageView1"
+            android:layout_width="@dimen/_60ssp"
+            android:layout_height="@dimen/_60ssp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+
+            android:scaleType="fitCenter"
+            android:src="@drawable/imagtest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_border_color="#333333"
+
+            app:riv_corner_radius="30dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="true"
+
+            />
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</FrameLayout>

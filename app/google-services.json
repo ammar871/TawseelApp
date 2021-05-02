@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "624348188826",
+    "project_id": "tawseeluserapp",
+    "storage_bucket": "tawseeluserapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624348188826:android:cd53a35f9d210162f74f23",
+        "android_client_info": {
+          "package_name": "com.ammar.tawseel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624348188826-0ii5ms26vpimrh24j0v9i7r2t8ufjif4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz5HFlGfwzdWIVvN32qBzBlI00MD6BmOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624348188826-0ii5ms26vpimrh24j0v9i7r2t8ufjif4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624348188826-bros9tocqmso4bp6ih1r80ia5bi7v83o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hanyalkahlout.Tawseel"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

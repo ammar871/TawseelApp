@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Tawseel</string>
+
+    <string name="forget"> <u>نسيت كلمة المرور؟</u></string>
+
+    <string name="proxy">عند قيامك بتسجيل جديد، فانك توافق على كافة<p style="color=#FAA61A"><u> شروط سياسة الخصوصية و الاستخدام</u> </p>.</string>
+
+    <string name="text">يسهلك لك التطبيق تعدد خيارات الدفع الالكتروني مثل،
+        فيزا كارد و بيبال و ماستر كارد مع إمكانية الدفع كاش</string>
+    <string name="text_slid3">اذا كنت تملك سيارة ، فبامكانك الانضمام الينا و العمل ك مندوب توصيل ضمن فريق عمل متميز من خلال تعبئة بيانات التسجيل في التطبيق</string>
+    <string name="slid2">ساعدك تطبيق توصيل على اختيار اقرب مناديب التسويق الى موقع طلبك من خلال عرضهم عبر الخريطة</string>
+    <string name="login"><u> تسجيل دخول </u></string>
+    <string name="register">قم بتسجيل حساب جديد من خلال تعبئة البيانات التالية</string>
+    <string name="login_text">قم بتسجيل دخول باستخدام اسم المستخدم و كلمة المرور الخاصة بك</string>
+    <string name="forget_pass">!استعادة كلمة المرور</string>
+    <string name="forget_lable">قم بتعبئة اسم المستخدم و البريد الالكتروني لاستعادة كلمة المرور الخاصة بك</string>
+    <string name="title_activity_select_location">Map</string>
+
+
+    <!-- Base application theme. -->
+    <style name="Theme.Fab_Bottom_app_bar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/login_color2</item>
+        <item name="colorPrimaryVariant">@color/login_color2</item>
+        <item name="colorOnPrimary">@color/login_color2</item>
+    </style>
+
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">#464545</item>
+        <item name="android:fontFamily">@font/bold</item>
+
+        <item name="android:textSize">8sp</item>
+
+    </style>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_tracking_maps">Map</string>
+    <string name="dailog">مندوب التوصيل لديه طلب حالي، لا يمكنك التواصل معه الآن</string>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/color_light</item>
+        <item name="colorControlActivated">@color/color_rating</item>
+    </style>
+
+    <style name="RadioButtonTheme" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/text_color</item>
+        <item name="colorControlNormal">@color/text_color</item>
+    </style>
+
+    <string name="facebook_app_id">2846000032331536</string>
+    <string name="fb_login_protocol_scheme">fb2846000032331536</string>
+    <string name="title_activity_traking_maps">Map</string>
+
+</resources>

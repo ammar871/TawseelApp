@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CountenerPick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintRight_toRightOf="parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="@dimen/_15sdp"
+        android:src="@drawable/ic_cancel"
+        android:id="@+id/img_cancel"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginStart="@dimen/_15ssp"
+        android:layout_marginEnd="@dimen/_15ssp"
+
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_120sdp">
+
+        <RelativeLayout
+            android:id="@+id/layout_pick_canera"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent=".49"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="@dimen/_50ssp"
+                    android:layout_height="@dimen/_50ssp"
+                    android:src="@drawable/ic_camera" />
+
+                <TextView
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Camera"
+                    android:textColor="@color/main2"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/medium"
+                    android:textSize="@dimen/_9sdp"
+                    android:id="@+id/tv_Credit" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_pick_gallry"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent=".49"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="@dimen/_50ssp"
+                    android:layout_height="@dimen/_50ssp"
+                    android:src="@drawable/ic_galary" />
+
+                <TextView
+                    android:gravity="center_horizontal"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Gallary"
+                    android:textColor="@color/main2"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/medium"
+                    android:textSize="@dimen/_9sdp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

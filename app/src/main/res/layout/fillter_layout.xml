@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15ssp"
+        app:cardCornerRadius="@dimen/_10sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:padding="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="موقع المندوب"
+                    app:layout_constraintWidth_percent=".30"
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:textColor="@color/light_text"
+                    />
+                <CheckBox
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/tv_text"
+                    android:text="أبعد من 5 كيلو"
+                    app:layout_constraintWidth_percent=".33"
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:textColor="@color/light_text"
+                   />
+                <CheckBox
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:text="أقرب من 5 كيلو"
+                    app:layout_constraintWidth_percent=".33"
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:textColor="@color/light_text"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="#707070" />
+
+
+            <RelativeLayout
+                android:padding="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_text_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                    android:text="تقييم المندوب"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/light_text"
+                    />
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/tv_date_messgee"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
+
+                    android:maxLines="1"
+                    android:rating="5"
+                    android:text="25/06/2019"
+                    android:textColor="@color/login_color2"
+                    android:theme="@style/RatingBar"
+                    android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/tv_text_rate"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="#707070" />
+
+            <RelativeLayout
+                android:padding="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_text_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="المدينة"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/light_text"
+                    />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/spinner_citis"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_text_street"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="المنطقة"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
+                    android:fontFamily="@font/medium"
+                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/light_text"
+                    />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/spinner_street"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

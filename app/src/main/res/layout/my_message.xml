@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="10dp"
+    android:paddingRight="15dp"
+    android:paddingLeft="20dp"
+    android:clipToPadding="false">
+
+
+    <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imageView1"
+        android:layout_alignParentTop="true"
+        android:layout_width="@dimen/_40ssp"
+        android:layout_height="@dimen/_40ssp"
+     android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginRight="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/imagtest"
+        app:riv_border_color="#333333"
+        app:riv_corner_radius="30dip"
+        app:riv_mutate_background="true"
+        app:riv_oval="true"
+
+        />
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/message_body"
+        android:background="@drawable/my_message"
+        android:textColor="#fff"
+        android:paddingStart="@dimen/_15ssp"
+        android:paddingEnd="@dimen/_15ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:fontFamily="@font/medium"
+        android:gravity="left"
+        android:elevation="2dp"
+        android:textSize="18sp"
+        android:text="Placeholder messagedggggggggggggggggggggggggggggggggggggggggdnnnnnnnnnnnnnnnnnndnnnnnnnnnnnnnnnnnnnnn"
+        />
+
+</RelativeLayout>

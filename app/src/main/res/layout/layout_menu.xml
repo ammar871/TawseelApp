@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/gradint_login"
+        app:layout_constraintHeight_percent=".35"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_15ssp"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_gravity="center"
+                android:background="@drawable/backround_circle"
+                android:src="@drawable/imagtest"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/bold"
+                android:text="أحمد عمر عبدالعال"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/bold"
+                android:text="طالب خدمة"
+                android:textColor="@color/login_color2"
+                android:textSize="@dimen/_13ssp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:orientation="vertical"
+        android:weightSum="8"
+        app:layout_constraintHeight_percent=".55"
+        app:layout_constraintTop_toBottomOf="@id/header_layout">
+
+        <TextView
+            android:id="@+id/nav_userProfil"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+
+            android:text="الملف الشخصي" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+android:id="@+id/tv_rates"
+            android:text="التقييمات" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_sitting"
+            android:text="الاعدادات" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_about_us"
+            android:text="من نحن" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_call_us"
+            android:text="اتصل بنا" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_plociy"
+            android:text="سياسة الخصوصية و الاستخدام" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_shar"
+            android:text="مشاركة التطبيق" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|right"
+            android:id="@+id/tv_rate"
+            android:text="تقييم التطبيق" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+android:id="@+id/nav_logout"
+
+        android:layout_margin="@dimen/_15sdp"
+        android:fontFamily="@font/medium"
+        android:gravity="center_vertical|right"
+
+        android:text="تسجيل خروج"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

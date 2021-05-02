@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F3F3"
+        tools:context=".ui.fragments.NotifecationFragment">
+
+        <RelativeLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80ssp"
+            android:background="@drawable/drawb_backround_bar">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/imag_back_bar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:fontFamily="@font/bold"
+                android:text="الاشعارات"
+
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_15ssp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:fontFamily="@font/bold"
+                android:id="@+id/toggles"
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/_15ssp"
+                app:srcCompat="@drawable/ic_menu" />
+
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_notify"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_bar"
+            android:layout_marginTop="@dimen/_10sdp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
+</layout>
