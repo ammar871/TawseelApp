@@ -6,21 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
-import com.ammar.tawseel.pojo.data.DataNotification;
+import com.ammar.tawseel.pojo.data.DataMessags;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.ViewHolderVidio> {
+public class AdapterFatora extends RecyclerView.Adapter<AdapterFatora.ViewHolderVidio> {
 
-    ArrayList<DataNotification> list;
+    ArrayList<DataMessags> list;
     private Context mcontext;
     private OnclickMessage onclickMessage;
 
@@ -31,18 +30,18 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     int layout;
 
-    public AdapterNotification(ArrayList<DataNotification> list, Context mcontext) {
+    public AdapterFatora(ArrayList<DataMessags> list, Context mcontext, OnclickMessage onclickMessage) {
 
 
         this.mcontext = mcontext;
         this.list = list;
-
+        this.onclickMessage = onclickMessage;
     }
 
     @NonNull
     @Override
     public ViewHolderVidio onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notify, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fatoraes, parent, false);
         return new ViewHolderVidio(view);
 
     }
@@ -51,15 +50,15 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
-
-        holder.name_notiy.setText(list.get(position).getType() + "");
-        holder.date_notiy.setText(list.get(position).getReciver() + "");
-        holder.desc_noty.setText(list.get(position).getParams() + "");
+//        holder.number.setText(list.get(position).getIDName() + "");
+//        holder.to_fatora.setText(list.get(position).getMessage() + "");
+//        holder.from_fatora.setText(list.get(position).getMessage() + "");
+//        holder.price.setText(list.get(position).getMessage() + "");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // onclickMessage.itemOnclick();
+                //  onclickMessage.itemOnclick();
             }
         });
     }
@@ -90,19 +89,17 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     public static class ViewHolderVidio extends RecyclerView.ViewHolder {
 
         ImageView imageView;
+        TextView number, price, to_fatora, from_fatora;
 
-        public RelativeLayout viewBackground;
-        public CardView viewForeground;
-        TextView name_notiy, desc_noty, date_notiy;
 
         public ViewHolderVidio(@NonNull View itemView) {
             super(itemView);
 
-            viewBackground = itemView.findViewById(R.id.view_background_noty);
-            viewForeground = itemView.findViewById(R.id.view_for_background_noty);
-            name_notiy = itemView.findViewById(R.id.tv_name_lable_noty);
-            desc_noty = itemView.findViewById(R.id.tv_messgee_noty);
-            date_notiy = itemView.findViewById(R.id.tv_date_messgee_noty);
+
+            number = itemView.findViewById(R.id.number_fatoram);
+            price = itemView.findViewById(R.id.price_fatoram);
+            to_fatora = itemView.findViewById(R.id.toFatoraM);
+            from_fatora = itemView.findViewById(R.id.from_fatoram);
 
 
         }
@@ -113,6 +110,5 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 //            // notify item added by position
 //            notifyItemInserted(position);
 //        }
-    }
-}
+    }}
 

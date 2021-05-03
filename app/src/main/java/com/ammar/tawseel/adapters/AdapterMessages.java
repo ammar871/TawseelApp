@@ -1,5 +1,6 @@
 package com.ammar.tawseel.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,12 +15,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
+import com.ammar.tawseel.pojo.data.DataMessags;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHolderVidio> {
 
-    ArrayList<String> list;
+    ArrayList<DataMessags> list;
     private Context mcontext;
     private OnclickMessage onclickMessage;
 
@@ -30,7 +34,7 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
 
     int layout;
 
-    public AdapterMessages(ArrayList<String> list, Context mcontext, OnclickMessage onclickMessage) {
+    public AdapterMessages(ArrayList<DataMessags> list, Context mcontext, OnclickMessage onclickMessage) {
 
 
         this.mcontext = mcontext;
@@ -47,13 +51,17 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
-
+        holder.name.setText(list.get(position).getIDName() + "");
+        holder.message.setText(list.get(position).getMessage() + "");
+        Picasso.with(mcontext).load(list.get(position).getAvatar())
+                .into(holder.roundedImageView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onclickMessage.itemOnclick();
+              //  onclickMessage.itemOnclick();
             }
         });
     }
@@ -84,7 +92,8 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
     public static class ViewHolderVidio extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name;
+        TextView name, message, date;
+        RoundedImageView roundedImageView;
         public RelativeLayout viewBackground;
         public CardView viewForeground;
 
@@ -93,6 +102,10 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
             super(itemView);
 
             viewBackground = itemView.findViewById(R.id.view_background);
+            roundedImageView = itemView.findViewById(R.id.imageView1);
+            name = itemView.findViewById(R.id.tv_name_message);
+            message = itemView.findViewById(R.id.tv_messgee);
+            date = itemView.findViewById(R.id.tv_date_messgee);
             viewForeground = itemView.findViewById(R.id.view_for_background);
 
 

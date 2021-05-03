@@ -50,22 +50,22 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getTokenFCM() {
-
-        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
-            if (!TextUtils.isEmpty(token)) {
-                Log.d("tokenFir", "retrieve token successful : " + token);
-                Cemmon.FIREBASE_TOKEN =token;
-
-            } else {
-                Log.w("tokenFirnull", "token should not be null...");
-            }
-        }).addOnFailureListener(e -> {
-            //handle e
-        }).addOnCanceledListener(() -> {
-            //handle cancel
-        }).addOnCompleteListener(task ->
-                Log.v("tokenFire", "This is the token : " + task.getResult())
-
-        );
+Cemmon.FIREBASE_TOKEN="tffggfhjjkhjkjhghgjh";
+//        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+//            if (!TextUtils.isEmpty(token)) {
+//                Log.d("tokenFir", "retrieve token successful : " + token);
+//                Cemmon.FIREBASE_TOKEN =token;
+//
+//            } else {
+//                Log.w("tokenFirnull", "token should not be null...");
+//            }
+//        }).addOnFailureListener(e -> {
+//            //handle e
+//        }).addOnCanceledListener(() -> {
+//            //handle cancel
+//        }).addOnCompleteListener(task ->
+//                Log.v("tokenFire", "This is the token : " + task.getResult())
+//
+//        );
     }
 }

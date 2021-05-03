@@ -71,6 +71,7 @@ android:id="@+id/toggles"
                 >
 
                 <RelativeLayout
+
                     android:id="@+id/layout_not_found_order"
                     android:layout_width="@dimen/_90sdp"
                     android:layout_height="wrap_content"
@@ -78,7 +79,8 @@ android:id="@+id/toggles"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_3sdp"
-                    android:background="@drawable/draw_text_tab">
+                    android:background="@drawable/draw_selected_tab"
+                   >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -107,7 +109,8 @@ android:id="@+id/toggles"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:layout_marginBottom="@dimen/_3sdp"
-                    android:background="@drawable/draw_selected_tab">
+                    android:background="@drawable/draw_text_tab"
+                 >
 
                     <TextView
                         android:layout_width="wrap_content"

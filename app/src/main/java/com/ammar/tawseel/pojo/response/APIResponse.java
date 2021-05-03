@@ -3,6 +3,7 @@ package com.ammar.tawseel.pojo.response;
 import android.service.autofill.UserData;
 
 import com.ammar.tawseel.pojo.data.DataChat;
+import com.ammar.tawseel.pojo.data.DataFatora;
 import com.ammar.tawseel.pojo.data.DataFinshOrder;
 import com.ammar.tawseel.pojo.data.DataMessags;
 import com.ammar.tawseel.pojo.data.DataNotification;
@@ -455,6 +456,42 @@ public class APIResponse {
         }
     }
 
+    public  class ResponseFatora {
+
+        @SerializedName("data")
+        @Expose
+        private List<DataFatora> data = null;
+        @SerializedName("status")
+        @Expose
+        private Boolean status;
+        @SerializedName("message")
+        @Expose
+        private List<Object> message = null;
+
+        public List<DataFatora> getData() {
+            return data;
+        }
+
+        public void setData(List<DataFatora> data) {
+            this.data = data;
+        }
+
+        public Boolean getStatus() {
+            return status;
+        }
+
+        public void setStatus(Boolean status) {
+            this.status = status;
+        }
+
+        public List<Object> getMessage() {
+            return message;
+        }
+
+        public void setMessage(List<Object> message) {
+            this.message = message;
+        }
+    }
 
 
 

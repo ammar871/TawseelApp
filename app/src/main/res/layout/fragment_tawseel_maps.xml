@@ -7,9 +7,9 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
 
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container_frag"
@@ -46,7 +46,7 @@
                     android:layout_height="@dimen/_50ssp"
                     android:layout_gravity="center"
 
-                    android:src="@drawable/ic_logopages"
+                    app:srcCompat="@drawable/ic_logopages"
                     android:contentDescription="@string/app_name" />
                 <TextView
                     android:id="@+id/tv_label"
@@ -205,5 +205,5 @@
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
