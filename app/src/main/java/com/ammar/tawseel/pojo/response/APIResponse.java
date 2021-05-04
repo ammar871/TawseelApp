@@ -11,6 +11,7 @@ import com.ammar.tawseel.pojo.data.DataOrder;
 import com.ammar.tawseel.pojo.data.DataProfile;
 import com.ammar.tawseel.pojo.data.DataUser;
 import com.ammar.tawseel.pojo.data.Driver;
+import com.ammar.tawseel.pojo.data.Rating;
 import com.ammar.tawseel.pojo.data.SendMessage;
 import com.ammar.tawseel.pojo.data.UserRegister;
 import com.google.gson.annotations.Expose;
@@ -494,6 +495,19 @@ public class APIResponse {
     }
 
 
+    public  class ResponseRating {
 
+        @SerializedName("ratings")
+        @Expose
+        private List<Rating> ratings = null;
+
+        public List<Rating> getRatings() {
+            return ratings;
+        }
+
+        public void setRatings(List<Rating> ratings) {
+            this.ratings = ratings;
+        }
+    }
 
 }

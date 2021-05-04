@@ -12,30 +12,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
+import com.ammar.tawseel.pojo.data.DataFatora;
 import com.ammar.tawseel.pojo.data.DataMessags;
+import com.ammar.tawseel.pojo.data.DataOrder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterFatora extends RecyclerView.Adapter<AdapterFatora.ViewHolderVidio> {
 
-    ArrayList<DataMessags> list;
+    ArrayList<DataFatora> list;
     private Context mcontext;
-    private OnclickMessage onclickMessage;
 
-    public interface OnclickMessage {
 
-        public void itemOnclick();
-    }
 
     int layout;
 
-    public AdapterFatora(ArrayList<DataMessags> list, Context mcontext, OnclickMessage onclickMessage) {
+    public AdapterFatora(ArrayList<DataFatora> list, Context mcontext) {
 
 
         this.mcontext = mcontext;
         this.list = list;
-        this.onclickMessage = onclickMessage;
+
     }
 
     @NonNull
@@ -50,10 +49,10 @@ public class AdapterFatora extends RecyclerView.Adapter<AdapterFatora.ViewHolder
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
-//        holder.number.setText(list.get(position).getIDName() + "");
-//        holder.to_fatora.setText(list.get(position).getMessage() + "");
-//        holder.from_fatora.setText(list.get(position).getMessage() + "");
-//        holder.price.setText(list.get(position).getMessage() + "");
+        holder.number.setText(list.get(position).getOrderId() + "");
+        holder.to_fatora.setText(list.get(position).getToAddress() + "");
+        holder.from_fatora.setText(list.get(position).getFromAddress() + "");
+        holder.price.setText(list.get(position).getPrice() + "");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

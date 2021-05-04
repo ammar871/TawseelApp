@@ -87,7 +87,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     LocationManager locationManager;
     double latitude, longitude;
     GoogleMap googleMapBusey, googleMapOff, googleMapOn;
-
+    private final static int LOCATION_PER_REQUEST = 9999;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -113,15 +113,24 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         // check if permissions are given
-        if (checkPermissions()) {
+//
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//
+//            ActivityCompat.requestPermissions(getActivity(),
+//                    new String[]{
+//                            Manifest.permission.ACCESS_COARSE_LOCATION,
+//                            Manifest.permission.ACCESS_FINE_LOCATION
+//
+//                    }, LOCATION_PER_REQUEST);
+//        } else {
 
             // check if location is enabled
             if (isLocationEnabled()) {
 
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -131,19 +140,13 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                         } else {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Cemmon.latude=latitude;
-                            Cemmon.langtude=longitude;
+                            Cemmon.latude = latitude;
+                            Cemmon.langtude = longitude;
                         }
                     }
                 });
-            } else {
-             // requestPermissions();
             }
-        } else {
-            // if permissions aren't available,
-            // request for permissions
-           // requestPermissions();
-        }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -198,24 +201,24 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     }
 
     // If everything is alright then
-    @Override
-    public void
-    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_ID) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
-        }
-    }
+//    @Override
+//    public void
+//    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        if (requestCode == PERMISSION_ID) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getLastLocation();
+//            }
+//        }
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
+//        if (checkPermissions()) {
+//            getLastLocation();
+//        }
     }
 
 

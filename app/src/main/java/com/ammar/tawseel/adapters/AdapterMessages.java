@@ -6,6 +6,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -58,11 +59,8 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
         holder.message.setText(list.get(position).getMessage() + "");
         Picasso.with(mcontext).load(list.get(position).getAvatar())
                 .into(holder.roundedImageView);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //  onclickMessage.itemOnclick();
-            }
+        holder.itemView.setOnClickListener(v -> {
+
         });
     }
 
@@ -95,7 +93,7 @@ public class AdapterMessages extends RecyclerView.Adapter<AdapterMessages.ViewHo
         TextView name, message, date;
         RoundedImageView roundedImageView;
         public RelativeLayout viewBackground;
-        public CardView viewForeground;
+        public FrameLayout viewForeground;
 
 
         public ViewHolderVidio(@NonNull View itemView) {

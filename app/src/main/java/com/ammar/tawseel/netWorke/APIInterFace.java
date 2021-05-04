@@ -178,15 +178,23 @@ public interface APIInterFace {
 
 
     @GET("api/user/paid-bills?")
-    Call<APIResponse.ResponseMessages> getPaid_bills(
+    Call<APIResponse.ResponseFatora> getPaid_bills(
             @Query("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
 
-    @GET("canceled-bills?")
-    Call<APIResponse.ResponseMessages> getCanceled_bills(
+    @GET("api/user/canceled-bills?")
+    Call<APIResponse.ResponseFatora> getCanceled_bills(
+            @Query("page") String page,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @GET("api/user/ratings?")
+    Call<APIResponse.ResponseRating> getRating(
             @Query("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,

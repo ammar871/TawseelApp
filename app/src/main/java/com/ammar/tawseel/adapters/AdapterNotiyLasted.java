@@ -2,6 +2,7 @@ package com.ammar.tawseel.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.ViewHolderVidio> {
+public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.ViewHolderVidio> {
 
     ArrayList<DataNotification> list;
     private Context mcontext;
@@ -35,7 +36,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     int layout;
 
-    public AdapterNotification(ArrayList<DataNotification> list, Context mcontext) {
+    public AdapterNotiyLasted(ArrayList<DataNotification> list, Context mcontext) {
 
 
         this.mcontext = mcontext;
@@ -55,7 +56,6 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
-        holder.cardView.setBackgroundColor(mcontext.getResources().getColor(R.color.core_notiy));
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -70,22 +70,19 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         String formatted = output.format(d);
 
         holder.date_notiy.setText(formatted + "");
-
-
         if (list.get(position).getType().equals("accept-order")) {
-            holder.name_notiy.setText("لقد وافق على طلب رسالتك "  );
+            holder.name_notiy.setText("لقد وافق على طلب رسالتك " + list.get(position).getTarget());
         } else if (list.get(position).getType().equals("new-bill")) {
-            holder.name_notiy.setText("لقد تم انشاء فاتورة جديدة برقم " );
+            holder.name_notiy.setText("لقد تم انشاء فاتورة جديدة برقم " + list.get(position).getTarget());
         } else if (list.get(position).getType().equals("deliver-don")) {
-            holder.name_notiy.setText("لقد تم توصيل طلبك  " );
+            holder.name_notiy.setText("لقد تم توصيل طلبك  " + list.get(position).getTarget());
         } else if (list.get(position).getType().equals("refuse-order")) {
-            holder.name_notiy.setText("لقد تم رفض طلبك  " );
+            holder.name_notiy.setText("لقد تم رفض طلبك  " + list.get(position).getTarget());
         }
 
 
-        holder.date_notiy.setText(list.get(position).getReciver() + "");
-        holder.desc_noty.setText(list.get(position).getTarget() + "");
 
+        holder.desc_noty.setText(list.get(position).getTarget() + "");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +122,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         public FrameLayout viewForeground;
         TextView name_notiy, desc_noty, date_notiy;
         CardView cardView;
+
         public ViewHolderVidio(@NonNull View itemView) {
             super(itemView);
 
@@ -134,6 +132,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             desc_noty = itemView.findViewById(R.id.tv_messgee_noty);
             date_notiy = itemView.findViewById(R.id.tv_date_messgee_noty);
             cardView = itemView.findViewById(R.id.card);
+
 
         }
 
@@ -145,4 +144,3 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 //        }
     }
 }
-

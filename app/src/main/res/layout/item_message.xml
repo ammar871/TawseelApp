@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="@dimen/_5sdp"
-android:background="@color/color_backround"
 
- >
-
-<RelativeLayout
-    android:background="@drawable/drawble_item_message"
-    android:id="@+id/view_background"
-    android:layout_margin="@dimen/_5ssp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/delete_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/_10sdp"
-        app:srcCompat="@drawable/ic_delete_sweep" />
-</RelativeLayout>
+    android:layout_margin="@dimen/_4sdp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardElevation="@dimen/_1sdp"
 
 
+    >
 
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/view_for_background"
-android:padding="@dimen/_10sdp"
-        app:cardBackgroundColor="@color/white"
+    <RelativeLayout
+        android:id="@+id/view_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_60ssp"
+        android:background="@drawable/drawble_item_message">
 
-        app:cardCornerRadius="@dimen/_10sdp">
+        <ImageView
+            android:id="@+id/delete_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:padding="@dimen/_8sdp"
+            app:srcCompat="@drawable/ic_delete_sweep" />
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/view_for_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60sdp"
+        android:background="@color/white"
+        android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.makeramen.roundedimageview.RoundedImageView
+
                 android:id="@+id/imageView1"
                 android:layout_width="@dimen/_50ssp"
                 android:layout_height="@dimen/_50ssp"
@@ -72,6 +73,7 @@ android:padding="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:fontFamily="@font/medium"
                 android:text="عمر علي"
+
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintRight_toLeftOf="@id/imageView1"
@@ -85,6 +87,7 @@ android:padding="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:fontFamily="@font/medium"
+                android:gravity="right"
                 android:maxLines="1"
                 android:text="متى سنبدا العمل مباشرة ؟"
                 android:textColor="@color/text_coloe"
@@ -111,6 +114,6 @@ android:padding="@dimen/_10sdp"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
-</FrameLayout>
+</androidx.cardview.widget.CardView>

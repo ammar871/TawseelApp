@@ -62,14 +62,58 @@
                 />
 
         </FrameLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list_notify"
-            android:visibility="gone"
+        <LinearLayout
+android:layout_below="@id/app_bar"
+            android:id="@+id/home_contant"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/app_bar"
-            android:layout_marginTop="@dimen/_10sdp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:fontFamily="@font/medium"
+                android:text="اليـوم"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"
+                android:visibility="visible"
+                android:id="@+id/rv_list_notify_today">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:fontFamily="@font/medium"
+                android:text="3/3/2002"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"
+                android:visibility="visible"
+                android:id="@+id/rv_list_notify">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
     </RelativeLayout>
 </layout>

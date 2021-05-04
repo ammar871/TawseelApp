@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.adapters.AdapterNotification;
+import com.ammar.tawseel.adapters.AdapterNotiyLasted;
 import com.ammar.tawseel.adapters.AdapterOrdersHome;
 import com.ammar.tawseel.databinding.FragmentNotifecationBinding;
 import com.ammar.tawseel.editor.ShardEditor;
@@ -42,7 +43,10 @@ public class NotifecationFragment extends Fragment {
     FragmentNotifecationBinding binding;
     APIInterFace apiInterFace;
     ShardEditor shardEditor;
-AdapterNotification adapterNotification;
+    AdapterNotiyLasted adapterNotiyLasted;
+    ArrayList<DataNotification> listNotiyToday=new ArrayList<>();
+    ArrayList<DataNotification> listlast=new ArrayList<>();
+    AdapterNotification adapterNotification;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +58,8 @@ AdapterNotification adapterNotification;
         binding.rvListNotify.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         binding.rvListNotify.setHasFixedSize(true);
 
+        binding.rvListNotifyToday.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        binding.rvListNotifyToday.setHasFixedSize(true);
         openDraw();
         loadDataNotification("1");
         return binding.getRoot();
@@ -71,11 +77,34 @@ AdapterNotification adapterNotification;
                 if (response.code()==200){
                     assert response.body() != null;
                     if (response.body().getStatus()){
-                        Log.d("responses", "onResponse: "+response.body().getData().size());
-                        adapterNotification = new AdapterNotification((ArrayList<DataNotification>) response.body().getData(),getActivity());
-                        binding.rvListNotify.setAdapter(adapterNotification);
+
+
+                            for (int i=0;i<response.body().getData().size();i++ ){
+                            if (response.body().getData().get(i).getReaded().equalsIgnoreCase("0")){
+
+                                listNotiyToday.add(response.body().getData().get(i));
+                            }else {
+                                listlast.add(response.body().getData().get(i));
+                            }
+
+                            }
+
+
+
+
+                        Log.d("responses", "onResponse: "+listNotiyToday.size()+listlast.size());
+                        adapterNotification = new AdapterNotification(listNotiyToday,getActivity());
+                        binding.rvListNotifyToday.setAdapter(adapterNotification);
+
+
+
+                        adapterNotiyLasted = new AdapterNotiyLasted(listlast,getActivity());
+                        binding.rvListNotify.setAdapter(adapterNotiyLasted);
                         binding.layoutProgress.setVisibility(View.GONE);
-                        binding.rvListNotify.setVisibility(View.VISIBLE);
+                        binding.homeContant.setVisibility(View.VISIBLE);
+                        binding.homeContant.setVisibility(View.VISIBLE);
+
+
                     }
 
                 }
@@ -85,7 +114,7 @@ AdapterNotification adapterNotification;
             @Override
             public void onFailure(@NonNull Call<APIResponse.ResponseNotification> call, @NonNull Throwable t) {
                 binding.layoutProgress.setVisibility(View.GONE);
-                binding.rvListNotify.setVisibility(View.VISIBLE);
+                binding.homeContant.setVisibility(View.VISIBLE);
             }
         });
 

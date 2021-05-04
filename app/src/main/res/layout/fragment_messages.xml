@@ -73,6 +73,9 @@ android:id="@+id/toggles"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_10ssp"
         android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_6sdp"
+        android:layout_marginLeft="@dimen/_6sdp"
+
 android:visibility="gone"
         android:id="@+id/rv_message">
 
