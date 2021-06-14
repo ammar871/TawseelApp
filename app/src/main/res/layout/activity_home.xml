@@ -7,10 +7,12 @@
 
     </data>
 
+
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
-        tools:openDrawer="left"
+        tools:openDrawer="start"
         android:id="@+id/draw"
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeActivity">
@@ -88,7 +90,7 @@
             android:id="@+id/nav"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             app:itemIconTint="@color/login_color2"
             app:itemTextColor="@color/login_color2"
 

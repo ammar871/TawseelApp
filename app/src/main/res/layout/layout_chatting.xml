@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/layoutMainchat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_80ssp"
+                android:background="@drawable/drawb_backround_bar">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/imag_back_bar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:fontFamily="@font/bold"
+                    android:text="الرسائل"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15ssp" />
+
+
+                <ImageView
+                    android:id="@+id/img_back_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_15ssp"
+android:padding="8dp"
+                    android:fontFamily="@font/bold"
+                    android:scaleType="centerInside"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15ssp"
+                    app:srcCompat="@drawable/ic_arrow_back" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginEnd="@dimen/_10sdp">
+
+
+                <FrameLayout
+
+                    android:id="@+id/view_for_background"
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="-15dp"
+                    android:layout_toEndOf="@id/imageView1Chat"
+
+                    android:background="@drawable/drawble_edit2"
+
+                    >
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="match_parent">
+
+                        <!--                    tv_name_lablechat
+                        tv_date_rat_chat
+                        -->
+                        <TextView
+                            android:id="@+id/tv_name_lablechat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            android:fontFamily="@font/medium"
+                            android:paddingTop="@dimen/_4sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:text="عمر علي"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11sdp"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+<!--                        <TextView-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            android:id="@+id/tv_messgee_chat"-->
+<!--                            android:layout_width="@dimen/_150sdp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="@dimen/_5sdp"-->
+<!--                            android:layout_marginStart="@dimen/_5sdp"-->
+<!--                            android:fontFamily="@font/medium"-->
+<!--                            android:maxLines="1"-->
+
+<!--                            android:gravity="start|center_vertical"-->
+<!--                            android:paddingBottom="@dimen/_1sdp"-->
+<!--                            android:text="متى سنبدا العمل مباشرة ؟"-->
+<!--                            android:textColor="@color/text_coloe"-->
+<!--                            android:textSize="@dimen/_11sdp"-->
+
+<!--                            app:layout_constraintTop_toBottomOf="@id/tv_name_lablechat" />-->
+
+
+                        <androidx.appcompat.widget.AppCompatRatingBar
+                            android:id="@+id/tv_date_rat_chat"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:maxLines="1"
+                            android:rating="5"
+                            android:text="25/06/2019"
+                            android:textColor="@color/login_color2"
+                            android:theme="@style/RatingBar"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </FrameLayout>
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    app:layout_constraintRight_toRightOf="parent"
+
+                    android:layout_width="@dimen/_50ssp"
+                    android:layout_height="@dimen/_50ssp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:id="@+id/imageView1Chat"
+                    android:src="@drawable/imagerat"
+                    tools:ignore="MissingConstraints" />
+
+                <!--                <de.hdodenhof.circleimageview.CircleImageView-->
+                <!--                    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                <!--                  -->
+                <!--                  -->
+                <!--                    android:scaleType="fitCenter"-->
+                <!--                    android:src="@drawable/imagtest"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintRight_toRightOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"-->
+                <!--                    app:riv_border_color="#333333"-->
+
+                <!--                    app:riv_corner_radius="30dip"-->
+                <!--                    app:riv_mutate_background="true"-->
+                <!--                    app:riv_oval="true"-->
+
+                <!--                    />-->
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@id/layout_details"
+                android:id="@+id/recyclerViewMessages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                android:background="@drawable/backroundtrans"
+                android:scrollbars="none" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

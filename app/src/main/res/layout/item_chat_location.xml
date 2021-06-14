@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/their_layout_location_there"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="60dp"
+        android:visibility="gone">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginBottom="-12dp"
+            android:id="@+id/location_View1item_there"
+            android:layout_width="@dimen/_35ssp"
+            android:layout_height="@dimen/_35ssp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+
+
+
+            />
+
+    <ImageView
+        android:id="@+id/location_img_body_there"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_110sdp"
+        android:src="@drawable/imagtest"
+        android:scaleType="fitXY"
+        android:background="@drawable/their_message"
+        android:elevation="2dp"
+        android:layout_below="@id/location_View1item_there"
+        android:layout_toRightOf="@id/location_View1item_there"
+        android:textSize="13sp" />
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/layout_me_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="15dp"
+        android:visibility="gone">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/location_View1_img_me"
+            android:layout_width="@dimen/_33ssp"
+            android:layout_marginBottom="-12dp"
+            android:layout_height="@dimen/_33ssp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:src="@drawable/imagerat"
+
+
+            />
+
+
+            <ImageView
+                android:id="@+id/location_img_body_me"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_110sdp"
+                android:layout_below="@id/location_View1_img_me"
+                android:layout_toLeftOf="@id/location_View1_img_me"
+                android:src="@drawable/imagtest"
+                android:scaleType="fitXY"
+                android:background="@drawable/their_message"
+                android:elevation="2dp"
+                android:text="How are you doing? This is a long message that should probably wrap."
+                android:textSize="13sp" />
+
+
+
+
+    </RelativeLayout>
+</RelativeLayout>

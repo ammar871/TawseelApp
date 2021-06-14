@@ -74,14 +74,19 @@ public class LoginActivity extends AppCompatActivity {
     ShardEditor shardEditor;
     GoogleSignInClient mGoogleSignInClient;
     //for facebook
-   private CallbackManager callbackManager;
+    private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        shardEditor=new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
 
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -104,8 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginFace.setOnClickListener(v -> {
 
 
-
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
             loginManferFace();
         });
     }
@@ -181,8 +185,8 @@ public class LoginActivity extends AppCompatActivity {
                                             String name_fb = object.optString("name");
                                             String id_fb = object.optString("id");
                                             String email_fb = object.optString("email");
-                                            Log.d("facebook", "onCompleted: "+name_fb +"\n "+ email_fb +"\n "+ id_fb);
-loginWithSocial(email_fb,id_fb,name_fb,"facebook");
+                                            Log.d("facebook", "onCompleted: " + name_fb + "\n " + email_fb + "\n " + id_fb);
+                                            loginWithSocial(email_fb, id_fb, name_fb, "facebook",name_fb);
 //                                            shardUserSaved = new ShardUserSaved(name_fb, "not"
 //                                                    , email_fb, "not", "not");
 //                                            sharedEditor.saveData(shardUserSaved);
@@ -252,9 +256,9 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
                 String personName = acct.getDisplayName();
                 String personemail = acct.getEmail();
                 String personId = acct.getId();
-
+                Log.d("googlename", "handleSignInResult: "+personName);
 //                shardEditor.saveToken(personToken);
-            loginWithSocial(personemail,personId,personName,"google");
+                loginWithSocial(personemail, personId, personName, "google",personName);
 
             }
 
@@ -266,10 +270,10 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
         }
     }
 
-    private void loginWithSocial(String personemail, String personId, String personName, String typ) {
+    private void loginWithSocial(String personemail, String personId, String personName, String typ,String name) {
 
         Call<APIResponse.ResponseLogin> call = apiInterFace.registerSocialGoogle(typ,
-                personemail, personId,personName,"android", Cemmon.FIREBASE_TOKEN);
+                personemail, personId, personName, "android", Cemmon.FIREBASE_TOKEN);
 
         call.enqueue(new Callback<APIResponse.ResponseLogin>() {
             @Override
@@ -286,13 +290,15 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
                         shardEditor.saveToken(response.body().getToken());
 
                         assert response.body() != null;
+
+                        Cemmon.NAME_OF_USER=name+"";
 //                        Log.d("tokengoogle", "onResponse: "+response.body().getToken());
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         finish();
 
 
                     } else {
-                        Toast.makeText(LoginActivity.this,response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -308,7 +314,6 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
     }
@@ -342,7 +347,7 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
         binding.imgLogin.setVisibility(View.GONE);
 
         Call<APIResponse.ResponseLogin> call = apiInterFace.loginAPI(
-                username, password,"android", Cemmon.FIREBASE_TOKEN);
+                username, password, "android", Cemmon.FIREBASE_TOKEN);
 
         call.enqueue(new Callback<APIResponse.ResponseLogin>() {
             @Override
@@ -356,8 +361,9 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
                     if (response.body().getStatus()) {
                         shardEditor.saveDataLoginWith(true);
                         shardEditor.saveToken(response.body().getToken());
-//                        shardEditor.saveData(response.body().getUser());
+                     //   Log.d("dddddddddddddd", "onResponse: "+ response.body().getUser().getId());
                         assert response.body() != null;
+//                        Cemmon.NAME_OF_USER=response.body().getUser().getName();
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         finish();
 
@@ -365,7 +371,7 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
                         binding.imgLogin.setVisibility(View.VISIBLE);
 
                     } else {
-                        Toast.makeText(LoginActivity.this,response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
                         binding.progressbar.setVisibility(View.GONE);
                         binding.imgLogin.setVisibility(View.VISIBLE);
                     }
@@ -420,7 +426,6 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
     }
 
 
-
     private void printHashKey() {
 
         try {
@@ -441,7 +446,6 @@ loginWithSocial(email_fb,id_fb,name_fb,"facebook");
     }
 
     private void enableLoc() {
-
 
 
         LocationRequest locationRequest = LocationRequest.create();

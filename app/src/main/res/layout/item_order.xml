@@ -273,7 +273,7 @@ android:id="@+id/tv_place_from"
 
 
             android:fontFamily="@font/medium"
-            android:text="من"
+            android:text="إلى"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/_11sdp" />

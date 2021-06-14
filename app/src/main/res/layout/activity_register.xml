@@ -64,7 +64,7 @@
                                 android:layout_gravity="right"
                                 android:layout_marginTop="@dimen/_18sdp"
                                 android:fontFamily="@font/bold"
-                                android:text="مرحباً بانضمامك الينا!"
+                                android:text="@string/welecom_fotr_join"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_15ssp"
                                 android:textStyle="bold" />
@@ -207,7 +207,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/bold"
-                            android:text="لديك حساب مسبقاً ؟ "
+                            android:text="@string/you_have_accounte"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp"
                             app:layout_constraintBottom_toBottomOf="parent"

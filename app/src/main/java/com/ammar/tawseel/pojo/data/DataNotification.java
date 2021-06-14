@@ -22,9 +22,9 @@ public class DataNotification {
     @SerializedName("params")
     @Expose
     private String params;
-    @SerializedName("readed")
+    @SerializedName("status")
     @Expose
-    private String readed;
+    private String status;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -81,11 +81,11 @@ public class DataNotification {
     }
 
     public String getReaded() {
-        return readed;
+        return status;
     }
 
     public void setReaded(String readed) {
-        this.readed = readed;
+        this.status = readed;
     }
 
     public String getCreatedAt() {

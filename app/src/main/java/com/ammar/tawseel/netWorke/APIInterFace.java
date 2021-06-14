@@ -3,6 +3,8 @@ package com.ammar.tawseel.netWorke;
 
 import com.ammar.tawseel.pojo.response.APIResponse;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -10,8 +12,10 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -51,7 +55,7 @@ public interface APIInterFace {
             @Field("fcm_token") String fcm_token);
 
 
-//    @FormUrlEncoded
+    //    @FormUrlEncoded
 //    @POST("api/user/social-login/facebook")
 //    Call<APIResponse.ResponseLogin> registerSocialFacebook(
 //            @Field("email") String email,
@@ -60,41 +64,28 @@ public interface APIInterFace {
 //            @Field("device_type") String device_typ,
 //            @Field("fcm_token") String fcm_token);
 //
-
-    @FormUrlEncoded
     @POST("api/user/profile")
+    @Multipart
     Call<APIResponse.ResponseProfile> editProfile(
 
-            @Field("gpsLat") String gpsLat,
-            @Field("gpsLng") String gpsLng,
-            @Field("gpsAddress") String gpsAddress,
-            @Field("name") String name,
-            @Field("phone") String phone
-            , @Field("avatar") String avatar,
+            @Part("gpsLat") double gpsLat,
+            @Part("gpsLng") double gpsLng,
+            @Part("gpsAddress") String gpsAddress,
+            @Part("name") RequestBody name,
+            @Part("phone") RequestBody phone
+            ,@Part  MultipartBody.Part avatar,
             @Header("Accept") String Accept,
             @Header("Authorization") String token);
 
 
-    @FormUrlEncoded
-    @POST("api/user/send-message")
-    Call<APIResponse.ResponseSendMessage> sendFirstMessageApi(
-            @Field("to") String to,
-            @Field("type") String type,
 
-            @Field("message") String message,
-            @Field("first") String first,
-            @Header("Accept") String Accept,
-            @Header("Authorization") String token,
-            @Header("Accept-Language") String lang
-    );
+
 
     @FormUrlEncoded
-    @POST("api/user/send-message")
-    Call<APIResponse.ResponseSendMessage> sendMessageApi(
-            @Field("to") String to,
-            @Field("type") String type,
-            @Field("message") String message,
-            @Field("first") boolean first,
+    @POST("api/user/chat/{driverId}//?")
+    Call<APIResponse.ResponseChatBetween> chatBetweenOneMessage(
+            @Path("driverId") String driverId,
+            @Field("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
@@ -107,19 +98,52 @@ public interface APIInterFace {
             @Field("type") String type,
             @Field("order_id") String order_id,
             @Field("message") String message,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/user/send-message")
+    Call<APIResponse.ResponseSendMessage> sendFirstMessageApi(
+            @Field("to") String to,
+            @Field("type") String type,
+            @Field("message") String message,
             @Field("first") boolean first,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
 
+    @Multipart
+    @POST("api/user/send-message")
+    Call<APIResponse.ResponseSendMessage> sendFileMessage(
+            @Part("to") int to,
+            @Part("type") RequestBody type,
+            @Part("order_id") int order_id,
+            @Part MultipartBody.Part  message,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+    @Multipart
+    @POST("api/user/send-message")
+    Call<APIResponse.ResponseSendMessage> sendFileFirstMessage(
+            @Part("to") int to,
+            @Part("type") RequestBody type,
+            @Part MultipartBody.Part  message,
+            @Part("first") boolean first,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
 
     @GET("api/user/chat/{idDirver}/{orderId}?")
     Call<APIResponse.ResponseChatBetween> chatBetweenUser(
 
             @Path("idDirver") String idDirver,
             @Path("orderId") String order_id,
-            @Query("page") String id,
+            @Query("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
@@ -142,6 +166,8 @@ public interface APIInterFace {
 
     @GET("api/user/drivers")
     Call<APIResponse.ResponseDrivers> getDrivers(
+            @Query("lat") String lat,
+            @Query("lng") String lng,
             @Header("Authorization") String token,
             @Header("lang") String lang,
             @Header("Accept") String accept);
@@ -152,6 +178,7 @@ public interface APIInterFace {
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
+
     @GET("api/user/finished-orders?page=1")
     Call<APIResponse.ResponseFinshedOrder> finishedOrders(
             @Header("Accept") String Accept,
@@ -196,6 +223,149 @@ public interface APIInterFace {
     @GET("api/user/ratings?")
     Call<APIResponse.ResponseRating> getRating(
             @Query("page") String page,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/user/add-rate")
+    Call<APIResponse.AddRateResponse> addRating(
+            @Field("to") String to,
+            @Field("text") String type,
+            @Field("stars") String order_id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/user/update-rate/{id}")
+    Call<APIResponse.ResponseUpdateRating> upDateRating(
+
+            @Field("to") String to,
+            @Field("text") String text,
+            @Field("stars") String stars,
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+
+
+
+
+    @GET("api/user/order/{id}")
+    Call<APIResponse.ResponseShowOrder> showOrder(
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @GET("api/user/bill/{id}")
+    Call<APIResponse.ResponseShowBill> showBill(
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @POST("api/user/delete-bill/{id}")
+    Call<APIResponse.CanceleResponse> deleteBill(
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+    @POST("api/user/delete-chat/{idCaht}")
+    Call<APIResponse.ResponseDeleteChat> deleteChat(
+
+            @Path("idCaht") String to,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/user/search")
+    Call<APIResponse.ResponseSearchDrivers> searshDrivires(
+            @Field("name") String name,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/user/filter-drivers")
+    Call<APIResponse.ResponseFillter> filtersDrivires(
+            @Field("lat") String lat,
+            @Field("lng") String lng,
+            @Field("stars") int stars,
+            @Field("kilometers") String kilometers,
+            @Field("inside") boolean inside,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+
+    @GET("api/who-us")
+    Call<APIResponse.WhoUsResponse> WhoUs(
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/contact-us")
+    Call<APIResponse.ContactResponse> sendContactus(
+            @Field("email") String email,
+            @Field("content") String content,
+            @Field("name") String name,
+            @Field("user_type") String user_type,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @GET("api/whatsapp-number")
+    Call<APIResponse.NumberWhatsResponse> numberWhatsResponse(
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+
+    @GET("api/policies")
+    Call<APIResponse.PoeloyProxyResponse> poeloyProxyResponse(
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+
+    @POST("api/user/delete-notification/{idCaht}")
+    Call<APIResponse.ResponseDeleteChat> deleteNotifecatio(
+
+            @Path("idCaht") String to,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+    @POST("api/user/confirm-deliverd-order/{id}")
+    Call<APIResponse.ConfirmResponse> confirmOrder(
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @POST("api/user/cancel-deliverd-order/{id}")
+    Call<APIResponse.CanceleResponse> cancelOrder(
+            @Path("id") String id,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang

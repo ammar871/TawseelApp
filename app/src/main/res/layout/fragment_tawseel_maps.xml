@@ -10,44 +10,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
 
+        android:id="@+id/container_frag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container_frag"
         android:background="@android:color/transparent"
         tools:context=".ui.fragments.TawseelMapsFragment">
 
         <RelativeLayout
-            android:background="@drawable/drawble_edit2"
+            android:visibility="gone"
             android:id="@+id/layout_location"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginBottom="@dimen/_8sdp"
             android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/_15ssp"
-            android:layout_marginRight="@dimen/_15ssp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_15ssp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_15ssp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/drawble_edit2"
+            android:padding="@dimen/_8ssp"
+            app:cardCornerRadius="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:padding="@dimen/_8ssp"
-            app:cardCornerRadius="@dimen/_10sdp">
+            app:layout_constraintTop_toTopOf="parent">
+
             <LinearLayout
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:paddingTop="@dimen/_10ssp"
-                >
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_10ssp">
+
                 <ImageView
                     android:layout_width="@dimen/_50ssp"
                     android:layout_height="@dimen/_50ssp"
                     android:layout_gravity="center"
 
-                    app:srcCompat="@drawable/ic_logopages"
-                    android:contentDescription="@string/app_name" />
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/ic_logopages" />
+
                 <TextView
                     android:id="@+id/tv_label"
                     android:layout_width="wrap_content"
@@ -56,57 +59,73 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/regular"
                     android:gravity="center"
+                    android:paddingBottom="@dimen/_8sdp"
                     android:text="تأكد من تفعيل خاصية الموقع"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp"
-                    android:paddingBottom="@dimen/_8sdp"
-                    />
+                    android:textSize="@dimen/_15ssp" />
+
                 <LinearLayout
-                    android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_gravity="center"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_margin="@dimen/_4sdp"
                         android:id="@+id/tv_turrn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_4sdp"
+                        android:background="@drawable/drawble_button_dialog"
+                        android:fontFamily="@font/medium"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_6sdp"
                         android:text="الاعدادات"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15ssp"
-                        android:paddingLeft="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"
-                        android:paddingTop="@dimen/_6sdp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/medium"
-                        android:paddingBottom="@dimen/_6sdp"
-                        android:background="@drawable/drawble_button_dialog"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/content_map"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-<ProgressBar
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    android:visibility="visible"
-    android:id="@+id/progress_map"/>
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/progress_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="visible" />
+
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/layout_home"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/progress_mapsearsh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoyut_maping"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_70sdp">
@@ -139,22 +158,22 @@
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:fontFamily="@font/bold"
-                        android:text="الطلبات"
+                        android:text="الخرائط"
 
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15ssp" />
 
                     <ImageView
+                        android:id="@+id/toggls"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/_15ssp"
+                        android:layout_marginStart="@dimen/_15ssp"
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:fontFamily="@font/bold"
-                        android:text="الطلبات"
+                        android:padding="@dimen/_8sdp"
                         android:textColor="@color/white"
-
                         android:textSize="@dimen/_15ssp"
                         app:srcCompat="@drawable/ic_menu" />
 
@@ -163,37 +182,52 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_70sdp"
 
-                    android:layout_marginEnd="@dimen/_15sdp">
+                    android:layout_marginEnd="@dimen/_10sdp">
 
-                    <EditText
-                        android:id="@+id/card_searsh"
+                    <FrameLayout
+                        android:id="@+id/layoutSearsh"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/darw_edite"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:elevation="@dimen/_5sdp"
-                        android:fontFamily="@font/bold"
-                        android:hint="بحث"
                         android:paddingStart="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent=".85">
+                        app:layout_constraintWidth_percent=".87">
+
+                        <TextView
+                            android:id="@+id/tv_searsh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textColor="@color/color_bar_home"
+android:text="Click on the green icon to contact the driver"
+                            android:background="@null"
+
+                            android:fontFamily="@font/bold"
+                           />
 
 
-                    </EditText>
+
+                    </FrameLayout>
 
 
                     <ImageView
+                        android:id="@+id/img_filtter"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
-                        android:layout_alignParentRight="true"
+
                         android:scaleType="fitXY"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/card_searsh"
+                        app:layout_constraintEnd_toStartOf="@id/layoutSearsh"
                         app:layout_constraintTop_toTopOf="parent"
 
                         app:srcCompat="@drawable/ic_bar_icon" />

@@ -21,6 +21,7 @@ import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivitySkipingBinding;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.ui.auth.LoginActivity;
+import com.ammar.tawseel.uitllis.Cemmon;
 
 public class SkipingActivity extends AppCompatActivity {
 ShardEditor shardEditor;
@@ -37,7 +38,12 @@ ActivitySkipingBinding binding;
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-       shardEditor = new ShardEditor(this);
+        shardEditor=new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         if (!shardEditor.isFirstTimeLaunch()) {
             launchHomeScreen();
             finish();

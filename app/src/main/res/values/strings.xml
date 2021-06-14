@@ -8,7 +8,7 @@
     <string name="text">يسهلك لك التطبيق تعدد خيارات الدفع الالكتروني مثل،
         فيزا كارد و بيبال و ماستر كارد مع إمكانية الدفع كاش</string>
     <string name="text_slid3">اذا كنت تملك سيارة ، فبامكانك الانضمام الينا و العمل ك مندوب توصيل ضمن فريق عمل متميز من خلال تعبئة بيانات التسجيل في التطبيق</string>
-    <string name="slid2">ساعدك تطبيق توصيل على اختيار اقرب مناديب التسويق الى موقع طلبك من خلال عرضهم عبر الخريطة</string>
+    <string name="slid2">ساعدك تطبيق توصيل على اختيار اقرب مناديب التوصيل الى موقع طلبك من خلال عرضهم عبر الخريطة</string>
     <string name="login"><u> تسجيل دخول </u></string>
     <string name="register">قم بتسجيل حساب جديد من خلال تعبئة البيانات التالية</string>
     <string name="login_text">قم بتسجيل دخول باستخدام اسم المستخدم و كلمة المرور الخاصة بك</string>
@@ -46,8 +46,95 @@
         <item name="colorControlNormal">@color/text_color</item>
     </style>
 
+    <style name="RadioButtonThememessage" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/core_dialog2</item>
+        <item name="colorControlNormal">@color/core_dialog2</item>
+    </style>
+
     <string name="facebook_app_id">2846000032331536</string>
     <string name="fb_login_protocol_scheme">fb2846000032331536</string>
     <string name="title_activity_traking_maps">Map</string>
+    <string name="distance">المسافة :</string>
+    <string name="locationdriver">موقع المندوب</string>
+    <string name="contact_us">التواصل في حالات الطوارئ من خلال الواتساب المباشر</string>
+    <string name="whats_live">واتســاب مباشر</string>
+    <string name="send_message_contact">بامكانك التواصل معنا عبر ارسال رسالة نصية سيتم الرد عليكم في أقرب فرصة ممكنة</string>
+    <string name="name">الاسم</string>
+    <string name="email">البريد الالكتروني</string>
+    <string name="message">الرسالة</string>
+    <string name="send">ارسال</string>
+    <string name="detail_bill">تفاصيل الفاتورة</string>
+    <string name="name_customer">اسم طالب الخدمة</string>
+    <string name="name_of_dilevry">اسم مندوب التوصيل</string>
+    <string name="number_bill">رقم الفاتورة</string>
+    <string name="location_order">موقع الطلب</string>
+    <string name="location_pick_up">موقع التسليم</string>
+    <string name="paid_bill">مبلغ الدفع (ريال سعودي)</string>
+    <string name="delete_from_menu">حذف من القائمة</string>
+    <string name="details_accounte">الملف الشخصي</string>
+    <string name="selecte_location">تحديد الموقع</string>
+    <string name="all_name">الاسم كاملاً</string>
+    <string name="number_phone">رقم الجوالً</string>
+    <string name="photo">صورة شخصية</string>
+    <string name="welecome_to_back">أهلا بعودتك</string>
+    <string name="start_here">ابدأ من هنا</string>
+    <string name="login_with">أو الدخول باستخدام</string>
+    <string name="current_order">الحالية</string>
+    <string name="finshed_order">المنتهية</string>
+    <string name="pr_policy">سياسة الخصوصية والاستخدام</string>
+    <string name="rating_drivers">تقييمات مناديب التوصيل</string>
+    <string name="welecom_fotr_join">مرحباً بانضمامك الينا!</string>
+    <string name="you_have_accounte">لديك حساب مسبقاً ؟</string>
+    <string name="check_gps">تأكد من تفعيل خاصية الموقع</string>
+    <string name="sitting">الاعدادات</string>
+    <string name="save">حفظ</string>
+    <string name="paid_mothed">الدفع الالكتروني</string>
+    <string name="sound_noty">صوت الاشعارات</string>
+    <string name="svae_change">حفظ التغيرات</string>
+    <string name="share_app">مشاركة التطبيق</string>
+    <string name="or_with">أو من خلال</string>
+    <string name="copy_link">نسخ الرابط</string>
+    <string name="next">التالى</string>
+    <string name="skip">تخطى</string>
+    <string name="name_drive">اسم السائق :</string>
+    <string name="paid_bill_trak">مبلغ التوصيل</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="fill_detail">قم بتعبئة البيانات التالية</string>
+    <string name="who_us">من نحن</string>
+    <string name="sure_delet">هل انت متأكد من عملية الحذف؟</string>
+    <string name="cancel">الغاء</string>
+    <string name="delete">حذف</string>
+    <string name="success_save">تم حفظ البيانات بنجاح</string>
+    <string name="filed_oprator">خطأ في العملية</string>
+    <string name="update_rate">تعديل تقييم السائق</string>
+    <string name="input_here">اكتب هنا</string>
+    <string name="upfate">تعديل</string>
+    <string name="rate_of_driv">تقييم المندوب :</string>
+    <string name="messages">الرسائل</string>
+    <string name="Driver">المندوب :</string>
+    <string name="type_amessage">اكتب هنا</string>
+    <string name="paid_bell_real">مبلغ الدفع (ريال سعودي)</string>
+    <string name="done_oprator">اتمام العملية</string>
+    <string name="billes">الفواتير</string>
+    <string name="paided">المدفوعة</string>
+    <string name="done_order">اشعار إتمام التوصيل</string>
+    <string name="dont_pickuup">لم يتم التوصيل</string>
+    <string name="rate_add">تقييم السائق</string>
 
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:padding">@dimen/_10sdp</item>
+    </style>
+
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:padding">@dimen/_10sdp</item>
+    </style>
+
+    <bool name="is_right_to_left">false</bool>
 </resources>

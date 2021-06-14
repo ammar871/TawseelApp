@@ -7,8 +7,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,50 +20,70 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ammar.tawseel.BuildConfig;
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivityHomeBinding;
 import com.ammar.tawseel.editor.ShardEditor;
+import com.ammar.tawseel.netWorke.APIClient;
+import com.ammar.tawseel.netWorke.APIInterFace;
+import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.ContactUsActivity;
 import com.ammar.tawseel.ui.EditeProfilActivity;
+import com.ammar.tawseel.ui.OrdersActivity;
+import com.ammar.tawseel.ui.PrivacyPolicyActivity;
+import com.ammar.tawseel.ui.RatingUsersActivity;
+import com.ammar.tawseel.ui.SettingsActivity;
+import com.ammar.tawseel.ui.ShareAppActivity;
+import com.ammar.tawseel.ui.WhoUsActivity;
 import com.ammar.tawseel.ui.auth.LoginActivity;
 import com.ammar.tawseel.ui.fragments.HomeFragment;
 import com.ammar.tawseel.ui.fragments.MenusFragment;
 import com.ammar.tawseel.ui.fragments.MessagesFragment;
 import com.ammar.tawseel.ui.fragments.NotifecationFragment;
 import com.ammar.tawseel.ui.fragments.TawseelMapsFragment;
-import com.ammar.tawseel.uitllis.OnclicksInActivities;
+import com.ammar.tawseel.uitllis.Cemmon;
+
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
         , View.OnClickListener {
-    private static final int LOCATION_SETTINGS_REQUEST = 101;
+
     ActivityHomeBinding binding;
-    ShardEditor sharedEditor;
+    ShardEditor shardEditor;
+    APIInterFace apiInterFace;
+    CircleImageView imgProfile;
+    TextView tv_nam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        sharedEditor = new ShardEditor(this);
+        shardEditor = new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG) != "") {
+
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
+        apiInterFace = APIClient.getClient().create(APIInterFace.class);
+        if (shardEditor.loadData().get(ShardEditor.KEY_TOKEN) != null
+                && !shardEditor.loadData().get(ShardEditor.KEY_TOKEN).equals("")) {
 
-        if (sharedEditor.loadData().get(ShardEditor.KEY_TOKEN) != null
-                && !sharedEditor.loadData().get(ShardEditor.KEY_TOKEN).equals("")) {
-
-            Log.d("tokenaa", "onCreate: " + sharedEditor.loadData().get(ShardEditor.KEY_TOKEN));
+            Log.d("token", "onCreate: " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
         }
 
         navigationBottom();
@@ -70,24 +92,71 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         inItView();
         //enableLoc();
+        loadDataProfile();
     }
 
+    private void loadDataProfile() {
+
+        Call<APIResponse.ResponseShowProfile> call = apiInterFace.showProfile(
+                "application/json",
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG));
+        call.enqueue(new Callback<APIResponse.ResponseShowProfile>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.ResponseShowProfile> call, @NonNull Response<APIResponse.ResponseShowProfile> response) {
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
+
+
+                        Log.d("dataprofil", "onResponse: " + response.body().getData().getName());
+                        if (response.body().getData().getAvatar() != null &&
+                                !response.body().getData().getAvatar().equals("")) {
+                            Glide.with(HomeActivity.this)
+                                    .load(Cemmon.BASE_URL + response.body().getData().getAvatar()).placeholder(
+                                    R.drawable.imagerat)
+                                    .into(imgProfile);
+                            Cemmon.NAME_OF_USER = response.body().getData().getName();
+                            tv_nam.setText(Cemmon.NAME_OF_USER + "");
+                            Cemmon.IMAGE_OF_USER = response.body().getData().getAvatar() + "";
+                            Log.d("iiiiiiiiiiii", "onResponse: " + Cemmon.IMAGE_OF_USER);
+
+                        }
+                    } else {
+                        Toast.makeText(HomeActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<APIResponse.ResponseShowProfile> call, @NonNull Throwable t) {
+
+
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
     private void inItView() {
         TextView tv_userProfil = findViewById(R.id.nav_userProfil);
         TextView tv_logout = findViewById(R.id.nav_logout);
 
-
+        imgProfile = findViewById(R.id.profile_image);
         TextView tv_rates = findViewById(R.id.tv_rates);
+        TextView tv_order = findViewById(R.id.nav_order);
         TextView tv_sitting = findViewById(R.id.tv_sitting);
         TextView tv_about_us = findViewById(R.id.tv_about_us);
         TextView tv_call_us = findViewById(R.id.tv_call_us);
         TextView tv_plociy = findViewById(R.id.tv_plociy);
         TextView tv_shar = findViewById(R.id.tv_shar);
         TextView tv_rate = findViewById(R.id.tv_rate);
+        tv_nam = findViewById(R.id.tv_name_user);
 
         tv_userProfil.setOnClickListener(this);
         tv_logout.setOnClickListener(this);
-
+        tv_order.setOnClickListener(this);
         tv_rates.setOnClickListener(this);
         tv_sitting.setOnClickListener(this);
         tv_about_us.setOnClickListener(this);
@@ -125,7 +194,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.nav_home:
 
-                fragment = new HomeFragment();
+                fragment = new TawseelMapsFragment();
 
 
                 break;
@@ -141,6 +210,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 //                binding.tvBar.setText("حســابي");
 
                 break;
+
+
+//                binding.tvBar.setText("حســابي");
+
+
             default:
 
         }
@@ -161,56 +235,75 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 
-    @SuppressLint({"RtlHardcoded", "NonConstantResourceId"})
+    @SuppressLint({"RtlHardcoded", "NonConstantResourceId", "WrongConstant"})
     @Override
     public void onClick(View v) {
+        Fragment fragment=null;
         switch (v.getId()) {
             case R.id.nav_userProfil:
-               startActivity(new Intent(this, EditeProfilActivity.class));
+                startActivity(new Intent(this, EditeProfilActivity.class));
 
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
                 break;
 
 
             case R.id.nav_logout:
                 isLoginWitch();
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+            case R.id.nav_order:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+               startActivity(new Intent(this, OrdersActivity.class));
                 break;
             case R.id.tv_rates:
 
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(HomeActivity.this, RatingUsersActivity.class));
+
                 break;
             case R.id.tv_sitting:
 
-
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
             case R.id.tv_about_us:
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(HomeActivity.this, WhoUsActivity.class));
                 break;
             case R.id.tv_call_us:
 
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(HomeActivity.this, ContactUsActivity.class));
                 break;
             case R.id.tv_plociy:
 
 
-                binding.draw.closeDrawer(Gravity.LEFT);
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(HomeActivity.this, PrivacyPolicyActivity.class));
                 break;
             case R.id.tv_shar:
 
-
-                binding.draw.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(HomeActivity.this, ShareAppActivity.class));
+                binding.draw.closeDrawer(Gravity.START);
                 break;
             case R.id.tv_rate:
 
-
-                binding.draw.closeDrawer(Gravity.LEFT);
+                Uri uri = Uri.parse("market://details?id=" + "com.ammar.tawseel");
+                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(myAppLinkToMarket);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+                }
+                binding.draw.closeDrawer(Gravity.START);
                 break;
 
         }
@@ -226,7 +319,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         LoginManager.getInstance().logOut();
 
-        sharedEditor.logOut();
+        shardEditor.logOut();
 
     }
 
@@ -290,3 +383,29 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 //
 //    }
 }
+
+
+   /* private void getLanguge() {
+
+        if (sharedEditor.loadData().get(SharedEditor.KEY_LANG).equals("")) {
+            if (Locale.getDefault().getLanguage().equals("ar")) {
+                sharedEditor.saveLang(Locale.getDefault().getLanguage());
+                Cemmon.setLocale(this, sharedEditor.loadData().get(SharedEditor.KEY_LANG));
+            } else if (Locale.getDefault().getLanguage().equals("eng")) {
+                sharedEditor.saveLang(Locale.getDefault().getLanguage().replace("g", ""));
+                Cemmon.setLocale(this, sharedEditor.loadData().get(SharedEditor.KEY_LANG) + "g");
+            } else if (Locale.getDefault().getLanguage().equals("pt")) {
+                sharedEditor.saveLang(Locale.getDefault().getLanguage());
+                Cemmon.setLocale(this, sharedEditor.loadData().get(SharedEditor.KEY_LANG));
+            } else {
+                sharedEditor.saveLang("en");
+                Cemmon.setLocale(this, sharedEditor.loadData().get(SharedEditor.KEY_LANG));
+            }
+
+        } else {
+
+            Cemmon.setLocale(this, sharedEditor.loadData().get(SharedEditor.KEY_LANG));
+        }
+
+        Log.d("codelang", sharedEditor.loadData().get(SharedEditor.KEY_LANG));
+    }*/

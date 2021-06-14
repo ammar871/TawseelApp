@@ -16,16 +16,29 @@ import android.widget.Toast;
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivityForgetPasswordBinding;
 import com.ammar.tawseel.databinding.ActivityForgetPasswordBindingImpl;
+import com.ammar.tawseel.editor.ShardEditor;
+import com.ammar.tawseel.uitllis.Cemmon;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 ActivityForgetPasswordBinding binding;
+ShardEditor shardEditor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+shardEditor=new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
 
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         textSpan();
     }
 

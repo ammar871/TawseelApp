@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/layout_there"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_215sdp">
+
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView1item_there_video"
+                android:layout_width="@dimen/_35ssp"
+                android:layout_height="@dimen/_35ssp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:layout_marginBottom="-12dp"
+
+
+                />
+
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView1item_there_video"
+            android:layout_margin="10dp"
+
+            android:layout_toRightOf="@id/imageView1item_there_video">
+
+            <ImageView
+                android:id="@+id/video_player_there"
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp" />
+
+            <FrameLayout
+                android:id="@+id/media_controller_there"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/holder_there"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:background="@drawable/ic_play_me" />
+
+            <ProgressBar
+                android:id="@+id/buffereing_there"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <RelativeLayout
+        android:layout_margin="@dimen/_5sdp"
+        android:id="@+id/layout_me"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_216sdp">
+
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_View_item_me_video"
+                android:layout_width="@dimen/_35ssp"
+                android:layout_height="@dimen/_35ssp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:layout_marginBottom="-12dp"
+
+
+                />
+
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_View_item_me_video"
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@id/image_View_item_me_video">
+
+            <ImageView
+                android:background="@color/black"
+                android:id="@+id/video_player_me"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp" />
+
+            <FrameLayout
+                android:id="@+id/media_controller_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/holder_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_play_me" />
+
+            <ProgressBar
+                android:id="@+id/buffereing_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

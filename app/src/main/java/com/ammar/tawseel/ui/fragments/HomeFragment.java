@@ -26,6 +26,7 @@ import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.data.DataFinshOrder;
 import com.ammar.tawseel.pojo.data.DataOrder;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.uitllis.Cemmon;
 import com.ammar.tawseel.uitllis.OnclicksInActivities;
 
 import java.util.ArrayList;
@@ -54,6 +55,11 @@ ShardEditor shardEditor;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         shardEditor=new ShardEditor(getActivity());
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+
+            Cemmon.setLocale(getActivity(), shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
 
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
@@ -86,7 +92,7 @@ ShardEditor shardEditor;
 
     private void loadCurrentOrders() {
         Call<APIResponse.ResponseCurrentOrder>call=apiInterFace.currentOrder( "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                "ar"
+                shardEditor.loadData().get(ShardEditor.KEY_LANG)
                 );
         call.enqueue(new Callback<APIResponse.ResponseCurrentOrder>() {
             @Override
@@ -115,8 +121,9 @@ ShardEditor shardEditor;
 
     }
     private void loadFinshidOrders() {
-        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders( "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                "ar"
+        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(
+                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG)
         );
         call.enqueue(new Callback<APIResponse.ResponseFinshedOrder>() {
             @Override
@@ -144,11 +151,12 @@ ShardEditor shardEditor;
 
 
     }
+    @SuppressLint("WrongConstant")
     private void openDraw() {
         binding.toogles.setOnClickListener((View.OnClickListener) v -> {
 
             DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.draw);
-            drawer.openDrawer(Gravity.LEFT);
+            drawer.openDrawer(Gravity.START);
 
         });
     }

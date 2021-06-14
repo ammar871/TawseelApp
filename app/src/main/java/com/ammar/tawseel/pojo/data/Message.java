@@ -1,9 +1,12 @@
 package com.ammar.tawseel.pojo.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Message {
+public class Message implements Parcelable {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -34,6 +37,38 @@ public class Message {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    public Message() {
+    }
+
+    public Message(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        orderId = in.readString();
+        from = in.readString();
+        senderType = in.readString();
+        to = in.readString();
+        reciverType = in.readString();
+        message = in.readString();
+        type = in.readString();
+        createdAt = in.readString();
+        updatedAt = in.readString();
+    }
+
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
+        @Override
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
+        }
+
+        @Override
+        public Message[] newArray(int size) {
+            return new Message[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -113,5 +148,29 @@ public class Message {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(orderId);
+        dest.writeString(from);
+        dest.writeString(senderType);
+        dest.writeString(to);
+        dest.writeString(reciverType);
+        dest.writeString(message);
+        dest.writeString(type);
+        dest.writeString(createdAt);
+        dest.writeString(updatedAt);
     }
 }

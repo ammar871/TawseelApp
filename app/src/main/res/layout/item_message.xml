@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
     android:layout_margin="@dimen/_4sdp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/black"
     app:cardCornerRadius="@dimen/_10sdp"
     app:cardElevation="@dimen/_1sdp"
 
@@ -22,11 +23,12 @@
             android:id="@+id/delete_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_10sdp"
             android:padding="@dimen/_8sdp"
-            app:srcCompat="@drawable/ic_delete_sweep" />
+            app:srcCompat="@drawable/ic_delete_sweep"
+            android:contentDescription="TODO" />
     </RelativeLayout>
 
 
@@ -42,27 +44,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-
-                android:id="@+id/imageView1"
-                android:layout_width="@dimen/_50ssp"
-                android:layout_height="@dimen/_50ssp"
-                android:layout_gravity="right"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/imagtest"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView1message"
                 app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:riv_border_color="#333333"
-
-                app:riv_corner_radius="30dip"
-                app:riv_mutate_background="true"
-                app:riv_oval="true"
-
-                />
+                android:paddingRight="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="@dimen/_40ssp"
+                android:layout_height="@dimen/_40ssp"
+                android:src="@drawable/imagtest"
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/tv_name_message"
@@ -76,8 +68,8 @@
 
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp"
-                app:layout_constraintRight_toLeftOf="@id/imageView1"
-                app:layout_constraintTop_toTopOf="@id/imageView1" />
+                app:layout_constraintRight_toLeftOf="@id/imageView1message"
+                app:layout_constraintTop_toTopOf="@id/imageView1message" />
 
             <TextView
                 android:id="@+id/tv_messgee"
@@ -89,10 +81,10 @@
                 android:fontFamily="@font/medium"
                 android:gravity="right"
                 android:maxLines="1"
-                android:text="متى سنبدا العمل مباشرة ؟"
+
                 android:textColor="@color/text_coloe"
                 android:textSize="@dimen/_11sdp"
-                app:layout_constraintRight_toLeftOf="@id/imageView1"
+                app:layout_constraintRight_toLeftOf="@id/imageView1message"
                 app:layout_constraintTop_toBottomOf="@id/tv_name_message" />
 
 

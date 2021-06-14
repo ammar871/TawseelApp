@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/bold"
-                android:text="الملف الشخصى"
+                android:text="@string/details_accounte"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +59,7 @@
                     android:layout_gravity="right"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:fontFamily="@font/bold"
-                    android:text="قم بتعبئة البيانات التالية"
+                    android:text="@string/fill_detail"
                     android:textColor="#707070"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
                             android:focusable="false"
 
                             android:gravity="right"
-                            android:hint="تحديد الموقع"
+                            android:hint="@string/selecte_location"
 
 
                             app:boxBackgroundColor="@android:color/transparent"
@@ -134,7 +134,7 @@
 
                         android:background="@drawable/drawble_edit2"
                         android:gravity="right"
-                        android:hint="الاسم كاملاً"
+                        android:hint="@string/all_name"
 
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxStrokeWidth="0dp"
@@ -168,7 +168,7 @@
 
                         android:background="@drawable/drawble_edit2"
                         android:gravity="right"
-                        android:hint="رقم الجوالً"
+                        android:hint="@string/number_phone"
 
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxStrokeWidth="0dp"
@@ -191,7 +191,7 @@
                     android:layout_gravity="right"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:fontFamily="@font/bold"
-                    android:text="صورة شخصية"
+                    android:text="@string/photo"
                     android:textColor="#707070"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -264,7 +264,7 @@
                         android:fontFamily="@font/black"
                         android:gravity="center"
 
-                        android:text="حفظ البيانات"
+                        android:text="@string/svae_change"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"

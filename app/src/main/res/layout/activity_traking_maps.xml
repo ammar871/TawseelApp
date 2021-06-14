@@ -14,6 +14,7 @@
         tools:context=".ui.TrakingMapsActivity">
 
         <RelativeLayout
+            android:id="@+id/home_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/backroundtrans">
@@ -66,7 +67,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:fontFamily="@font/medium"
-                            android:text="اسم السائق :  "
+                            android:text="@string/name_drive"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp" />
 
@@ -160,7 +161,7 @@ android:id="@+id/tv_date"
                                 android:fontFamily="@font/medium"
                                 android:gravity="center_vertical"
 
-                                android:text="رقم الفاتورة"
+                                android:text="@string/number_bill"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_11sdp"
@@ -207,7 +208,7 @@ android:id="@+id/numberFatora"
                                 android:gravity="center"
 
 
-                                android:text="مبلغ التوصيل"
+                                android:text="@string/paid_bill_trak"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_11sdp"
@@ -284,7 +285,7 @@ android:id="@+id/price_Fatora"
 
 
                                 android:fontFamily="@font/medium"
-                                android:text="من"
+                                android:text="@string/from"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_11sdp" />
@@ -327,7 +328,7 @@ android:id="@+id/tv_from"
 
 
                                 android:fontFamily="@font/medium"
-                                android:text="إلى"
+                                android:text="@string/to"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_11sdp" />
@@ -356,6 +357,17 @@ android:id="@+id/tv_to"
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/layout_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
 
+        </FrameLayout>
     </RelativeLayout>
 </layout>

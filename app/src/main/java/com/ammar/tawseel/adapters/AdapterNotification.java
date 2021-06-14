@@ -2,6 +2,7 @@ package com.ammar.tawseel.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.pojo.data.DataNotification;
+import com.ammar.tawseel.ui.ConfirmActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,10 +32,27 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     public interface OnclickMessage {
 
-        public void itemOnclick();
+        public void itemOnclickNewBill(DataNotification dataNotification, int i);
     }
 
     int layout;
+
+    @Override
+    public int getItemViewType(int position) {
+        if (list.get(position).getReaded().equals("0")) {
+            return 0;
+        }
+
+        return 1;
+
+
+    }
+
+    public AdapterNotification(ArrayList<DataNotification> list, Context mcontext, OnclickMessage onclickMessage) {
+        this.list = list;
+        this.mcontext = mcontext;
+        this.onclickMessage = onclickMessage;
+    }
 
     public AdapterNotification(ArrayList<DataNotification> list, Context mcontext) {
 
@@ -46,8 +65,15 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     @NonNull
     @Override
     public ViewHolderVidio onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notify, parent, false);
-        return new ViewHolderVidio(view);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+
+        View view;
+        if (viewType == 0 ) {
+            view = layoutInflater.inflate(R.layout.item_noty_today, parent, false);
+            return new ViewHolderVidio(view);
+        }
+            view = layoutInflater.inflate(R.layout.item_notify, parent, false);
+            return new ViewHolderVidio(view);
 
     }
 
@@ -55,9 +81,10 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
-        holder.cardView.setBackgroundColor(mcontext.getResources().getColor(R.color.core_notiy));
-        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
 
         Date d = null;
 
@@ -72,37 +99,106 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         holder.date_notiy.setText(formatted + "");
 
 
-        if (list.get(position).getType().equals("accept-order")) {
-            holder.name_notiy.setText("لقد وافق على طلب رسالتك "  );
-        } else if (list.get(position).getType().equals("new-bill")) {
-            holder.name_notiy.setText("لقد تم انشاء فاتورة جديدة برقم " );
-        } else if (list.get(position).getType().equals("deliver-don")) {
-            holder.name_notiy.setText("لقد تم توصيل طلبك  " );
+        if (list.get(position).getType().equals("new-bill")) {
+            holder.name_notiy.setText("فاتورةجدیدةرقم ");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 0);
+                }
+            });
+        } else if (list.get(position).getType().equals("deliver-order")) {
+
+            holder.name_notiy.setText("اشعارطلب توصیل للطلب رقم ");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent=new Intent(mcontext, ConfirmActivity.class);
+               intent.putExtra("idOrder",list.get(position).getTarget()+"");
+               mcontext.startActivity(intent);
+           }
+       });
+
+        } else if (list.get(position).getType().equals("deliver-confirm")) {
+            holder.name_notiy.setText("لقد تم توصيل طلبك  ");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 2);
+                }
+            });
+
+        } else if (list.get(position).getType().equals("accept-order")) {
+            holder.name_notiy.setText("تم تأكید طلب المراسلة" + list.get(position).getTarget() + "  للطلب من قبل مندوب التوصیل  ");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 3);
+                }
+            });
+
         } else if (list.get(position).getType().equals("refuse-order")) {
-            holder.name_notiy.setText("لقد تم رفض طلبك  " );
+
+            holder.name_notiy.setText( "تم رفض طلب المراسلة للطلب   " + list.get(position).getTarget() +"من قبل مندوب التوصيل");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 4);
+                }
+            });
+
+        } else if (list.get(position).getType().equals("user-add-rate")) {
+            holder.name_notiy.setText("تم تقییم السائق: ");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 5);
+                }
+            });
+        } else if (list.get(position).getType().equals("paid-bill")) {
+            holder.name_notiy.setText("تم دفع فاتورةرقم");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 6);
+                }
+            });
+        } else if (list.get(position).getType().equals("cancel-bill")) {
+            holder.name_notiy.setText("تم الغاء فاتورة رقم :");
+            holder.desc_noty.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 7);
+                }
+            });
+        }
+        else if (list.get(position).getType().equals("admin-accept-order")||
+                list.get(position).getType().equals("admin-refues-order")||
+                list.get(position).getType().equals("admin-id-papers")||
+                list.get(position).getType().equals("admin-activate-account")||
+                list.get(position).getType().equals("admin-financial-boost")||
+                list.get(position).getType().equals("admin-new-rate")||
+                list.get(position).getType().equals("admin-cash")) {
+
+            holder.name_notiy.setText(list.get(position).getTarget() + "");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onclickMessage.itemOnclickNewBill(list.get(position), 8);
+                }
+            });
         }
 
 
-        holder.date_notiy.setText(list.get(position).getReciver() + "");
-        holder.desc_noty.setText(list.get(position).getTarget() + "");
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // onclickMessage.itemOnclick();
-            }
-        });
     }
-
-
-//    private void intentMothed(Class a, Catogray value) {
-//
-//        Intent intent = new Intent(mcontext, a);
-//        intent.putExtra("catogery", value);
-//
-//        mcontext.startActivity(intent);
-//    }
-
 
     @Override
     public int getItemCount() {
@@ -125,6 +221,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         public FrameLayout viewForeground;
         TextView name_notiy, desc_noty, date_notiy;
         CardView cardView;
+
         public ViewHolderVidio(@NonNull View itemView) {
             super(itemView);
 

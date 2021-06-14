@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.ammar.tawseel.BuildConfig;
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivitySelectLocationBinding;
+import com.ammar.tawseel.editor.ShardEditor;
+import com.ammar.tawseel.uitllis.Cemmon;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -114,7 +116,7 @@ public class SelectLocationActivity extends FragmentActivity implements OnMapRea
     private ImageView img_back, img_pin;
     //private RadarView radar_view;
     private ProgressBar pro_bar;
-
+ShardEditor shardEditor;
     ActivitySelectLocationBinding binding;
 
     @Override
@@ -122,7 +124,12 @@ public class SelectLocationActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-      
+        shardEditor=new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_select_location);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         try {

@@ -28,7 +28,7 @@ public class Rating {
     private String updatedAt;
     @SerializedName("driver")
     @Expose
-    private Driver driver;
+    private DriverRate driver;
 
     public Integer getId() {
         return id;
@@ -86,11 +86,11 @@ public class Rating {
         this.updatedAt = updatedAt;
     }
 
-    public Driver getDriver() {
+    public DriverRate getDriver() {
         return driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void setDriver(DriverRate driver) {
         this.driver = driver;
     }
 

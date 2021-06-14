@@ -41,7 +41,12 @@ ActivityRegisterBinding binding;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        shardEditor = new ShardEditor(this);
+        shardEditor=new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
@@ -78,7 +83,8 @@ ActivityRegisterBinding binding;
         binding.progressbar.setVisibility(View.VISIBLE);
         binding.imgRegister.setVisibility(View.GONE);
 
-        Call<APIResponse.ResponseRegister> call = apiInterFace.registerAPI("en",
+        Call<APIResponse.ResponseRegister> call = apiInterFace.registerAPI(
+                shardEditor.loadData().get(ShardEditor.KEY_LANG),
                 name, pass,email,"android", Cemmon.FIREBASE_TOKEN);
 
         call.enqueue(new Callback<APIResponse.ResponseRegister>() {
@@ -95,7 +101,7 @@ ActivityRegisterBinding binding;
 
 
                         shardEditor.saveToken(response.body().getToken());
-
+                        Cemmon.NAME_OF_USER=response.body().getData().getUsername();
 //                       shardEditor.saveData(  new DataUser(response.body().getData().getId(),
 //                               response.body().getData().getUsername()
 //                               ,response.body().getData().getEmail()

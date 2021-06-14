@@ -33,7 +33,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:fontFamily="@font/bold"
-                android:text="الفواتير"
+                android:text="@string/billes"
 
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp" />
@@ -41,13 +41,14 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_15ssp"
+                android:layout_marginStart="@dimen/_5ssp"
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:fontFamily="@font/bold"
                 android:text="الطلبات"
                 android:textColor="@color/white"
+                android:padding="@dimen/_10sdp"
 android:id="@+id/toggles"
                 android:textSize="@dimen/_15ssp"
                 app:srcCompat="@drawable/ic_menu" />
@@ -96,7 +97,7 @@ android:id="@+id/toggles"
 
 
                         android:fontFamily="@font/black"
-                        android:text="المدفوعة"
+                        android:text="@string/paided"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </RelativeLayout>
@@ -126,7 +127,7 @@ android:id="@+id/toggles"
 
 
                         android:fontFamily="@font/black"
-                        android:text="المنتهية"
+                        android:text="@string/finshed_order"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </RelativeLayout>
@@ -143,14 +144,78 @@ android:id="@+id/toggles"
                     />
 
             </FrameLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_orders"
+            <androidx.core.widget.NestedScrollView
+                android:visibility="gone"
+                android:id="@+id/nestscroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20ssp"
-                android:layout_marginBottom="@dimen/_10sdp">
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_orders_current"
+                        android:layout_width="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20ssp"
+                        android:layout_marginBottom="@dimen/_10sdp">
+                    </androidx.recyclerview.widget.RecyclerView>
 
-            </androidx.recyclerview.widget.RecyclerView>
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/_25sdp"
+                        android:id="@+id/pro_bar_pag"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+
+                        android:indeterminate="true"
+                        android:layout_gravity="center_horizontal"
+                        android:indeterminateTint="@color/text_color"
+                        android:outlineAmbientShadowColor="@color/text_color"
+                        android:outlineSpotShadowColor="@color/text_color" />
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+            <androidx.core.widget.NestedScrollView
+                android:visibility="gone"
+                android:id="@+id/nestscrollfinshed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_orders_finshed"
+                        android:layout_width="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20ssp"
+                        android:layout_marginBottom="@dimen/_10sdp">
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/_25sdp"
+                        android:id="@+id/pro_bar_pag_finshid"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+
+                        android:indeterminate="true"
+                        android:layout_gravity="center_horizontal"
+                        android:indeterminateTint="@color/text_color"
+                        android:outlineAmbientShadowColor="@color/text_color"
+                        android:outlineSpotShadowColor="@color/text_color" />
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+
         </LinearLayout>
 
 

@@ -13,13 +13,16 @@ public class Driver {
     private Integer id;
     @SerializedName("gpsLat")
     @Expose
-    private Object gpsLat;
+    private Double gpsLat;
     @SerializedName("gpsLng")
     @Expose
-    private Object gpsLng;
+    private Double gpsLng;
     @SerializedName("gpsAddress")
     @Expose
     private Object gpsAddress;
+    @SerializedName("distance")
+    @Expose
+    private Double distance;
 
     public String getStatus() {
         return status;
@@ -37,19 +40,19 @@ public class Driver {
         this.id = id;
     }
 
-    public Object getGpsLat() {
+    public Double getGpsLat() {
         return gpsLat;
     }
 
-    public void setGpsLat(Object gpsLat) {
+    public void setGpsLat(Double gpsLat) {
         this.gpsLat = gpsLat;
     }
 
-    public Object getGpsLng() {
+    public Double getGpsLng() {
         return gpsLng;
     }
 
-    public void setGpsLng(Object gpsLng) {
+    public void setGpsLng(Double gpsLng) {
         this.gpsLng = gpsLng;
     }
 
@@ -59,5 +62,13 @@ public class Driver {
 
     public void setGpsAddress(Object gpsAddress) {
         this.gpsAddress = gpsAddress;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

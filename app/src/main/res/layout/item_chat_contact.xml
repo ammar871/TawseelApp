@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/their_messagec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="60dp"
+        android:visibility="gone">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginBottom="-12dp"
+            android:id="@+id/imageView1c"
+            android:layout_width="@dimen/_35ssp"
+            android:layout_height="@dimen/_35ssp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+
+
+
+            />
+
+
+        <TextView
+            android:id="@+id/message_bodyc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView1c"
+            android:layout_toRightOf="@id/imageView1c"
+            android:background="@drawable/their_message"
+            android:elevation="2dp"
+            android:paddingStart="@dimen/_15ssp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_15ssp"
+            android:paddingBottom="@dimen/_25sdp"
+            android:paddingHorizontal="16dp"
+
+            android:text="How are you doing? This is a long message that should probably wrap."
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/myMessagec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="15dp"
+        android:visibility="gone">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView1mec"
+            android:layout_width="@dimen/_33ssp"
+            android:layout_marginBottom="-12dp"
+            android:layout_height="@dimen/_33ssp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:src="@drawable/imagerat"
+
+
+            />
+
+        <TextView
+
+            android:id="@+id/message_bodymec"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView1mec"
+
+            android:layout_toLeftOf="@id/imageView1mec"
+            android:background="@drawable/my_message"
+            android:elevation="2dp"
+            android:fontFamily="@font/medium"
+            android:gravity="left"
+            android:paddingStart="@dimen/_15ssp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_15ssp"
+            android:paddingBottom="@dimen/_25sdp"
+            android:text="Placeholder messagedggggggggggggggggggggggggggggggggggggggggdnnnnnnnnnnnnnnnnnndnnnnnnnnnnnnnnnnnnnnn"
+            android:textColor="#fff"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -66,13 +66,12 @@
 
 
                 <androidx.appcompat.widget.AppCompatRatingBar
-                    android:id="@+id/tv_date_messgee"
+                    android:id="@+id/rating_messgee"
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
 
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
-
                     android:layout_marginTop="@dimen/_5sdp"
                     android:maxLines="1"
                     android:rating="5"

@@ -1,10 +1,12 @@
-package com.ammar.tawseel.adapters;
+package com.ammar.tawseel.helper;
 
 import android.graphics.Canvas;
 import android.view.View;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ammar.tawseel.adapters.AdapterMessages;
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     private RecyclerItemTouchHelperListener listener;

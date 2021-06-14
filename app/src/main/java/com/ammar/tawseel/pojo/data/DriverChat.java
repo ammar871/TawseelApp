@@ -15,7 +15,7 @@ public class DriverChat {
     private Integer id;
     @SerializedName("stars")
     @Expose
-    private Integer stars;
+    private Double stars;
 
     public String getIDName() {
         return iDName;
@@ -41,11 +41,11 @@ public class DriverChat {
         this.id = id;
     }
 
-    public Integer getStars() {
+    public Double getStars() {
         return stars;
     }
 
-    public void setStars(Integer stars) {
+    public void setStars(Double stars) {
         this.stars = stars;
     }
 

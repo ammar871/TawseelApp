@@ -51,7 +51,7 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/regular"
                     android:gravity="center"
-                    android:text="تأكد من تفعيل خاصية الموقع"
+                    android:text="@string/check_gps"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15ssp"
                     android:paddingBottom="@dimen/_8sdp"
@@ -70,7 +70,7 @@
                         android:id="@+id/tv_turrn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                       android:text="الاعدادات"
+                       android:text="@string/sitting"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_15ssp"
                         android:paddingLeft="@dimen/_10sdp"
@@ -203,7 +203,7 @@
 
 
                     android:background="@drawable/drawble_button"
-                    android:text="حفظ"
+                    android:text="@string/save"
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingEnd="@dimen/_15sdp"
                     android:fontFamily="@font/bold"

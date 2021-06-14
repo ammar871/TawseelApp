@@ -33,7 +33,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/regular"
                 android:gravity="center"
-                android:text="اشعار إتمام التوصيل"
+                android:text="@string/done_order"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:paddingBottom="@dimen/_2sdp"

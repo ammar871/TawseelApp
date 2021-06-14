@@ -79,6 +79,18 @@ public class ShardEditor {
         editor.putString(IS_TOKEN, token);
         editor.commit();
     }
+
+    public void saveLang(String lang) {
+
+        editor.putString(KEY_LANG, lang);
+        editor.commit();
+    }
+
+    public void loadLang(int lang) {
+
+        pref.getString(KEY_LANG, "");
+        editor.commit();
+    }
     public void saveOrderId(String orderId) {
 
         editor.putString(ORDER_ID, orderId);

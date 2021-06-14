@@ -1,8 +1,10 @@
 package com.ammar.tawseel.ui.auth;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.loader.content.CursorLoader;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -10,14 +12,18 @@ import android.content.IntentSender;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
@@ -43,10 +49,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +81,12 @@ public class UserProfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        shardEditor = new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG) != "") {
 
+            Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_profil);
 
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
@@ -116,16 +131,17 @@ public class UserProfilActivity extends AppCompatActivity {
         });
     }
 
+    MultipartBody.Part multipartBody;
+
     private void editeProfil(String latitude, String longitude, String addresss, String name, String phone, Uri saveuri) {
-        String imageUri;
-        if (saveuri != null) {
-            imageUri = getPath(saveuri);
-        } else {
-            imageUri = "";
-        }
+        RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), name);
+        RequestBody userphoneBody = RequestBody.create(MediaType.parse("text/plain"), phone);
+
+
         Call<APIResponse.ResponseProfile> call = apiInterFace.editProfile(
-                latitude
-                , longitude, addresss, name, phone, imageUri, "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+                Double.parseDouble(latitude)
+                , Double.parseDouble(longitude), addresss, usernameBody, userphoneBody, multipartBody,
+                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
 
 
         call.enqueue(new Callback<APIResponse.ResponseProfile>() {
@@ -138,14 +154,13 @@ public class UserProfilActivity extends AppCompatActivity {
                     binding.progressbar.setVisibility(View.GONE);
 
                     if (response.body().getStatus()) {
-                        Toast.makeText(UserProfilActivity.this, "تم التعديل بنجاح ", Toast.LENGTH_SHORT).show();
+
+                        showDialogScuccess(R.layout.dialog_success, 1);
                         Log.d("avatar", "onResponse: " + response.body().getData().getName());
-                        startActivity(new Intent(UserProfilActivity.this, HomeActivity.class));
-                        finish();
+
 
                     } else {
-
-                        Toast.makeText(UserProfilActivity.this, "" + response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                        showDialogScuccess(R.layout.dialog_wrong, 0);
                     }
 
 
@@ -156,12 +171,52 @@ public class UserProfilActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<APIResponse.ResponseProfile> call, @NonNull Throwable t) {
                 binding.tvSave.setVisibility(View.VISIBLE);
                 binding.progressbar.setVisibility(View.GONE);
-                // Toast.makeText(UserProfilActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                showDialogScuccess(R.layout.dialog_wrong, 0);
+
             }
         });
 
 
     }
+
+    private void showDialogScuccess(int dialog_success, int statuts) {
+
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(dialog_success, null);
+
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+
+        new CountDownTimer(3000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+                alertDialog.dismiss();
+                if (statuts == 1) {
+                    startActivity(new Intent(UserProfilActivity.this, HomeActivity.class));
+                    finish();
+                }
+
+            }
+        }.start();
+
+    }
+
+
+
+
 
     private boolean isValue() {
         if (binding.editTextLocation.getText().toString().isEmpty() && binding.editTextLocation.getText().toString().equals("")) {
@@ -187,7 +242,7 @@ public class UserProfilActivity extends AppCompatActivity {
     private void getProfile() {
 
         Call<APIResponse.ResponseProfile> call = apiInterFace.getProfile(
-                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN), "ar", "application/json");
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN), shardEditor.loadData().get(ShardEditor.KEY_LANG), "application/json");
         call.enqueue(new Callback<APIResponse.ResponseProfile>() {
             @Override
             public void onResponse(@NonNull Call<APIResponse.ResponseProfile> call,
@@ -228,26 +283,16 @@ public class UserProfilActivity extends AppCompatActivity {
     }
 
     String selectedImagePath;
+    Bitmap bitmap;
+    String imageString;
+    String imagepath;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
 
-                    saveuri = data.getData();
-
-                    binding.profileImage.setImageURI(saveuri);
-
-                    Uri selectedImageUri = data.getData();
-                    Log.d("images", "onActivityResult: " + saveuri);
-
-
-                }
-
-                break;
             case 1:
                 if (resultCode == RESULT_OK) {
                     String tv_location = data.getStringExtra("location");
@@ -256,10 +301,85 @@ public class UserProfilActivity extends AppCompatActivity {
                     binding.editTextLocation.setText(tv_location);
 
                 }
+            case 0:
+                if (resultCode == RESULT_OK) {
+
+
+                    File file = new File(getRealPathFromURI(data.getData()));
+                    RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
+                            file);
+                    multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+
+                    Log.d("mmmmmmmmmm", "onActivityResult: " + multipartBody + "\n" + file);
+                    try {
+                        //getting image from gallery
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+
+                        //Setting image to ImageView
+                        binding.profileImage.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //converting image to base64 string
+
+
+//                    imageString =getRealPathFromUri(filePath);
+
+
+                }
+
                 break;
+
+
+            case 2:
+                if (resultCode == RESULT_OK) {
+
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    Uri uri = getImageUri(photo);
+                    File file = new File(getRealPathFromURI(uri));
+                    RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
+                            file);
+                    multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+
+                    try {
+                        //getting image from gallery
+
+
+                        //Setting image to ImageView
+                        binding.profileImage.setImageBitmap(photo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    //converting image to base64 string
+
+
+                    imageString = getRealPathFromURI(uri);
+
+                    Log.d("aaaaaaaaaaaaa", "onActivityResult: " + imageString);
+                }
+
+                break;
+
         }
+    }
 
+    private Uri getImageUri(Bitmap photo) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), photo, "Title", null);
+        return Uri.parse(path);
+    }
 
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
     }
 
     public String getPath(Uri uri) {

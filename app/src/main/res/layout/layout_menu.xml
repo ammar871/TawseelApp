@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,13 +23,14 @@
             android:layout_marginBottom="@dimen/_15ssp"
             android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
+                android:layout_width="@dimen/_110sdp"
+                android:layout_height="@dimen/_110sdp"
                 android:layout_gravity="center"
                 android:background="@drawable/backround_circle"
-                android:src="@drawable/imagtest"
+                android:src="@drawable/imagerat"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -38,6 +40,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_name_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -76,21 +79,33 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
-
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:text="الملف الشخصي" />
-
         <TextView
+            android:id="@+id/nav_order"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:background="@drawable/line_drawble"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|left"
+
+            android:text="الطلبات" />
+        <TextView
+            android:id="@+id/tv_rates"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
-android:id="@+id/tv_rates"
+            android:textColor="@color/black"
+            android:gravity="center_vertical|left"
             android:text="التقييمات" />
 
         <TextView
@@ -98,9 +113,10 @@ android:id="@+id/tv_rates"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:id="@+id/tv_sitting"
             android:text="الاعدادات" />
 
@@ -109,9 +125,10 @@ android:id="@+id/tv_rates"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:id="@+id/tv_about_us"
             android:text="من نحن" />
 
@@ -120,9 +137,10 @@ android:id="@+id/tv_rates"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:id="@+id/tv_call_us"
             android:text="اتصل بنا" />
 
@@ -131,9 +149,10 @@ android:id="@+id/tv_rates"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:id="@+id/tv_plociy"
             android:text="سياسة الخصوصية و الاستخدام" />
 
@@ -142,9 +161,10 @@ android:id="@+id/tv_rates"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/line_drawble"
-            android:drawableLeft="@drawable/ic_chevron_left_"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:fontFamily="@font/medium"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
             android:id="@+id/tv_shar"
             android:text="مشاركة التطبيق" />
 
@@ -165,8 +185,8 @@ android:id="@+id/tv_rates"
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-android:id="@+id/nav_logout"
-
+        android:id="@+id/nav_logout"
+        android:textColor="@color/black"
         android:layout_margin="@dimen/_15sdp"
         android:fontFamily="@font/medium"
         android:gravity="center_vertical|right"

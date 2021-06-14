@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.pojo.data.DataFatora;
 import com.ammar.tawseel.pojo.data.DataMessags;
+import com.ammar.tawseel.pojo.data.DataNotification;
 import com.ammar.tawseel.pojo.data.DataOrder;
 import com.squareup.picasso.Picasso;
 
@@ -25,9 +26,19 @@ public class AdapterFatora extends RecyclerView.Adapter<AdapterFatora.ViewHolder
     ArrayList<DataFatora> list;
     private Context mcontext;
 
+    private OnclickMessage onclickMessage;
+    public interface OnclickMessage {
 
+        public void itemOnclickNewFatora(DataFatora dataNotification);
+    }
 
     int layout;
+
+    public AdapterFatora(ArrayList<DataFatora> list, Context mcontext, OnclickMessage onclickMessage) {
+        this.list = list;
+        this.mcontext = mcontext;
+        this.onclickMessage = onclickMessage;
+    }
 
     public AdapterFatora(ArrayList<DataFatora> list, Context mcontext) {
 
@@ -57,7 +68,7 @@ public class AdapterFatora extends RecyclerView.Adapter<AdapterFatora.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  onclickMessage.itemOnclick();
+                onclickMessage.itemOnclickNewFatora(list.get(position));
             }
         });
     }

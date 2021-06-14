@@ -41,20 +41,21 @@
 
             android:textColor="@color/white"
             android:textSize="@dimen/_15ssp" />
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/_15ssp"
+            android:layout_marginStart="@dimen/_5ssp"
             android:layout_marginBottom="@dimen/_20sdp"
             android:fontFamily="@font/bold"
-android:id="@+id/toggles"
+            android:id="@+id/toggles"
+            android:padding="@dimen/_10sdp"
             android:textColor="@color/white"
 
             android:textSize="@dimen/_15ssp"
             app:srcCompat="@drawable/ic_menu" />
+
 
     </RelativeLayout>
     <FrameLayout
@@ -68,18 +69,44 @@ android:id="@+id/toggles"
             />
 
     </FrameLayout>
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_10ssp"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:layout_marginRight="@dimen/_6sdp"
-        android:layout_marginLeft="@dimen/_6sdp"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_6sdp"
 
-android:visibility="gone"
-        android:id="@+id/rv_message">
+                android:visibility="gone"
+                android:id="@+id/rv_message">
 
-    </androidx.recyclerview.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
+            <ProgressBar
+                android:visibility="gone"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:id="@+id/pro_bar_pag_finshid"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+
+                android:indeterminate="true"
+                android:layout_gravity="center_horizontal"
+                android:indeterminateTint="@color/text_color"
+                android:outlineAmbientShadowColor="@color/text_color"
+                android:outlineSpotShadowColor="@color/text_color" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>
 
 

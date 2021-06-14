@@ -7,7 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main">#0093AE</color>  <color name="main2"> #023C80</color>
+    <color name="main">#0093AE</color>
+    <color name="main2"> #023C80</color>
 
     <color name="gerdiant">#0093AE</color>
     <color name="stroke_color"> #FF8000</color>
@@ -34,7 +35,9 @@
     <color name="line_color">#707070</color>
     <color name="core_dialog">#006AE6</color>
     <color name="core_dialog2">#012754</color>
-
+    <color name="green">   #00C936</color>
     <color name="core_notiy">#FFE9C4</color>
+    <color name="core_mask">#F3F3F3</color>
+
 
 </resources>

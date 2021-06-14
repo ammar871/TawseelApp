@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+
+    app:cardCornerRadius="@dimen/_8sdp">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/_8ssp"
+        android:layout_marginRight="@dimen/_8ssp"
+
+        android:orientation="vertical"
+        android:padding="@dimen/_25ssp"
+        android:paddingTop="@dimen/_15ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+
+            app:srcCompat="@drawable/ic_logopages" />
+
+        <TextView
+            android:id="@+id/tv_label_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="حدد نوع الخدمة "
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp" />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <RadioButton
+                android:id="@+id/radio_taxi"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:fontFamily="@font/medium"
+                android:padding="@dimen/_5sdp"
+                android:text="تــاكسي"
+                android:textColor="@color/core_dialog2"
+                android:textSize="@dimen/_12sdp"
+                android:theme="@style/RadioButtonThememessage" />
+
+            <RadioButton
+                android:id="@+id/radio_ordertalbat"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:fontFamily="@font/medium"
+                android:padding="@dimen/_5sdp"
+                android:text="توصيل طلبات مطاعم وغيرها"
+                android:textColor="@color/core_dialog2"
+                android:textSize="@dimen/_12sdp"
+                android:theme="@style/RadioButtonThememessage" />
+
+            <RadioButton
+                android:id="@+id/radio_orderPrecent"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:fontFamily="@font/medium"
+                android:padding="@dimen/_5sdp"
+                android:text="توصيل هدية فى مدينة أخرى"
+                android:textColor="@color/core_dialog2"
+                android:textSize="@dimen/_12sdp"
+                android:theme="@style/RadioButtonThememessage" />
+
+            <RadioButton
+                android:id="@+id/radio_orderProduct"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:fontFamily="@font/medium"
+                android:padding="@dimen/_5sdp"
+                android:text="توصيل شحنات وبضائع"
+                android:textColor="@color/core_dialog2"
+                android:textSize="@dimen/_12sdp"
+                android:theme="@style/RadioButtonThememessage" />
+
+            <RadioButton
+                android:id="@+id/radio_other"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:fontFamily="@font/medium"
+                android:padding="@dimen/_5sdp"
+                android:text="أخرى"
+                android:textColor="@color/core_dialog2"
+                android:textSize="@dimen/_12sdp"
+                android:theme="@style/RadioButtonThememessage" />
+
+
+
+        </RadioGroup>
+
+
+
+
+
+
+
+
+
+
+        <FrameLayout
+            android:id="@+id/tv_next"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/drawble_button_dialog"
+            android:orientation="horizontal">
+<ProgressBar
+    android:id="@+id/progrss_dilog"
+    android:layout_width="@dimen/_30sdp"
+    android:layout_height="@dimen/_30sdp"
+    android:layout_gravity="center"
+    android:visibility="gone"
+    android:theme="@style/Theme.Tawseel.mainColor2"/>
+            <TextView
+android:id="@+id/tv_text_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+
+                android:fontFamily="@font/medium"
+                android:paddingLeft="@dimen/_15sdp"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingRight="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="التالى "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

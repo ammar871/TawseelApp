@@ -1,82 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="@dimen/_5ssp"
+    android:paddingTop="@dimen/_10sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:paddingBottom="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/draw_arround"
     android:orientation="vertical">
-    <androidx.cardview.widget.CardView
+
+    <FrameLayout
+        android:padding="@dimen/_5sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_15ssp"
-        app:cardCornerRadius="@dimen/_10sdp">
+
+        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:orientation="vertical"
-            >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:padding="@dimen/_10sdp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:text="موقع المندوب"
-                    app:layout_constraintWidth_percent=".30"
-                    android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:textColor="@color/light_text"
-                    />
-                <CheckBox
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/tv_text"
-                    android:text="أبعد من 5 كيلو"
-                    app:layout_constraintWidth_percent=".33"
-                    android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:textColor="@color/light_text"
-                   />
-                <CheckBox
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:text="أقرب من 5 كيلو"
-                    app:layout_constraintWidth_percent=".33"
-                    android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:textColor="@color/light_text"
-                    />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="#707070" />
-
+            tools:ignore="UselessParent">
 
             <RelativeLayout
-                android:padding="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
 
                 >
 
@@ -84,33 +37,28 @@
                     android:id="@+id/tv_text_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                  android:layout_alignParentRight="true"
-                    android:text="تقييم المندوب"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_10sdp"
-
                     android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/light_text"
-                    />
+                    android:text="@string/rate_of_driv"
+                    android:textColor="@color/black"
+                    android:textSize="11dp" />
 
-                <androidx.appcompat.widget.AppCompatRatingBar
-                    android:id="@+id/tv_date_messgee"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
+                <RatingBar
+                    android:id="@+id/tv_datefillter"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
-
-
-                    android:maxLines="1"
-                    android:rating="5"
-                    android:text="25/06/2019"
-                    android:textColor="@color/login_color2"
-                    android:theme="@style/RatingBar"
                     android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/tv_text_rate"/>
+                    android:saveEnabled="true"
+                    android:isIndicator="false"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_toEndOf="@id/tv_text_rate"
+                    android:textColor="@color/login_color2"
+                    android:theme="@style/RatingBar" />
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -118,61 +66,102 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="#707070" />
 
-            <RelativeLayout
-                android:padding="@dimen/_10sdp"
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="@dimen/_10sdp">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_text_spinner"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                    android:layout_marginRight="@dimen/_5sdp"-->
+<!--                    android:fontFamily="@font/medium"-->
+<!--                    android:text="المسافة : "-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="@dimen/_11ssp" />-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/ed_distance"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_toLeftOf="@id/tv_text_spinner"-->
+<!--                    android:background="@null"-->
+<!--                    android:textSize="@dimen/_11sdp"-->
+<!--                    android:fontFamily="@font/medium"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:hint="اكتب هنا "-->
+<!--                    android:inputType="number" />-->
+<!--            </LinearLayout>-->
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                android:background="#707070" />-->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp">
+
                 <TextView
-                    android:id="@+id/tv_text_spinner"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_text"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="المدينة"
-                    android:layout_marginLeft="@dimen/_10sdp"
-
                     android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/light_text"
-                    />
+                    android:gravity="center_horizontal"
+                    android:text="موقع المندوب :"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <Spinner
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/group_radio_fillter"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:id="@+id/spinner_citis"/>
-            </RelativeLayout>
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_text"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".70">
 
-            <RelativeLayout
-                android:paddingTop="@dimen/_5sdp"
-                android:paddingBottom="@dimen/_5sdp"
-                android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_text_street"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="المنطقة"
-                    android:layout_marginLeft="@dimen/_10sdp"
+                    <RadioButton
+                        android:id="@+id/box_outSide"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/medium"
+                        android:text="أبعد من 5 كيلو"
+                        android:textColor="@color/black"
+                        android:theme="@style/RadioButtonTheme"
+                        android:textSize="11dp" />
 
-                    android:fontFamily="@font/medium"
-                    android:textSize="12dp"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/light_text"
-                    />
+                    <RadioButton
+                        android:id="@+id/box_inside"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:id="@+id/spinner_street"/>
-            </RelativeLayout>
+                        android:fontFamily="@font/medium"
+                        android:theme="@style/RadioButtonTheme"
+                        android:text="أقرب من 5 كيلو"
+                        android:textColor="@color/black"
+                        android:textSize="11dp" />
+                </RadioGroup>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 
 </LinearLayout>
