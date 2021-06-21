@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.ammar.tawseel.pojo.data.DataUser;
+import com.ammar.tawseel.ui.SplashActivity;
 import com.ammar.tawseel.ui.auth.LoginActivity;
 
 import java.util.HashMap;
@@ -135,9 +136,9 @@ public class ShardEditor {
         editor.commit();
     }
     public void logOut() {
-        editor.clear();
+       editor.remove(IS_LOGIN_WITH).apply();
         editor.commit();
-        Intent mIntent = new Intent(_context, LoginActivity.class);
+        Intent mIntent = new Intent(_context, SplashActivity.class);
         mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

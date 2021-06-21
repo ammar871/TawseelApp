@@ -174,13 +174,15 @@ public interface APIInterFace {
 
     @GET("api/user/current-orders?")
     Call<APIResponse.ResponseCurrentOrder> currentOrder(
+            @Query("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
 
-    @GET("api/user/finished-orders?page=1")
+    @GET("api/user/finished-orders?")
     Call<APIResponse.ResponseFinshedOrder> finishedOrders(
+            @Query("page") String page,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
@@ -369,5 +371,32 @@ public interface APIInterFace {
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/user/accept-order/{id}")
+    Call<APIResponse.PaidOrderResponse> finshOpreatoor(
+            @Path("id") String id,
+            @Field("payment_method") String payment_method,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @POST("api/user/cancel-order/{id}")
+    Call<APIResponse.PaidOrderResponse> cancelOpreatoor(
+            @Path("id") String id,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
+    );
+
+    @FormUrlEncoded
+    @POST("api/map/static-image?")
+        Call<ResponseBody> getPhoto(
+            @Field("lat") String lat,
+            @Field("lng") String lng
+
     );
 }

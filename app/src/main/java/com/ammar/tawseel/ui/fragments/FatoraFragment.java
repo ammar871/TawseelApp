@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.FragmentFatoraBinding;
@@ -38,6 +39,7 @@ public class FatoraFragment extends Fragment {
     FragmentFatoraBinding binding;
     APIInterFace apiInterFace;
     ShardEditor shardEditor;
+    String orderId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +47,7 @@ public class FatoraFragment extends Fragment {
         // Inflate the layout for this fragment
         shardEditor = new ShardEditor(getActivity());
 
-        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG) != "") {
 
             Cemmon.setLocale(getActivity(), shardEditor.loadData().get(ShardEditor.KEY_LANG));
 
@@ -54,6 +56,30 @@ public class FatoraFragment extends Fragment {
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
 
+        binding.layoutSucess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.prodSucces.setVisibility(View.VISIBLE);
+                binding.tvFinshOprator.setVisibility(View.GONE);
+                callPaidOrder();
+            }
+        });
+        binding.layoutDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.prodone.setVisibility(View.VISIBLE);
+                binding.tvCloseOprator.setVisibility(View.GONE);
+
+                callCancelOrder();
+            }
+        });
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assert getFragmentManager() != null;
+                getFragmentManager().popBackStackImmediate();
+            }
+        });
         openDraw();
 
         Bundle bundle = this.getArguments();
@@ -68,10 +94,90 @@ public class FatoraFragment extends Fragment {
         }
 
 
-
-
         return binding.getRoot();
     }
+
+    private void callPaidOrder() {
+        Call<APIResponse.PaidOrderResponse> call=apiInterFace.finshOpreatoor(orderId,"cash"
+                , "application/json",
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        call.enqueue(new Callback<APIResponse.PaidOrderResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.PaidOrderResponse> call,
+                                   @NonNull Response<APIResponse.PaidOrderResponse> response) {
+                if (response.code()==200){
+                    if (response.body().getStatus()){
+
+                        Toast.makeText(getActivity(), R.string.succesOprator, Toast.LENGTH_SHORT).show();
+                        binding.prodSucces.setVisibility(View.GONE);
+                        binding.tvFinshOprator.setVisibility(View.VISIBLE);
+                        assert getFragmentManager() != null;
+                        getFragmentManager().popBackStackImmediate();
+
+                    }else {
+                        Toast.makeText(getActivity(), ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                        binding.prodSucces.setVisibility(View.GONE);
+                        binding.tvFinshOprator.setVisibility(View.VISIBLE);
+                    }
+
+
+
+                }
+                binding.prodSucces.setVisibility(View.GONE);
+                binding.tvFinshOprator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse.PaidOrderResponse> call, Throwable t) {
+                binding.prodSucces.setVisibility(View.GONE);
+                binding.tvFinshOprator.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    private void callCancelOrder() {
+
+        Call<APIResponse.PaidOrderResponse> call=apiInterFace.cancelOpreatoor(orderId
+                , "application/json",
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG));
+
+        call.enqueue(new Callback<APIResponse.PaidOrderResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.PaidOrderResponse> call,
+                                   @NonNull Response<APIResponse.PaidOrderResponse> response) {
+                if (response.code()==200){
+                    if (response.body().getStatus()){
+
+                        Toast.makeText(getActivity(), R.string.succesOprator, Toast.LENGTH_SHORT).show();
+                        binding.prodone.setVisibility(View.GONE);
+                        binding.tvCloseOprator.setVisibility(View.VISIBLE);
+                        assert getFragmentManager() != null;
+                        getFragmentManager().popBackStackImmediate();
+                    }else {
+                        Toast.makeText(getActivity(), ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                        binding.prodone.setVisibility(View.GONE);
+                        binding.tvCloseOprator.setVisibility(View.VISIBLE);
+                    }
+
+
+
+                }
+                binding.prodone.setVisibility(View.GONE);
+                binding.tvCloseOprator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse.PaidOrderResponse> call, Throwable t) {
+                binding.prodone.setVisibility(View.GONE);
+                binding.tvCloseOprator.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
     @SuppressLint("WrongConstant")
     private void openDraw() {
         binding.toggls.setOnClickListener((View.OnClickListener) v -> {
@@ -80,6 +186,7 @@ public class FatoraFragment extends Fragment {
 
         });
     }
+
     private void loadShowBill(String idBill) {
 
         Call<APIResponse.ResponseShowBill> call = apiInterFace.showBill(idBill
@@ -93,6 +200,8 @@ public class FatoraFragment extends Fragment {
                                    @NonNull Response<APIResponse.ResponseShowBill> response) {
                 if (response.code() == 200) {
                     if (response.body().getStatus()) {
+
+                        orderId=response.body().getData().getOrderId()+"";
                         binding.tvNumberFatora.setText(response.body().getData().getId() + "");
                         binding.tvNameFatora.setText(response.body().getData().getName() + "");
                         binding.tvDevelaryFatora.setText(response.body().getData().getIDName() + "");

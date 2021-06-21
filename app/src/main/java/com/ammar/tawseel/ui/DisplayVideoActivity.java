@@ -29,6 +29,9 @@ ActivityDisplayVideoBinding binding;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_display_video);
+
+
+
         if (getIntent()!=null){
             uri=getIntent().getStringExtra("uri");
         }

@@ -68,7 +68,7 @@ ShardEditor shardEditor;
         binding.rvOrders.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         binding.rvOrders.setHasFixedSize(true);
 
-        loadCurrentOrders();
+//        loadCurrentOrders();
         openDraw();
 
         binding.layoutFoundOrder.setOnClickListener(v -> {
@@ -76,81 +76,81 @@ ShardEditor shardEditor;
             binding.layoutNotFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
             binding.rvOrders.setVisibility(View.GONE);
             binding.layoutProgress.setVisibility(View.VISIBLE);
-            loadFinshidOrders();
+//            loadFinshidOrders();
         });
         binding.layoutNotFoundOrder.setOnClickListener(v -> {
             binding.layoutFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
             binding.layoutNotFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_selected_tab));
             binding.rvOrders.setVisibility(View.GONE);
             binding.layoutProgress.setVisibility(View.VISIBLE);
-            loadCurrentOrders();
+//            loadCurrentOrders();
         });
 
         return binding.getRoot();
 
     }
 
-    private void loadCurrentOrders() {
-        Call<APIResponse.ResponseCurrentOrder>call=apiInterFace.currentOrder( "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                shardEditor.loadData().get(ShardEditor.KEY_LANG)
-                );
-        call.enqueue(new Callback<APIResponse.ResponseCurrentOrder>() {
-            @Override
-            public void onResponse(@NonNull Call<APIResponse.ResponseCurrentOrder> call,
-                                   @NonNull Response<APIResponse.ResponseCurrentOrder> response) {
-
-                if (response.code()==200){
-                    assert response.body() != null;
-                    if (response.body().getStauts()){
-                 adapterOrdersHome = new AdapterOrdersHome(getActivity(), (ArrayList<DataOrder>) response.body().getData());
-                 binding.rvOrders.setAdapter(adapterOrdersHome);
-                 binding.layoutProgress.setVisibility(View.GONE);
-                 binding.rvOrders.setVisibility(View.VISIBLE);
-             }
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<APIResponse.ResponseCurrentOrder> call, @NonNull Throwable t) {
-
-            }
-        });
-
-
-    }
-    private void loadFinshidOrders() {
-        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(
-                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                shardEditor.loadData().get(ShardEditor.KEY_LANG)
-        );
-        call.enqueue(new Callback<APIResponse.ResponseFinshedOrder>() {
-            @Override
-            public void onResponse(@NonNull Call<APIResponse.ResponseFinshedOrder> call,
-                                   @NonNull Response<APIResponse.ResponseFinshedOrder> response) {
-
-                if (response.code()==200){
-                    assert response.body() != null;
-                    if (response.body().getStauts()){
-                        adapterFinshedOrders = new AdapterFinshedOrders(getActivity(), (ArrayList<DataFinshOrder>) response.body().getData());
-                        binding.rvOrders.setAdapter(adapterFinshedOrders);
-                        binding.layoutProgress.setVisibility(View.GONE);
-                        binding.rvOrders.setVisibility(View.VISIBLE);
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<APIResponse.ResponseFinshedOrder> call, @NonNull Throwable t) {
-
-            }
-        });
-
-
-    }
+//    private void loadCurrentOrders() {
+//        Call<APIResponse.ResponseCurrentOrder>call=apiInterFace.currentOrder( "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+//                shardEditor.loadData().get(ShardEditor.KEY_LANG)
+//                );
+//        call.enqueue(new Callback<APIResponse.ResponseCurrentOrder>() {
+//            @Override
+//            public void onResponse(@NonNull Call<APIResponse.ResponseCurrentOrder> call,
+//                                   @NonNull Response<APIResponse.ResponseCurrentOrder> response) {
+//
+//                if (response.code()==200){
+//                    assert response.body() != null;
+//                    if (response.body().getStauts()){
+//                 adapterOrdersHome = new AdapterOrdersHome(getActivity(), (ArrayList<DataOrder>) response.body().getData());
+//                 binding.rvOrders.setAdapter(adapterOrdersHome);
+//                 binding.layoutProgress.setVisibility(View.GONE);
+//                 binding.rvOrders.setVisibility(View.VISIBLE);
+//             }
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<APIResponse.ResponseCurrentOrder> call, @NonNull Throwable t) {
+//
+//            }
+//        });
+//
+//
+//    }
+//    private void loadFinshidOrders() {
+//        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(
+//                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+//                shardEditor.loadData().get(ShardEditor.KEY_LANG)
+//        );
+//        call.enqueue(new Callback<APIResponse.ResponseFinshedOrder>() {
+//            @Override
+//            public void onResponse(@NonNull Call<APIResponse.ResponseFinshedOrder> call,
+//                                   @NonNull Response<APIResponse.ResponseFinshedOrder> response) {
+//
+//                if (response.code()==200){
+//                    assert response.body() != null;
+//                    if (response.body().getStauts()){
+//                        adapterFinshedOrders = new AdapterFinshedOrders(getActivity(), (ArrayList<DataFinshOrder>) response.body().getData());
+//                        binding.rvOrders.setAdapter(adapterFinshedOrders);
+//                        binding.layoutProgress.setVisibility(View.GONE);
+//                        binding.rvOrders.setVisibility(View.VISIBLE);
+//                    }
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<APIResponse.ResponseFinshedOrder> call, @NonNull Throwable t) {
+//
+//            }
+//        });
+//
+//
+//    }
     @SuppressLint("WrongConstant")
     private void openDraw() {
         binding.toogles.setOnClickListener((View.OnClickListener) v -> {

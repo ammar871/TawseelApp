@@ -163,7 +163,7 @@ public class ConfirmActivity extends AppCompatActivity {
     float getrating;
     private void showDilaogRateDriver(String driverid) {
 
-        View customLayout = LayoutInflater.from(this).inflate(R.layout.dilog_rating, null);
+        View customLayout = LayoutInflater.from(this).inflate(R.layout.add_rate_dailog, null);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)

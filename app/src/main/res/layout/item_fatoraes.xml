@@ -5,8 +5,10 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginTop="8dp"
+
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="8dp"
+    android:id="@+id/cardView_layout"
     app:cardCornerRadius="@dimen/_10sdp"
     app:cardElevation="@dimen/_2sdp">
 
@@ -41,9 +43,9 @@
 
                     android:drawablePadding="@dimen/_4sdp"
                     android:fontFamily="@font/medium"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|center_horizontal"
 
-                    android:text="رقم الفاتورة"
+                    android:text="@string/number_bill"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11sdp"
@@ -61,7 +63,7 @@
                     android:drawablePadding="@dimen/_4sdp"
                     android:fontFamily="@font/medium"
 
-                    android:gravity="right"
+                    android:gravity="center_horizontal"
                     android:text="23455"
                     android:textAllCaps="false"
                     android:textColor="@color/login_color2"
@@ -90,7 +92,7 @@
                     android:gravity="center"
 
 
-                    android:text="مبلغ التوصيل"
+                    android:text="@string/paid_bill_trak"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11sdp"
@@ -137,7 +139,7 @@
 
                 android:fontFamily="@font/medium"
                 android:gravity="center"
-                android:text="طريقة الدفع :"
+                android:text="@string/pay_mothed"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp" />
@@ -149,10 +151,10 @@
                 android:layout_height="wrap_content"
 
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/_15ssp"
+
                 android:layout_toEndOf="@id/lable_paid"
                 android:fontFamily="@font/medium"
-
+android:layout_marginStart="@dimen/_10sdp"
                 android:gravity="right"
                 android:text="23455"
                 android:textAllCaps="false"
@@ -209,7 +211,7 @@
 
 
                     android:fontFamily="@font/medium"
-                    android:text="من"
+                    android:text="@string/from"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11sdp" />
@@ -252,7 +254,7 @@
 
 
                     android:fontFamily="@font/medium"
-                    android:text="إلى"
+                    android:text="@string/to"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11sdp" />

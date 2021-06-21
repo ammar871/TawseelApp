@@ -1,6 +1,8 @@
 package com.ammar.tawseel.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +35,7 @@ import com.ammar.tawseel.pojo.data.DataFinshOrder;
 import com.ammar.tawseel.pojo.data.DataOrder;
 import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
@@ -72,35 +76,63 @@ int page = 1;
         binding.rvOrdersCurrent.setHasFixedSize(true);
         binding.rvOrdersFinshed.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         binding.rvOrdersFinshed.setHasFixedSize(true);
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
-        loadCurrentOrders("1");
-        layoutMenus();
-        binding.nestscroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        if (Cemmon.isNetworkOnline(getActivity())) {
+
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
+            }
+            binding.layoutHome.setVisibility(View.VISIBLE);
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
+            loadCurrentOrders("1");
+            layoutMenus();
+            binding.nestscroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                        binding.proBarPag.setVisibility(View.VISIBLE);
+                        page++;
+
+                        loadCurrentBillPage(page);
+
+                    }
+                }
+            });
+            binding.nestscrollfinshed.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                        binding.proBarPagFinshid.setVisibility(View.VISIBLE);
+                        pageFinshe++;
+                        loadFinshedBillPage(pageFinshe);
+
+
+
+                    }
+                }
+            });
+            openDraw();
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+
+
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
-                    binding.proBarPag.setVisibility(View.VISIBLE);
-                  page++;
-
-                 loadCurrentBillPage(page);
-
+            public void onClick(View v) {
+                try{
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch (ActivityNotFoundException ignored){
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 }
             }
         });
-        binding.nestscrollfinshed.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
-                    binding.proBarPagFinshid.setVisibility(View.VISIBLE);
-                    pageFinshe++;
-                    loadFinshedBillPage(pageFinshe);
-
-
-
-                }
-            }
-        });
-        openDraw();
         return binding.getRoot();
     }
 

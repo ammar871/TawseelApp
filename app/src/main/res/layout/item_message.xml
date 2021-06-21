@@ -1,111 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+android:background="@android:color/transparent"
 
-    android:layout_margin="@dimen/_4sdp"
-    app:cardBackgroundColor="@color/black"
-    app:cardCornerRadius="@dimen/_10sdp"
-    app:cardElevation="@dimen/_1sdp"
+
+
+
 
 
     >
 
     <RelativeLayout
+        android:layout_margin="@dimen/_5sdp"
         android:id="@+id/view_background"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_60ssp"
+        android:layout_height="@dimen/_55ssp"
         android:background="@drawable/drawble_item_message">
 
         <ImageView
             android:id="@+id/delete_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_10sdp"
+            android:contentDescription="TODO"
             android:padding="@dimen/_8sdp"
-            app:srcCompat="@drawable/ic_delete_sweep"
-            android:contentDescription="TODO" />
+            app:srcCompat="@drawable/ic_delete_sweep" />
     </RelativeLayout>
 
 
-    <FrameLayout
+    <androidx.cardview.widget.CardView
+        android:layout_margin="@dimen/_5sdp"
         android:id="@+id/view_for_background"
-
+app:cardCornerRadius="@dimen/_10sdp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardElevation="@dimen/_2sdp"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:background="@color/white"
+        android:layout_height="@dimen/_55sdp"
+
         android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView1message"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginRight="@dimen/_5sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:paddingRight="@dimen/_8sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="@dimen/_40ssp"
-                android:layout_height="@dimen/_40ssp"
+                android:layout_width="@dimen/_45ssp"
+                android:layout_height="@dimen/_45ssp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:paddingRight="@dimen/_5sdp"
                 android:src="@drawable/imagtest"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
 
-            <TextView
-                android:id="@+id/tv_name_message"
-
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:fontFamily="@font/medium"
-                android:text="عمر علي"
-
-                android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/imageView1message"
-                app:layout_constraintTop_toTopOf="@id/imageView1message" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_messgee"
-
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:fontFamily="@font/medium"
-                android:gravity="right"
-                android:maxLines="1"
-
-                android:textColor="@color/text_coloe"
-                android:textSize="@dimen/_11sdp"
-                app:layout_constraintRight_toLeftOf="@id/imageView1message"
-                app:layout_constraintTop_toBottomOf="@id/tv_name_message" />
+                <TextView
+                    android:id="@+id/tv_name_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
 
 
-            <TextView
-                android:id="@+id/tv_date_messgee"
+                    android:fontFamily="@font/medium"
+                    android:text="عمر علي"
+
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/tv_messgee"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:fontFamily="@font/medium"
+                    android:gravity="right"
+                    android:maxLines="1"
+
+                    android:textColor="@color/text_coloe"
+                    android:textSize="@dimen/_11sdp" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/medium"
-                android:maxLines="1"
-
-                android:text="25/06/2019"
-                android:textColor="@color/login_color2"
-                android:textSize="@dimen/_9sdp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_date_messgee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/medium"
+                    android:maxLines="1"
+
+
+                    android:textColor="@color/login_color2"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/tv_count"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+android:gravity="center"
+
+                    android:layout_marginTop="@dimen/_5sdp"
+android:layout_gravity="center_horizontal"
+                    android:background="@drawable/circle_txt"
+
+                    android:padding="1dp"
+                    android:textColor="@color/white"
+
+                    android:textSize="9dp" />
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
-</androidx.cardview.widget.CardView>
+</FrameLayout>

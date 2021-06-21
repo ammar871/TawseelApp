@@ -150,7 +150,7 @@ public class ContactUsActivity extends AppCompatActivity {
     }
 
     private void WhatesSend() {
-        String contact = "+2"+numberWhatsResponse;
+        String contact = numberWhatsResponse;
         String url = "https://api.whatsapp.com/send?phone=" + contact;
         try {
             PackageManager pm = getPackageManager();

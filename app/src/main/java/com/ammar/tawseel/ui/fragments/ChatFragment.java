@@ -2,20 +2,22 @@ package com.ammar.tawseel.ui.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.SurfaceTexture;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -27,29 +29,30 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.CursorLoader;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,23 +65,28 @@ import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.data.Message;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.FamilyWebSiteActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.ammar.tawseel.uitllis.CountingRequestBody;
 import com.ammar.tawseel.uitllis.PathVideo;
+import com.ammar.tawseel.uitllis.Permissions;
+import com.ammar.tawseel.uitllis.ProgressRequestBody;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -87,18 +95,22 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Header;
 
 import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMessageAudio, TextureView.SurfaceTextureListener {
+public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMessageAudio, ProgressRequestBody.UploadCallbacks {
 
     public ChatFragment() {
 
@@ -139,6 +151,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
     int PERMISSION_ID = 44;
 
+    Permissions permissions = new Permissions();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"ClickableViewAccessibility", "WrongConstant"})
@@ -154,37 +167,44 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false);
+        if (Cemmon.isNetworkOnline(getActivity())) {
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        getLastLocation();
-
-        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        fileName = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/" + UUID.randomUUID().toString() + System.currentTimeMillis() + "_audio_record.3gp";
-        checkPermation();
-        inItView();
-
-        Bundle bundle = this.getArguments();
-
-        if (bundle != null) {
-
-            to = getArguments().getString("to");
-            orderId = getArguments().getString("orderId");
-            Log.d("bundelsdata", "onCreateView: " + to + "\n " + orderId);
-            if (orderId == null){
-                oneChatBetween(page, to);
-                hideKeyboard(getActivity());
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
             }
 
-            else{
-                getChatsBetween(page, to, orderId);
-                hideKeyboard(getActivity());
+            if (!permissions.isStorageOk(getActivity()))
+                permissions.requestStorage(getActivity());
+
+
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            getLastLocation();
+
+            mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            fileName = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/" + UUID.randomUUID().toString() + System.currentTimeMillis() + "_audio_record.3gp";
+            checkPermation();
+            inItView();
+
+            Bundle bundle = this.getArguments();
+
+            if (bundle != null) {
+
+                to = getArguments().getString("to");
+                orderId = getArguments().getString("orderId");
+                Log.d("bundelsdata", "onCreateView: " + to + "\n " + orderId);
+                if (orderId == null) {
+                    oneChatBetween(page, to);
+
+                } else {
+                    getChatsBetween(page, to, orderId);
+
+                }
+
+
             }
-
-
-        }
 
 //        binding.scroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
@@ -227,35 +247,54 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 ////                }
 //            }
 //        });
-        binding.toggls.setOnClickListener((View.OnClickListener) v -> {
+            binding.toggls.setOnClickListener((View.OnClickListener) v -> {
 
-            DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.draw);
-            drawer.openDrawer(Gravity.START);
+                DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.draw);
+                drawer.openDrawer(Gravity.START);
 
-        });
+            });
 
-        binding.imgSend.setOnClickListener(v -> {
-            if (!binding.editGchatMessage.getText().toString().isEmpty() ||
-                    !binding.editGchatMessage.getText().toString().equals("")) {
-                binding.proBar.setVisibility(View.VISIBLE);
-                binding.editGchatMessage.setVisibility(View.GONE);
-                binding.imgRecord.setEnabled(false);
-                binding.imgSend.setEnabled(false);
-                binding.imgFile.setEnabled(false);
-                callSendTwoMessage(to, "text", binding.editGchatMessage.getText().toString());
+            binding.imgSend.setOnClickListener(v -> {
+                if (!binding.editGchatMessage.getText().toString().isEmpty() ||
+                        !binding.editGchatMessage.getText().toString().equals("")) {
+                    binding.proBar.setVisibility(View.VISIBLE);
+                    binding.editGchatMessage.setVisibility(View.GONE);
+                    binding.imgRecord.setEnabled(false);
+                    binding.imgSend.setEnabled(false);
+                    binding.imgFile.setEnabled(false);
+                    callSendTwoMessage(to, "text", binding.editGchatMessage.getText().toString());
 
-                binding.editGchatMessage.setText("");
+                    binding.editGchatMessage.setText("");
 
-            } else {
-                Toast.makeText(getActivity(), "An empty message cannot be sent", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "An empty message cannot be sent", Toast.LENGTH_SHORT).show();
+                }
+
+
+            });
+
+            binding.imgFile.setOnClickListener(v -> showDialogSelecteService());
+
+            intItRecord();
+        } else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+        }
+
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ignored) {
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
             }
-
-
         });
-
-        binding.imgFile.setOnClickListener(v -> showDialogSelecteService());
-
-        intItRecord();
         return binding.getRoot();
     }
 
@@ -301,9 +340,9 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
     }
 
     private void inItView() {
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+
         binding.rvChat.setLayoutManager(mLayoutManager);
-        binding.rvChat.setItemAnimator(itemAnimator);
+        binding.rvChat.setNestedScrollingEnabled(false);
 
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
         timeFormatter = new SimpleDateFormat("m:ss", Locale.getDefault());
@@ -336,14 +375,19 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
             public boolean onLongClick(View v) {
                 binding.editGchatMessage.setVisibility(View.GONE);
                 binding.textRecorderMessage.setVisibility(View.VISIBLE);
+                if (permissions.isRecordingOk(getActivity())) {
 
-                if (timer == null) {
-                    timer = new Timer();
-                    timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    if (timer == null) {
+                        timer = new Timer();
+                        timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    }
+
+                    startRecording();
+                } else {
+                    permissions.requestStorage(getActivity());
                 }
 
 
-                startRecording();
                 return true;
             }
         });
@@ -355,25 +399,30 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP: {
-                        stopRecording();
-                        timerTask.cancel();
-                        binding.textRecorderMessage.setVisibility(View.GONE);
-                        binding.proBar.setVisibility(View.VISIBLE);
-                        binding.editGchatMessage.setVisibility(View.GONE);
-                        binding.imgRecord.setEnabled(false);
-                        binding.imgSend.setEnabled(false);
-                        binding.imgFile.setEnabled(false);
-                        //  binding.textRecorderMessage.setText(recordTime+"");
-                        File file = new File(fileName);
 
-                        RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
-                                file);
-                        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("message", file.getName(), requestFile);
-                        Log.d("ssssssssssssss", "onRecordingCompleted: " + to + "\n " + orderId);
-                        RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "audio");
-                        callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
-                        Log.d("fffffffffff", "onTouch: " + fileName);
-                        return true; //indicate we're done listening to this touch listener
+                        if (recorder != null) {
+                            stopRecording();
+                            timerTask.cancel();
+                            binding.textRecorderMessage.setVisibility(View.GONE);
+                            binding.proBar.setVisibility(View.VISIBLE);
+                            binding.editGchatMessage.setVisibility(View.GONE);
+                            binding.imgRecord.setEnabled(false);
+                            binding.imgSend.setEnabled(false);
+                            binding.imgFile.setEnabled(false);
+                            //  binding.textRecorderMessage.setText(recordTime+"");
+                            File file = new File(fileName);
+
+                            RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
+                                    file);
+                            MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("message", file.getName(), requestFile);
+                            Log.d("ssssssssssssss", "onRecordingCompleted: " + to + "\n " + orderId);
+                            RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "audio");
+                            callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
+                            Log.d("fffffffffff", "onTouch: " + fileName);
+                            return true; //indicate we're done listening to this touch listener
+
+                        }
+
                     }
 
                 }
@@ -419,7 +468,10 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                 if (response.code() == 200) {
 
                     if (response.body().getStatus()) {
-                        binding.proBar.setVisibility(View.GONE);
+                        binding.proBarIm.setProgress(100);
+                        if (  binding.proBarIm.getProgress()==100)
+                        binding.proBarIm.setVisibility(View.GONE);
+
                         binding.editGchatMessage.setVisibility(View.VISIBLE);
                         binding.imgRecord.setEnabled(true);
                         binding.imgSend.setEnabled(true);
@@ -433,11 +485,11 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                         adapterChatePage.refreshData(response.body().getData());
                         refreshAdpter(adapterChatePage, list);
                         adapterChatePage.notifyItemInserted(list.size());
-                        binding.rvChat.smoothScrollToPosition(list.size());
-                        binding.scroll.post(new Runnable() {
+
+                        binding.scrollView.post(new Runnable() {
                             @Override
                             public void run() {
-                                binding.scroll.fullScroll(View.FOCUS_DOWN);
+                                binding.scrollView.fullScroll(View.FOCUS_DOWN);
                             }
                         });
                     } else {
@@ -505,7 +557,9 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                 if (response.code() == 200) {
 
                     if (response.body().getStatus()) {
-                        binding.proBar.setVisibility(View.GONE);
+
+                        binding.proBarIm.setProgress(100);
+                        binding.proBarIm.setVisibility(View.GONE);
                         binding.editGchatMessage.setVisibility(View.VISIBLE);
                         binding.imgRecord.setEnabled(true);
                         binding.imgSend.setEnabled(true);
@@ -519,16 +573,16 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                         //   adapterChatePage = new AdapterChatePage(list, getActivity(), image);
                         refreshAdpter(adapterChatePage, list);
                         adapterChatePage.notifyItemInserted(list.size());
-                        binding.rvChat.smoothScrollToPosition(list.size());
-                        binding.scroll.post(new Runnable() {
+
+                        binding.scrollView.post(new Runnable() {
                             @Override
                             public void run() {
-                                binding.scroll.fullScroll(View.FOCUS_DOWN);
+                                binding.scrollView.fullScroll(View.FOCUS_DOWN);
                             }
                         });
                     } else {
                         Log.d("rrrrrrrrrrrrrrrr1", "onResponse: " + response.body().getMessage());
-                        binding.proBar.setVisibility(View.GONE);
+//                        binding.proBar.setVisibility(View.GONE);
                         binding.editGchatMessage.setVisibility(View.VISIBLE);
                         binding.imgRecord.setEnabled(true);
                         binding.imgSend.setEnabled(true);
@@ -541,7 +595,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
             @Override
             public void onFailure(@NonNull Call<APIResponse.ResponseSendMessage> call, @NonNull Throwable t) {
                 Log.d("rrrrrrrrrrrrrrrr", "onResponse: " + t.getMessage());
-                binding.proBar.setVisibility(View.GONE);
+//                binding.proBar.setVisibility(View.GONE);
                 binding.editGchatMessage.setVisibility(View.VISIBLE);
                 binding.imgRecord.setEnabled(true);
                 binding.imgSend.setEnabled(true);
@@ -581,18 +635,39 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
         TextView tv_send_location = view.findViewById(R.id.send_location);
         TextView tv_send_vidio = view.findViewById(R.id.send_vedio);
         TextView tv_send_contact = view.findViewById(R.id.send_phone);
+        TextView tv_send_stors = view.findViewById(R.id.send_store);
+        TextView tv_send_famaly = view.findViewById(R.id.send_room);
 //        progressBar = view.findViewById(R.id.progrss_dilog);
 //        btn_next = view.findViewById(R.id.tv_next);
 
+        tv_send_famaly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                showDialogGoToTProductiveFamilies();
+            }
+        });
+        tv_send_stors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                showDialogNotService();
+            }
+        });
 
         tv_send_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (permissions.isContactOk(getActivity())) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(intent, 3);
 
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, 3);
+                    alertDialog.dismiss();
+                } else {
+                    permissions.requestContact(getActivity());
+                    alertDialog.dismiss();
+                }
 
-                alertDialog.dismiss();
             }
         });
         tv_send_Image.setOnClickListener(new View.OnClickListener() {
@@ -635,6 +710,8 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
                 Intent intent = new Intent();
                 intent.setType("video/*");
+                intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 5);
+                intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Video"), 1);
 
@@ -651,11 +728,90 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
     }
 
+    private void showDialogGoToTProductiveFamilies() {
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.dialog_familay, null);
+
+        FrameLayout tv_title = view.findViewById(R.id.btn_follow);
+        FrameLayout tv_cancel = view.findViewById(R.id.btn_cancel);
+
+        tv_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogTwo.dismiss();
+                startActivity(new Intent(getActivity(), FamilyWebSiteActivity.class));
+
+            }
+        });
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogTwo.dismiss();
+
+
+            }
+        });
+        alertDialogTwo = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+        alertDialogTwo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialogTwo.show();
+
+    }
+
+    AlertDialog alertDialogTwo = null;
+
+    private void showDialogNotService() {
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.dialog_service_nair, null);
+
+        LinearLayout tv_title = view.findViewById(R.id.btn_dissmes);
+
+        tv_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogTwo.dismiss();
+            }
+        });
+
+        alertDialogTwo = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+        alertDialogTwo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialogTwo.show();
+
+        new CountDownTimer(3000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+                alertDialogTwo.dismiss();
+            }
+        }.start();
+
+
+    }
+
     private void getPictureFromGalary() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
+        if (permissions.isStorageOk(getActivity())) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
+
+        } else {
+            permissions.requestStorage(getActivity());
+        }
+
     }
 
     String phoneNumber;
@@ -668,43 +824,81 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
             case 0:
                 if (resultCode == RESULT_OK) {
-                    binding.proBar.setVisibility(View.VISIBLE);
+                    binding.proBarIm.setVisibility(View.VISIBLE);
+
                     binding.editGchatMessage.setVisibility(View.GONE);
                     binding.imgRecord.setEnabled(false);
                     binding.imgSend.setEnabled(false);
                     binding.imgFile.setEnabled(false);
-
+                    Log.d("kkkkkkkkkkk", "onActivityResult: " + data.getData() + "\n" + PathVideo.getPath(getActivity(), data.getData()));
                     //    Toast.makeText(getActivity(), "ok", Toast.LENGTH_SHORT).show();
-                    File file = new File(getRealPathFromURI(data.getData()));
-                    RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
-                            file);
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(getActivity(), data.getData())));
+
+                    binding.proBarIm.setProgress(0);
+                    ProgressRequestBody requestFile = new ProgressRequestBody(file, "multipart/form-data", this);
+
+//                    RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
+//                            file);
                     MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("message", file.getName(), requestFile);
                     RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "image");
                     callSendImageTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
 
 
-                    break;
-
-
                 }
-
+                break;
 
             case 1:
                 if (resultCode == RESULT_OK) {
 
-                    binding.proBar.setVisibility(View.VISIBLE);
-                    binding.editGchatMessage.setVisibility(View.GONE);
-                    binding.imgRecord.setEnabled(false);
-                    binding.imgSend.setEnabled(false);
-                    binding.imgFile.setEnabled(false);
-                    Uri selectedImageUri = data.getData();
 
+                    Uri selectedImageUri = data.getData();
+                    //   Log.d("ttttttttttttttttttt1", "onActivityResult: " + selectedImageUri);
                     // MEDIA GALLERY
+
                     String selectedVideoPath = PathVideo.getPath(getActivity(), selectedImageUri);
 
-                    MultipartBody.Part multipartBody = PathVideo.getMultiPartBody("message", selectedVideoPath);
-                    RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "video");
-                    callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
+                    File file = new File(selectedVideoPath);
+
+                    long length = file.length();
+                    length = length / 1024;
+
+                    if (length >= 3000) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        alert.setMessage(R.string.size_video);
+                        alert.setPositiveButton(R.string.down, (dialog, which) -> {
+                            binding.proBarIm.setVisibility(View.VISIBLE);
+                            binding.editGchatMessage.setVisibility(View.GONE);
+                            binding.imgRecord.setEnabled(false);
+                            binding.imgSend.setEnabled(false);
+                            binding.imgFile.setEnabled(false);
+
+                            binding.proBarIm.setProgress(0);
+                            ProgressRequestBody requestFile = new ProgressRequestBody(file, "video", this);
+                            MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("message", file.getName(), requestFile);
+                            //   MultipartBody.Part multipartBody = PathVideo.getMultiPartBody("message", selectedVideoPath);
+                            Log.d("ttttttttttttttttttt2", "onActivityResult: " + multipartBody);
+                            RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "video");
+                            callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
+                        });
+                        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.show();
+                    } else {
+
+                        ProgressRequestBody requestFile = new ProgressRequestBody(file, "video", this);
+                        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("message", file.getName(), requestFile);
+                        //   MultipartBody.Part multipartBody = PathVideo.getMultiPartBody("message", selectedVideoPath);
+                        Log.d("ttttttttttttttttttt2", "onActivityResult: " + multipartBody);
+                        RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), "video");
+                        callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
+                    }
+
+
+                    //  callSendFileTwoMessage(Integer.parseInt(to), usernameBody, multipartBody);
 
 
                 }
@@ -729,19 +923,21 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                                 Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
                                 while (phones.moveToNext()) {
                                     phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                    Log.d("Number", phoneNumber);
+                                    //  Log.d("nnnnnnnnnumber", phoneNumber);
                                     //     Toast.makeText(getActivity(), ""+phoneNumber, Toast.LENGTH_SHORT).show();
                                     binding.proBar.setVisibility(View.VISIBLE);
                                     binding.editGchatMessage.setVisibility(View.GONE);
                                     binding.imgRecord.setEnabled(false);
                                     binding.imgSend.setEnabled(false);
                                     binding.imgFile.setEnabled(false);
-                                    callSendTwoMessage(to, "contact", phoneNumber);
+
 
                                 }
                                 phones.close();
                             }
-
+                            Log.d("Number", phoneNumber);
+                            if (phoneNumber != null)
+                                callSendTwoMessage(to, "contact", phoneNumber);
                         }
                     }
                     cur.close();
@@ -750,6 +946,56 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
 
         }
+    }
+
+    public String generatePath(Uri uri, Context context) {
+        String filePath = null;
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        if (isKitKat) {
+            filePath = generateFromKitkat(uri, context);
+        }
+
+        if (filePath != null) {
+            return filePath;
+        }
+
+        Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                filePath = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        }
+        return filePath == null ? uri.getPath() : filePath;
+    }
+
+    @TargetApi(19)
+    private String generateFromKitkat(Uri uri, Context context) {
+        String filePath = null;
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            String wholeID = DocumentsContract.getDocumentId(uri);
+
+            String id = wholeID.split(":")[1];
+
+            String[] column = {MediaStore.Video.Media.DATA};
+            String sel = MediaStore.Video.Media._ID + "=?";
+
+            Cursor cursor = context.getContentResolver().
+                    query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            column, sel, new String[]{id}, null);
+
+
+            int columnIndex = cursor.getColumnIndex(column[0]);
+
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex);
+            }
+
+            cursor.close();
+        }
+        return filePath;
     }
 
 
@@ -764,41 +1010,6 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
         return result;
     }
 
-
-    private void releaseMediaPlayer() {
-
-        if (player != null) {
-
-            player.release();
-
-
-            player = null;
-            mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-
-        }
-    }
-
-
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
-                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                player.pause();
-                player.seekTo(0);
-            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-
-                player.start();
-            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-
-                releaseMediaPlayer();
-            }
-        }
-    };
-
-    private MediaPlayer.OnCompletionListener mCompletionListener
-            = mediaPlayer -> releaseMediaPlayer();
 
     private MediaPlayer player = null;
 
@@ -819,6 +1030,9 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                     if (response.body().getStatus()) {
                         binding.lauytContent.setVisibility(View.VISIBLE);
                         binding.progress.setVisibility(View.GONE);
+                        if (response.body().getData().getDriver().getAvatar() != null)
+                            Cemmon.IMAGE_OF_DRIVER = response.body().getData().getDriver().getAvatar();
+
                         if (response.body().getData().getMessages().size() > 0) {
                             isFirst = true;
                             Log.d("ttttttttttttt", "onResponse: " + isFirst);
@@ -832,10 +1046,10 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                                 , getActivity(), (dataMessags, viewHolderVideo) -> {
                         }, response.body().getData().getDriver().getAvatar());
                         binding.rvChat.setAdapter(adapterChatePage);
-                        binding.scroll.post(new Runnable() {
+                        binding.scrollView.post(new Runnable() {
                             @Override
                             public void run() {
-                                binding.scroll.fullScroll(View.FOCUS_DOWN);
+                                binding.scrollView.fullScroll(View.FOCUS_DOWN);
                             }
                         });
 
@@ -883,7 +1097,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
             @Override
             public void onResponse(@NonNull Call<APIResponse.ResponseChatBetween> call,
                                    @NonNull Response<APIResponse.ResponseChatBetween> response) {
-list.clear();
+                list.clear();
 
                 if (response.code() == 200) {
 
@@ -900,6 +1114,7 @@ list.clear();
                             Log.d("ttttttttttttt", "onResponse: " + isFirst);
                         }
                         list = (ArrayList<Message>) response.body().getData().getMessages();
+
                         Cemmon.IMAGE_OF_DRIVER = response.body().getData().getDriver().getAvatar();
                         if (Cemmon.IMAGE_OF_DRIVER != null) {
                             adapterChatePage = new AdapterChatePage(list
@@ -915,10 +1130,10 @@ list.clear();
                                 Toast.makeText(getActivity(), "ok", Toast.LENGTH_SHORT).show();
                             }, response.body().getData().getDriver().getAvatar());
                             binding.rvChat.setAdapter(adapterChatePage);
-                            binding.scroll.post(new Runnable() {
+                            binding.scrollView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.scroll.fullScroll(View.FOCUS_DOWN);
+                                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
                             });
                         }
@@ -970,11 +1185,10 @@ list.clear();
                 adapterChatePage.refreshData(receivedText);
             refreshAdpter(adapterChatePage, list);
             adapterChatePage.notifyItemInserted(list.size());
-            binding.rvChat.smoothScrollToPosition(list.size());
-            binding.scroll.post(new Runnable() {
+            binding.scrollView.post(new Runnable() {
                 @Override
                 public void run() {
-                    binding.scroll.fullScroll(View.FOCUS_DOWN);
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
                 }
             });
         }
@@ -1034,6 +1248,7 @@ list.clear();
                 if (response.code() == 200) {
 
                     if (response.body().getStatus()) {
+                        orderId = response.body().getData().getOrderId();
                         binding.proBar.setVisibility(View.GONE);
                         binding.editGchatMessage.setVisibility(View.VISIBLE);
                         binding.imgRecord.setEnabled(true);
@@ -1048,11 +1263,11 @@ list.clear();
                             //   adapterChatePage = new AdapterChatePage(list, getActivity(), image);
                             refreshAdpter(adapterChatePage, list);
                             adapterChatePage.notifyItemInserted(list.size());
-                            binding.rvChat.smoothScrollToPosition(list.size());
-                            binding.scroll.post(new Runnable() {
+
+                            binding.scrollView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.scroll.fullScroll(View.FOCUS_DOWN);
+                                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
                             });
                         } catch (Exception e) {
@@ -1135,6 +1350,8 @@ list.clear();
 
                             lattuide = location.getLatitude();
                             longtuide = location.getLongitude();
+                            Cemmon.latude = lattuide;
+                            Cemmon.langtude = longtuide;
                         }
                     }
                 });
@@ -1174,6 +1391,8 @@ list.clear();
             Location mLastLocation = locationResult.getLastLocation();
             lattuide = mLastLocation.getLatitude();
             longtuide = mLastLocation.getLongitude();
+            Cemmon.latude = lattuide;
+            Cemmon.langtude = longtuide;
         }
     };
 
@@ -1229,25 +1448,6 @@ list.clear();
 
     }
 
-    @Override
-    public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
-
-    }
-
-    @Override
-    public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, int width, int height) {
-
-    }
-
-    @Override
-    public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-        return false;
-    }
-
-    @Override
-    public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
-
-    }
 
     private void getDataWithPagination(int page) {
 
@@ -1288,6 +1488,140 @@ list.clear();
         });
 
     }
+
+    @Override
+    public void onProgressUpdate(int percentage) {
+        binding.proBarIm.setProgress(percentage);
+        Log.d("hahmyyyyyyyyyy", "onError: " + percentage);
+    }
+
+    @Override
+    public void onError() {
+        Log.d("hahmyyyyyyyyyy", "onError: " + "errrrrrrrr");
+    }
+
+    @Override
+    public void onFinish() {
+        binding.proBarIm.setProgress(100);
+        Log.d("hahmyyyyyyyyyy", "onError: " + "end");
+    }
+
+
+//    public void uploadImage(Uri uri){
+//
+//        if(uri == null){
+//            return;
+//        }
+//
+//        final File imageFile = new File(PathVideo.getPath(getActivity(),uri));
+//        Uri uris = Uri.fromFile(imageFile);
+//        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uris.toString());
+//        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
+//        String imageName = imageFile.getName();
+//
+//        //Log.e(TAG, imageFile.getName()+" "+mime+" "+uriToFilename(uri));
+//        RequestBody requestBody = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("file", imageName,
+//                        RequestBody.create(imageFile, MediaType.parse(mime)))
+//                .build();
+//
+//        final CountingRequestBody.Listener progressListener = new CountingRequestBody.Listener() {
+//            @Override
+//            public void onRequestProgress(long bytesRead, long contentLength) {
+//                if (bytesRead >= contentLength) {
+//                    if (binding.proBar != null)
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                binding.proBar.setVisibility(View.GONE);
+//                            }
+//                        });
+//                } else {
+//                    if (contentLength > 0) {
+//                        final int progress = (int) (((double) bytesRead / contentLength) * 100);
+//                        if (binding.proBar != null)
+//                            getActivity().runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    binding.proBar.setVisibility(View.VISIBLE);
+//                                    binding.proBar.setProgress(progress);
+//                                }
+//                            });
+//
+//                        if(progress >= 100){
+//                            binding.proBar.setVisibility(View.GONE);
+//                        }
+//                        Log.e("uploadProgress called", progress+" ");
+//                    }
+//                }
+//            }
+//        };
+//
+//        OkHttpClient imageUploadClient = new OkHttpClient.Builder()
+//                .addNetworkInterceptor(new Interceptor() {
+//                    @Override
+//                    public okhttp3.Response intercept(Chain chain) throws IOException {
+//                        Request originalRequest = chain.request();
+//
+//                        if (originalRequest.body() == null) {
+//                            return chain.proceed(originalRequest);
+//                        }
+//                        Request progressRequest = originalRequest.newBuilder()
+//                                .method(originalRequest.method(),
+//                                        new CountingRequestBody(originalRequest.body(), progressListener))
+//                                .build();
+//
+//                        return chain.proceed(progressRequest);
+//
+//                    }
+//                })
+//                .build();
+//        Request request;
+//        if (isFirst) {
+//             request = new Request.Builder()
+//                    .url("")
+//                    .header("Accept", "application/json")
+//                    .header("Accept-Language", shardEditor.loadData().get(ShardEditor.KEY_LANG))
+//                    .header("Authorization","Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN))
+//                    .post()
+//                    .post(requestBody)
+//                    .build();
+//
+//
+//        } else {
+//
+////            call =
+////                    apiInterFace.sendFileFirstMessage(id, type,
+////                            message
+////                            , true
+////                            , "application/json",
+////                            "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN)
+////
+////                            , shardEditor.loadData().get(ShardEditor.KEY_LANG));KEY_LANG
+//        }
+//
+//
+//
+//
+//        imageUploadClient.newCall(request).enqueue(new okhttp3.Callback() {
+//            @Override
+//            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        binding.proBar.setVisibility(View.GONE);
+//
+//                    }
+//                });
+//            }
+//        });
+//    }
+
 
 }
 

@@ -2,6 +2,7 @@ package com.ammar.tawseel.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.pojo.data.DataNotification;
+import com.ammar.tawseel.ui.ConfirmActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,9 +63,9 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
+
         @SuppressLint("SimpleDateFormat") SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
-
 
         Date d = null;
 
@@ -91,7 +93,14 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
 
             holder.name_notiy.setText("اشعارطلب توصیل للطلب رقم ");
             holder.desc_noty.setText(list.get(position).getTarget() + "");
-            onclickMessage.itemOnclickNewBill(list.get(position), 1);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(mcontext, ConfirmActivity.class);
+                    intent.putExtra("idOrder",list.get(position).getTarget()+"");
+                    mcontext.startActivity(intent);
+                }
+            });
 
         } else if (list.get(position).getType().equals("deliver-confirm")) {
             holder.name_notiy.setText("لقد تم توصيل طلبك  ");
@@ -115,7 +124,7 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
 
         } else if (list.get(position).getType().equals("refuse-order")) {
 
-            holder.name_notiy.setText("من قب لمندوب التوصيل" + list.get(position).getTarget() + "  تم رفض طلب المراسلة للطلب   ");
+            holder.name_notiy.setText( "تم رفض طلب المراسلة للطلب   " + list.get(position).getTarget() +"من قبل مندوب التوصيل");
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -167,7 +176,10 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
                     onclickMessage.itemOnclickNewBill(list.get(position), 8);
                 }
             });
+        }else {
+            holder.name_notiy.setText(list.get(position).getTarget() + "");
         }
+
     }
 
 

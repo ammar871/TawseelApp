@@ -1,10 +1,15 @@
 package com.ammar.tawseel.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,11 +20,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.adapters.AdapterMessages;
@@ -68,33 +75,63 @@ int page=1;
 
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_messages, container, false);
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
-        loadDataMessages("1");
 
+        if (Cemmon.isNetworkOnline(getActivity())) {
 
-        openDraw();
-
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvMessage);
-
-        binding.scroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
-                    binding.proBarPagFinshid.setVisibility(View.VISIBLE);
-                    page++;
-                    if (list.size()>0){
-                        loadMessagesPage(page);
-                    }else {
-                        binding.proBarPagFinshid.setVisibility(View.GONE);
-                    }
-
-
-
-                }
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
             }
-        });
+            binding.layoutHome.setVisibility(View.VISIBLE);
+
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
+            loadDataMessages("1");
+
+
+            openDraw();
+
+
+            ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+            new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvMessage);
+
+            binding.scroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                        binding.proBarPagFinshid.setVisibility(View.VISIBLE);
+                        page++;
+                        if (list.size()>0){
+                            loadMessagesPage(page);
+                        }else {
+                            binding.proBarPagFinshid.setVisibility(View.GONE);
+                        }
+
+
+
+                    }
+                }
+            });
+
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+
+binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        try{
+            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+            intent.setComponent(cn);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }catch (ActivityNotFoundException ignored){
+            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+        }
+    }
+});
         return binding.getRoot();
     }
 
@@ -126,7 +163,7 @@ int page=1;
                             fragobj.setArguments(bundle);
                             Objects.requireNonNull(getActivity()).getSupportFragmentManager()
                                     .beginTransaction()
-                                    .add(R.id.layout_view, fragobj)
+                                    .replace(R.id.layout_view, fragobj)
                                     .addToBackStack(null)
                                     .commit();
                         });
@@ -196,8 +233,8 @@ int page=1;
         binding.rvMessage.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         binding.rvMessage.setHasFixedSize(true);
         binding.rvMessage.setAdapter(adapterMessages);
-        binding.rvMessage.setItemAnimator(new DefaultItemAnimator());
-        binding.rvMessage.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+//        binding.rvMessage.setItemAnimator(new DefaultItemAnimator());
+//        binding.rvMessage.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
     }
 
     @SuppressLint("WrongConstant")
@@ -209,16 +246,46 @@ int page=1;
 
         });
     }
-
+AlertDialog alertDialog=null;
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof AdapterMessages.ViewHolderVidio) {
 
+            View customLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete, null);
 
-            Log.d("idOrder", "onSwiped: "+list.get(viewHolder.getAdapterPosition()).getIDName());
-            deletFromChat(list.get(viewHolder.getAdapterPosition()).getOrderId(), list
-                    .get(viewHolder.getAdapterPosition()).getIDName());
-            adapterMessages.removeItem(viewHolder.getAdapterPosition());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setView(customLayout);
+
+
+            TextView tv_delete = customLayout.findViewById(R.id.tv_delete);
+            TextView tv_cancel = customLayout.findViewById(R.id.tv_cancel);
+
+            tv_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("idOrder", "onSwiped: "+list.get(viewHolder.getAdapterPosition()).getIDName());
+                    deletFromChat(list.get(viewHolder.getAdapterPosition()).getOrderId(), list
+                            .get(viewHolder.getAdapterPosition()).getIDName());
+                    adapterMessages.removeItem(viewHolder.getAdapterPosition());
+                    alertDialog.dismiss();
+                }
+            });
+
+            tv_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapterMessages.notifyDataSetChanged();
+                    alertDialog.dismiss();
+                }
+            });
+
+
+            builder.setCancelable(true);
+            alertDialog = builder.create();
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alertDialog.show();
+
             // get the removed item name to display it in snack bar
          /*   String name = cartList.get(viewHolder.getAdapterPosition()).getName();
 
@@ -312,7 +379,7 @@ int page=1;
         fragobj.setArguments(bundle);
         Objects.requireNonNull(getActivity()).getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.layout_view, fragobj)
+                .replace(R.id.layout_view, fragobj)
                 .addToBackStack(null)
                 .commit();
     }

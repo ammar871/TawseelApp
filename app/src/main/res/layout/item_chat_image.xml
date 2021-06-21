@@ -6,13 +6,14 @@
 
     <RelativeLayout
         android:id="@+id/their_layout_img_there"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_210sdp"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingVertical="10dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="60dp"
-        android:visibility="gone">
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="10dp"
+android:layout_marginLeft="@dimen/_5sdp"
+        android:visibility="visible">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginBottom="-12dp"
@@ -41,19 +42,33 @@
             android:elevation="2dp"
 
 
-            android:text="How are you doing? This is a long message that should probably wrap."
             android:textSize="13sp" />
+        <TextView
+            android:id="@+id/date_body_there_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imge_body_there"
+         android:layout_alignParentRight="true"
+android:layout_marginRight="@dimen/_10sdp"
+            android:elevation="2dp"
+            android:gravity="right"
+
+            android:paddingTop="@dimen/_2sdp"
+
+
+            android:textSize="11sp" />
     </RelativeLayout>
 
 
     <RelativeLayout
+        android:layout_alignParentRight="true"
         android:id="@+id/layout_me_img"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_210sdp"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingVertical="10dp"
         android:paddingLeft="20dp"
-        android:paddingRight="15dp"
+        android:paddingRight="10dp"
         android:visibility="gone">
 
 
@@ -75,7 +90,7 @@
 
             android:id="@+id/img_bodyme"
             android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_height="@dimen/_180sdp"
 
             android:scaleType="fitXY"
             android:layout_below="@id/imageView1_img_me"
@@ -87,6 +102,20 @@
             android:gravity="left"
 
            />
+        <TextView
+            android:id="@+id/date_body_me_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_bodyme"
+         android:layout_alignParentLeft="true"
 
+            android:elevation="2dp"
+            android:gravity="right"
+            android:text="222222"
+
+            android:paddingTop="@dimen/_2sdp"
+
+
+            android:textSize="11sp" />
     </RelativeLayout>
 </RelativeLayout>

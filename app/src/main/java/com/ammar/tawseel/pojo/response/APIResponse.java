@@ -1113,4 +1113,45 @@ public class APIResponse {
         }
 
     }
+
+
+
+    public class PaidOrderResponse {
+
+        @SerializedName("status")
+        @Expose
+        private Boolean status;
+        @SerializedName("data")
+        @Expose
+        private List<Object> data = null;
+        @SerializedName("message")
+        @Expose
+        private List<Object> message = null;
+
+        public Boolean getStatus() {
+            return status;
+        }
+
+        public void setStatus(Boolean status) {
+            this.status = status;
+        }
+
+        public List<Object> getData() {
+            return data;
+        }
+
+        public void setData(List<Object> data) {
+            this.data = data;
+        }
+
+        public List<Object> getMessage() {
+            return message;
+        }
+
+        public void setMessage(List<Object> message) {
+            this.message = message;
+        }
+
+    }
+
 }

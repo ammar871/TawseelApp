@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.ViewHolderVidio> {
 
@@ -37,16 +38,16 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     int layout;
 
-    @Override
-    public int getItemViewType(int position) {
-        if (list.get(position).getReaded().equals("0")) {
-            return 0;
-        }
-
-        return 1;
-
-
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        if (list.get(position).getReaded().equals("0")) {
+//            return 0;
+//        }
+//
+//        return 1;
+//
+//
+//    }
 
     public AdapterNotification(ArrayList<DataNotification> list, Context mcontext, OnclickMessage onclickMessage) {
         this.list = list;
@@ -68,12 +69,12 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         View view;
-        if (viewType == 0 ) {
+//        if (viewType == 0 ) {
             view = layoutInflater.inflate(R.layout.item_noty_today, parent, false);
             return new ViewHolderVidio(view);
-        }
-            view = layoutInflater.inflate(R.layout.item_notify, parent, false);
-            return new ViewHolderVidio(view);
+//        }
+//            view = layoutInflater.inflate(R.layout.item_notify, parent, false);
+//            return new ViewHolderVidio(view);
 
     }
 
@@ -84,7 +85,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy",new Locale("en"));
 
         Date d = null;
 
@@ -100,7 +101,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
 
         if (list.get(position).getType().equals("new-bill")) {
-            holder.name_notiy.setText("فاتورةجدیدةرقم ");
+            holder.name_notiy.setText(R.string.new_bill);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,7 +111,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             });
         } else if (list.get(position).getType().equals("deliver-order")) {
 
-            holder.name_notiy.setText("اشعارطلب توصیل للطلب رقم ");
+            holder.name_notiy.setText(R.string.noty_delviry_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
        holder.itemView.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -122,7 +123,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
        });
 
         } else if (list.get(position).getType().equals("deliver-confirm")) {
-            holder.name_notiy.setText("لقد تم توصيل طلبك  ");
+            holder.name_notiy.setText(R.string.deliverd_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,7 +133,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             });
 
         } else if (list.get(position).getType().equals("accept-order")) {
-            holder.name_notiy.setText("تم تأكید طلب المراسلة" + list.get(position).getTarget() + "  للطلب من قبل مندوب التوصیل  ");
+            holder.name_notiy.setText(R.string.accept_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,7 +144,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
         } else if (list.get(position).getType().equals("refuse-order")) {
 
-            holder.name_notiy.setText( "تم رفض طلب المراسلة للطلب   " + list.get(position).getTarget() +"من قبل مندوب التوصيل");
+            holder.name_notiy.setText( R.string.refuse_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -153,7 +154,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             });
 
         } else if (list.get(position).getType().equals("user-add-rate")) {
-            holder.name_notiy.setText("تم تقییم السائق: ");
+            holder.name_notiy.setText(R.string.rate_dliviry);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -162,7 +163,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                 }
             });
         } else if (list.get(position).getType().equals("paid-bill")) {
-            holder.name_notiy.setText("تم دفع فاتورةرقم");
+            holder.name_notiy.setText(R.string.paid_bill_);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,7 +172,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                 }
             });
         } else if (list.get(position).getType().equals("cancel-bill")) {
-            holder.name_notiy.setText("تم الغاء فاتورة رقم :");
+            holder.name_notiy.setText(R.string.cancel_bill);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -195,6 +196,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                     onclickMessage.itemOnclickNewBill(list.get(position), 8);
                 }
             });
+        }else {
+            holder.name_notiy.setText(list.get(position).getTarget() + "");
         }
 
 

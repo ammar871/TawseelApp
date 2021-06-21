@@ -25,9 +25,14 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         android:theme="@style/Theme.Tawseel"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q">
+        tools:targetApi="m">
+        <activity android:name=".example.ProgressActivity"></activity>
+        <activity android:name=".ui.FamilyWebSiteActivity" />
+        <activity android:name=".ui.ShowImageChatActivity" />
         <activity android:name=".ui.ConfirmActivity" />
         <activity android:name=".ui.DisplayVideoActivity" />
         <activity android:name=".ui.OrdersActivity" />

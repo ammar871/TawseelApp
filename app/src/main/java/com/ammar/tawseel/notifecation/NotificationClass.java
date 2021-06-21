@@ -45,6 +45,8 @@ public class NotificationClass {
             title = order.getData().get("new Message");
             id = order.getData().get("order_id");
         } else {
+
+
             body = order.getData().get("target");
             title = order.getData().get("new Notification");
             id = order.getData().get("id");

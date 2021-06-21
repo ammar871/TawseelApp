@@ -39,13 +39,17 @@ ShardEditor shardEditor;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         shardEditor=new ShardEditor(this);
+        Log.d("llllllllllllll", "onCreate: "+Locale.getDefault().getLanguage());
         if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
 
             Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
+            Cemmon.LONG_USER=shardEditor.loadData().get(ShardEditor.KEY_LANG);
 
         }else {
 
             shardEditor.saveLang(Locale.getDefault().getLanguage());
+
+            Cemmon.LONG_USER=Locale.getDefault().getLanguage();
         }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -82,6 +82,7 @@ android:id="@+id/img_back"
             <TextView
                 android:id="@+id/ed_update_raing_app"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="#FFFFFF"
@@ -91,18 +92,18 @@ android:id="@+id/img_back"
                 android:paddingBottom="@dimen/_12sdp"
                 android:paddingEnd="@dimen/_15sdp"
                 android:paddingStart="@dimen/_15sdp"
-android:gravity="right"
+android:gravity="left"
                 android:fontFamily="@font/medium" />
 
             <ImageView
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
 
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/_15sdp"
                 android:fontFamily="@font/bold"
                 android:scaleType="centerInside"
-               android:src= "@drawable/ic_baseline_arrow_back_ios_24"
+               android:src= "@drawable/ic_baseline_keyboard_arrow_right_24"
                 android:textSize="@dimen/_15ssp" />
         </androidx.cardview.widget.CardView>
 
@@ -130,7 +131,7 @@ android:gravity="right"
 
 
         android:layout_centerVertical="true"
-        android:layout_gravity="center|right"
+        android:layout_gravity="center|left"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="@dimen/_5sdp"
         android:background="@android:color/transparent"
@@ -138,7 +139,7 @@ android:gravity="right"
 
 android:layout_alignParentRight="true"
 
-        android:gravity="right|center_vertical"
+        android:gravity="left|center_vertical"
         android:inputType="textPassword"
 
         android:spinnerMode="dropdown"
@@ -152,15 +153,15 @@ android:layout_alignParentRight="true"
 
 
     <ImageView
-        android:layout_alignParentLeft="true"
+       android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_width="@dimen/_12sdp"
         android:layout_height="@dimen/_12sdp"
-        android:layout_gravity="center_vertical|left"
-        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="@dimen/_15sdp"
         android:fontFamily="@font/bold"
         android:scaleType="centerInside"
-        android:src= "@drawable/ic_baseline_arrow_back_ios_24"
+        app:srcCompat= "@drawable/ic_baseline_keyboard_arrow_right_24"
         android:textSize="@dimen/_15ssp" />
 </RelativeLayout>
 

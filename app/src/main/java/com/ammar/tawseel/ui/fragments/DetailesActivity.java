@@ -65,7 +65,12 @@ public class DetailesActivity extends AppCompatActivity {
             callDeleteApi(idBill);
         });
 
-
+binding.imgBack.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        onBackPressed();
+    }
+});
     }
 
     private void callDeleteApi(String idBill) {

@@ -83,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         if (shardEditor.loadData().get(ShardEditor.KEY_TOKEN) != null
                 && !shardEditor.loadData().get(ShardEditor.KEY_TOKEN).equals("")) {
 
-            Log.d("token", "onCreate: " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+            Log.d("tokennn", "onCreate: " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
         }
 
         navigationBottom();
@@ -170,7 +170,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
     private void navigationBottom() {
         binding.bottomNavigationView.setBackground(null);
-        binding.bottomNavigationView.getMenu().getItem(2).setChecked(true);
+    //    binding.bottomNavigationView.getMenu().getItem(2).setChecked(true);
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this);
         binding.imgTawseel.setOnClickListener(new View.OnClickListener() {
             @Override

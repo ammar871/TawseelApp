@@ -38,6 +38,7 @@
     <color name="green">   #00C936</color>
     <color name="core_notiy">#FFE9C4</color>
     <color name="core_mask">#F3F3F3</color>
+    <color name="core_notiy_paig">#B7FFE9C4</color>
 
 
 </resources>

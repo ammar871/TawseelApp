@@ -2,6 +2,7 @@ package com.ammar.tawseel.ui.auth;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -83,6 +84,7 @@ import com.skyfishjy.library.RippleBackground;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class SelectLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, LocationListener, Animation.AnimationListener {
@@ -128,7 +130,12 @@ ShardEditor shardEditor;
         if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
 
             Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
-
+            Locale locale = new Locale(shardEditor.loadData().get(ShardEditor.KEY_LANG));
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_select_location);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -208,8 +215,8 @@ ShardEditor shardEditor;
                             locality_city = addressList.get(0).getLocality();
                             sub_localoty = addressList.get(0).getSubLocality();
                             country_code = addressList.get(0).getCountryCode();
-                            if (locality != null && country != null) {
-                                binding.tvGetLocation.setText(locality + "");
+                            if (city != null && state != null && sub_admin != null && locality_city != null) {
+                                binding.tvGetLocation.setText(state + " , "+ city +" , " + locality_city );
                                 binding.proBar.setVisibility(View.GONE);
                             } else {
                                 binding.tvGetLocation.setText("غير قادر على تحديد الموقع ...");

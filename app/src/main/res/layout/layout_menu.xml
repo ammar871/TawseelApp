@@ -46,7 +46,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/bold"
-                android:text="أحمد عمر عبدالعال"
+
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp" />
 
@@ -56,7 +56,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:fontFamily="@font/bold"
-                android:text="طالب خدمة"
+                android:text="@string/server_order"
                 android:textColor="@color/login_color2"
                 android:textSize="@dimen/_13ssp" />
         </LinearLayout>
@@ -83,7 +83,7 @@
             android:fontFamily="@font/medium"
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
-            android:text="الملف الشخصي" />
+            android:text="@string/details_accounte" />
         <TextView
             android:id="@+id/nav_order"
             android:layout_width="match_parent"
@@ -95,7 +95,7 @@
             android:fontFamily="@font/medium"
             android:gravity="center_vertical|left"
 
-            android:text="الطلبات" />
+            android:text="@string/orders" />
         <TextView
             android:id="@+id/tv_rates"
             android:layout_width="match_parent"
@@ -106,7 +106,7 @@
             android:fontFamily="@font/medium"
             android:textColor="@color/black"
             android:gravity="center_vertical|left"
-            android:text="التقييمات" />
+            android:text="@string/ratings" />
 
         <TextView
             android:layout_width="match_parent"
@@ -118,7 +118,7 @@
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
             android:id="@+id/tv_sitting"
-            android:text="الاعدادات" />
+            android:text="@string/sitting" />
 
         <TextView
             android:layout_width="match_parent"
@@ -130,7 +130,7 @@
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
             android:id="@+id/tv_about_us"
-            android:text="من نحن" />
+            android:text="@string/who_us" />
 
         <TextView
             android:layout_width="match_parent"
@@ -142,7 +142,7 @@
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
             android:id="@+id/tv_call_us"
-            android:text="اتصل بنا" />
+            android:text="@string/cunct_us_menu" />
 
         <TextView
             android:layout_width="match_parent"
@@ -154,7 +154,7 @@
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
             android:id="@+id/tv_plociy"
-            android:text="سياسة الخصوصية و الاستخدام" />
+            android:text="@string/pr_policy" />
 
         <TextView
             android:layout_width="match_parent"
@@ -166,7 +166,7 @@
             android:gravity="center_vertical|left"
             android:textColor="@color/black"
             android:id="@+id/tv_shar"
-            android:text="مشاركة التطبيق" />
+            android:text="@string/share_app" />
 
         <TextView
             android:layout_width="match_parent"
@@ -177,7 +177,7 @@
             android:fontFamily="@font/medium"
             android:gravity="center_vertical|right"
             android:id="@+id/tv_rate"
-            android:text="تقييم التطبيق" />
+            android:text="@string/rate_app" />
 
 
     </LinearLayout>
@@ -191,7 +191,7 @@
         android:fontFamily="@font/medium"
         android:gravity="center_vertical|right"
 
-        android:text="تسجيل خروج"
+        android:text="@string/logout"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

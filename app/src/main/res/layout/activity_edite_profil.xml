@@ -7,311 +7,395 @@
 
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.EditeProfilActivity">
-
         <RelativeLayout
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_100ssp"
-            android:background="@drawable/drawb_backround_bar">
-
-            <ImageView
-                android:id="@+id/img_edite"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/imag_back_bar" />
-
-            <RelativeLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/details_accounte"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15ssp" />
-
-                <ImageView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_15ssp"
-
-                    android:fontFamily="@font/bold"
-
-                    android:textColor="@color/white"
-
-                    android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_menu" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-
-                    android:layout_marginRight="@dimen/_15ssp"
-
-                    android:background="@drawable/circle_image"
-                    android:fontFamily="@font/bold"
-                    android:scaleType="centerInside"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_arrow_back" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/_10sdp">
-
-                <ImageView
-                    android:id="@+id/btn_save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_15ssp"
-
-                    android:fontFamily="@font/bold"
-
-                    android:textColor="@color/white"
-
-                    android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_check" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-
-                    android:layout_marginRight="@dimen/_15ssp"
-
-
-                    android:fontFamily="@font/bold"
-                    android:scaleType="centerInside"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_edit" />
-            </RelativeLayout>
-
-
-        </RelativeLayout>
-
-        <FrameLayout
-            android:id="@+id/layout_progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/layout_home"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/layout_location_internet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:fillViewport="true"
-            android:visibility="gone">
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_15ssp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_15ssp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/drawble_edit2"
+            android:padding="@dimen/_8ssp"
 
+            >
 
             <LinearLayout
-
-                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/layout_bar">
+                android:paddingTop="@dimen/_10ssp">
 
+                <ImageView
+                    android:layout_width="@dimen/_50ssp"
+                    android:layout_height="@dimen/_50ssp"
+                    android:layout_gravity="center"
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_12ssp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/input_layout_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:enabled="true"
-                            android:focusable="false"
-                            android:gravity="right"
-                            android:hint="@string/selecte_location"
-                            app:boxBackgroundColor="@android:color/transparent"
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="0dp">
-
-                            <com.google.android.material.textfield.TextInputEditText
-
-
-                                android:id="@+id/edit_text_location"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@android:color/transparent"
-                                android:gravity="right" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <ImageView
-                            android:id="@+id/img_map"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:padding="@dimen/_8sdp"
-                            app:srcCompat="@drawable/ic_place" />
-                    </FrameLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_9ssp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-
-                    app:cardCornerRadius="@dimen/_10sdp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/input_layout_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-
-                        android:background="@drawable/drawble_edit2"
-                        android:gravity="right"
-                        android:hint="@string/all_name"
-
-                        app:boxBackgroundColor="@android:color/transparent"
-                        app:boxStrokeWidth="0dp"
-                        app:boxStrokeWidthFocused="0dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-
-                            android:id="@+id/edit_text_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:gravity="right"
-                            android:text="" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.cardview.widget.CardView>
-
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_9ssp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-
-                    app:cardCornerRadius="@dimen/_10sdp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/input_layout_phon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-
-                        android:background="@drawable/drawble_edit2"
-                        android:gravity="right"
-                        android:hint="@string/number_phone"
-                        app:boxBackgroundColor="@android:color/transparent"
-                        app:boxStrokeWidth="0dp"
-                        app:boxStrokeWidthFocused="0dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-
-                            android:id="@+id/edit_text_phone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:gravity="right"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </androidx.cardview.widget.CardView>
-
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/ic_logopages" />
 
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:fontFamily="@font/bold"
-                    android:text="@string/photo"
-                    android:textColor="#707070"
-                    android:textSize="@dimen/_12ssp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:text="تأكد من وجود الانترنت "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp" />
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_add_photo"
+                <LinearLayout
+                    android:id="@+id/btn_dissmes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_15ssp"
-                    android:elevation="@dimen/_3sdp">
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/profile_image"
-                        android:layout_width="@dimen/_90sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:background="@drawable/imagerat"
-                        android:enabled="false"
-                        android:src="@drawable/imagerat"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                    <TextView
 
-                        />
-
-                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_margin="@dimen/_4sdp"
+                        android:background="@drawable/drawble_button_dialog"
+                        android:fontFamily="@font/medium"
+                        android:paddingLeft="@dimen/_15sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingRight="@dimen/_15sdp"
+                        android:paddingBottom="@dimen/_6sdp"
+                        android:text="موافق"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp"
+                        android:textStyle="bold" />
 
-                        app:layout_constraintRight_toRightOf="@id/profile_image"
-                        app:srcCompat="@drawable/ic_add_a_photo"
-
-
-                        />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+                </LinearLayout>
             </LinearLayout>
+        </RelativeLayout>
+<LinearLayout
+    android:id="@+id/layout_home_internt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100ssp"
+        android:background="@drawable/drawb_backround_bar">
 
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/img_edite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/imag_back_bar" />
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/bold"
+                android:text="@string/details_accounte"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp" />
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_15ssp"
+
+                android:fontFamily="@font/bold"
+
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/_15ssp"
+                app:srcCompat="@drawable/ic_menu" />
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+
+                android:layout_marginRight="@dimen/_15ssp"
+
+                android:background="@drawable/circle_image"
+                android:fontFamily="@font/bold"
+                android:scaleType="centerInside"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                app:srcCompat="@drawable/ic_arrow_back" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_15ssp"
+
+                android:fontFamily="@font/bold"
+
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/_15ssp"
+                app:srcCompat="@drawable/ic_check" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+
+                android:layout_marginRight="@dimen/_15ssp"
+
+
+                android:fontFamily="@font/bold"
+                android:scaleType="centerInside"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15ssp"
+                app:srcCompat="@drawable/ic_edit" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/layout_bar">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_12ssp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_layout_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="true"
+                        android:focusable="false"
+                        android:gravity="right"
+                        android:hint="@string/selecte_location"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+
+
+                            android:id="@+id/edit_text_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:gravity="right" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/img_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:padding="@dimen/_8sdp"
+                        app:srcCompat="@drawable/ic_place" />
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_9ssp"
+                android:layout_marginEnd="@dimen/_5sdp"
+
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:background="@drawable/drawble_edit2"
+                    android:gravity="right"
+                    android:hint="@string/all_name"
+
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+
+                        android:id="@+id/edit_text_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="right"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_9ssp"
+                android:layout_marginEnd="@dimen/_5sdp"
+
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_phon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+
+                    android:background="@drawable/drawble_edit2"
+                    android:gravity="right"
+                    android:hint="@string/number_phone"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+
+                        android:id="@+id/edit_text_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="right"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/bold"
+                android:text="@string/photo"
+                android:textColor="#707070"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_add_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_15ssp"
+                android:elevation="@dimen/_3sdp">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_90sdp"
+                    android:background="@drawable/imagerat"
+                    android:enabled="false"
+                    android:src="@drawable/imagerat"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintRight_toRightOf="@id/profile_image"
+                    app:srcCompat="@drawable/ic_add_a_photo"
+
+
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+
+    </FrameLayout>
 </layout>

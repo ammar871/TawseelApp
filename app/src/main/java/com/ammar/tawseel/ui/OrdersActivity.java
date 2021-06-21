@@ -2,6 +2,7 @@ package com.ammar.tawseel.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -57,6 +58,10 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
     CircleImageView imgProfile;
     TextView tv_nam;
     ShardEditor shardEditor;
+    ArrayList<DataOrder>listCurrent=new ArrayList<>();
+    ArrayList<DataFinshOrder>listfinshed=new ArrayList<>();
+    int page = 1;
+    int pageFinshe = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,29 +78,137 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
 
-        binding.rvOrders.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        binding.rvOrders.setHasFixedSize(true);
+        binding.rvOrdersCurrent.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        binding.rvOrdersCurrent.setHasFixedSize(true);
 
-        loadCurrentOrders();
+        binding.rvOrdersFinshed.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        binding.rvOrdersFinshed.setHasFixedSize(true);
+
+        loadCurrentOrders(1);
         openDraw();
       inItView();
       loadDataProfile();
 
-        binding.layoutFoundOrder.setOnClickListener(v -> {
-            binding.layoutFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_selected_tab));
-            binding.layoutNotFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
-            binding.rvOrders.setVisibility(View.GONE);
+        binding.layoutCanceledOrder.setOnClickListener(v -> {
+            binding.layoutCanceledOrder.setBackground(getResources().getDrawable(R.drawable.draw_selected_tab));
+            binding.layoutCurrentOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
+            binding.scrolCurrent.setVisibility(View.GONE);
+            binding.nestscrollfinshed.setVisibility(View.VISIBLE);
             binding.layoutProgress.setVisibility(View.VISIBLE);
-            loadFinshidOrders();
+            loadFinshidOrders(1);
         });
-        binding.layoutNotFoundOrder.setOnClickListener(v -> {
-            binding.layoutFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
-            binding.layoutNotFoundOrder.setBackground(getResources().getDrawable(R.drawable.draw_selected_tab));
-            binding.rvOrders.setVisibility(View.GONE);
+        binding.layoutCurrentOrder.setOnClickListener(v -> {
+            binding.layoutCanceledOrder.setBackground(getResources().getDrawable(R.drawable.draw_text_tab));
+            binding.layoutCurrentOrder.setBackground(getResources().getDrawable(R.drawable.draw_selected_tab));
+            binding.scrolCurrent.setVisibility(View.VISIBLE);
+            binding.nestscrollfinshed.setVisibility(View.GONE);
             binding.layoutProgress.setVisibility(View.VISIBLE);
-            loadCurrentOrders();
+            loadCurrentOrders(1);
+        });
+
+
+        binding.scrolCurrent.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+
+                    if (listCurrent.size()>0){
+                        binding.proBarPag.setVisibility(View.VISIBLE);
+                        page++;
+//
+
+                        loadCurrentOrdersPagenaintion(page);
+                    }
+
+
+
+                }
+            }
+        });
+        binding.nestscrollfinshed.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                    if (listfinshed.size()>0){
+                        binding.proBarPagFinshid.setVisibility(View.VISIBLE);
+                        pageFinshe++;
+                        loadFinshedOrderPage(pageFinshe);
+
+                    }
+
+
+
+                }
+            }
         });
     }
+
+    private void loadFinshedOrderPage(int pageFinshe) {
+
+        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(pageFinshe+"",
+                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG)
+        );
+        call.enqueue(new Callback<APIResponse.ResponseFinshedOrder>() {
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.ResponseFinshedOrder> call,
+                                   @NonNull Response<APIResponse.ResponseFinshedOrder> response) {
+
+                if (response.code()==200){
+                    assert response.body() != null;
+                    if (response.body().getStauts()){
+                        listfinshed.addAll(response.body().getData());
+                        adapterFinshedOrders = new AdapterFinshedOrders(OrdersActivity.this, listfinshed);
+                        binding.rvOrdersFinshed.setAdapter(adapterFinshedOrders);
+                        binding.proBarPagFinshid.setVisibility(View.GONE);
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<APIResponse.ResponseFinshedOrder> call, @NonNull Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void loadCurrentOrdersPagenaintion(int page) {
+        Call<APIResponse.ResponseCurrentOrder> call=apiInterFace.currentOrder( page+"","application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG)
+        );
+        call.enqueue(new Callback<APIResponse.ResponseCurrentOrder>() {
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.ResponseCurrentOrder> call,
+                                   @NonNull Response<APIResponse.ResponseCurrentOrder> response) {
+
+                if (response.code()==200){
+                    assert response.body() != null;
+                    if (response.body().getStauts()){
+                        listCurrent.addAll(response.body().getData());
+                        adapterOrdersHome = new AdapterOrdersHome(OrdersActivity.this,listCurrent);
+                        binding.rvOrdersCurrent.setAdapter(adapterOrdersHome);
+                        binding.proBarPag.setVisibility(View.GONE);
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<APIResponse.ResponseCurrentOrder> call, @NonNull Throwable t) {
+
+            }
+        });
+
+
+
+    }
+
     private void loadDataProfile() {
 
         Call<APIResponse.ResponseShowProfile> call = apiInterFace.showProfile(
@@ -141,8 +254,8 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
             }
         });
     }
-    private void loadCurrentOrders() {
-        Call<APIResponse.ResponseCurrentOrder> call=apiInterFace.currentOrder( "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+    private void loadCurrentOrders(int page) {
+        Call<APIResponse.ResponseCurrentOrder> call=apiInterFace.currentOrder(page+"" ,"application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG)
         );
         call.enqueue(new Callback<APIResponse.ResponseCurrentOrder>() {
@@ -153,10 +266,11 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
                 if (response.code()==200){
                     assert response.body() != null;
                     if (response.body().getStauts()){
-                        adapterOrdersHome = new AdapterOrdersHome(OrdersActivity.this, (ArrayList<DataOrder>) response.body().getData());
-                        binding.rvOrders.setAdapter(adapterOrdersHome);
+                        listCurrent= (ArrayList<DataOrder>) response.body().getData();
+                        adapterOrdersHome = new AdapterOrdersHome(OrdersActivity.this, listCurrent);
+                        binding.rvOrdersCurrent.setAdapter(adapterOrdersHome);
                         binding.layoutProgress.setVisibility(View.GONE);
-                        binding.rvOrders.setVisibility(View.VISIBLE);
+                        binding.layoutHome.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -171,8 +285,8 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
 
 
     }
-    private void loadFinshidOrders() {
-        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(
+    private void loadFinshidOrders(int page) {
+        Call<APIResponse.ResponseFinshedOrder>call=apiInterFace.finishedOrders(page+"",
                 "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG)
         );
@@ -184,10 +298,11 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
                 if (response.code()==200){
                     assert response.body() != null;
                     if (response.body().getStauts()){
-                        adapterFinshedOrders = new AdapterFinshedOrders(OrdersActivity.this, (ArrayList<DataFinshOrder>) response.body().getData());
-                        binding.rvOrders.setAdapter(adapterFinshedOrders);
+                        listfinshed= (ArrayList<DataFinshOrder>) response.body().getData();
+                        adapterFinshedOrders = new AdapterFinshedOrders(OrdersActivity.this, listfinshed);
+                        binding.rvOrdersFinshed.setAdapter(adapterFinshedOrders);
                         binding.layoutProgress.setVisibility(View.GONE);
-                        binding.rvOrders.setVisibility(View.VISIBLE);
+                        binding.layoutHome.setVisibility(View.VISIBLE);
                     }
 
                 }

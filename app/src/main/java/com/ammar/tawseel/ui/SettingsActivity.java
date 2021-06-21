@@ -14,6 +14,7 @@ import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivitySettingsBinding;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.ammar.tawseel.uitllis.LocaleUtils;
 
 import java.util.ArrayList;
 
@@ -50,9 +51,12 @@ if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
                 if (itemSelectedSpinner.equals("لغة العرض")){
 
                 }else if ((itemSelectedSpinner.equals("اللغة العربيـة"))){
+
                     shardEditor.saveLang("ar");
+                    Cemmon.LONG_USER="ar";
                 }else if ((itemSelectedSpinner.equals("English"))){
-                    shardEditor.saveLang("eng");
+                    shardEditor.saveLang("en");
+                    Cemmon.LONG_USER="en";
                 }
                 startActivity(new Intent(SettingsActivity.this,SplashActivity.class));
                 finish();
@@ -61,7 +65,7 @@ if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
     }
 
     private void inItSpinner() {
-        languages.add("لغة العرض");
+        languages.add(getString(R.string.lang_display));
         languages.add("اللغة العربيـة");
         languages.add("English");
         ArrayAdapter<String> langAdapter = new ArrayAdapter<String>(SettingsActivity.this, R.layout.spinner_text, languages);

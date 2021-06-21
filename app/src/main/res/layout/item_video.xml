@@ -8,8 +8,9 @@
         android:visibility="gone"
         android:id="@+id/layout_there"
         android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_215sdp">
+        android:layout_width="@dimen/_240sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:layout_height="@dimen/_165sdp">
 
 
 
@@ -31,41 +32,40 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_120sdp"
             android:layout_below="@+id/imageView1item_there_video"
-            android:layout_margin="10dp"
+          android:id="@+id/layout_there_ved"
 
             android:layout_toRightOf="@id/imageView1item_there_video">
 
             <ImageView
-                android:id="@+id/video_player_there"
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp" />
-
-            <FrameLayout
-                android:id="@+id/media_controller_there"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
-            </FrameLayout>
-
+                android:background="#9C000000"
+                android:id="@+id/ved_view_there"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_120sdp"/>
             <ImageView
-                android:id="@+id/holder_there"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
 
-                android:background="@drawable/ic_play_me" />
+               android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_play_me"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"/>
 
-            <ProgressBar
-                android:id="@+id/buffereing_there"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
         </RelativeLayout>
+        <TextView
+            android:id="@+id/date_body_there"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_there_ved"
+            android:layout_alignParentRight="true"
+            android:text="233333"
+            android:elevation="2dp"
+            android:gravity="right"
+
+            android:paddingTop="@dimen/_2sdp"
+
+
+            android:textSize="11sp" />
     </RelativeLayout>
 
 
@@ -87,8 +87,8 @@
         android:id="@+id/layout_me"
         android:layout_alignParentRight="true"
         android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_216sdp">
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="@dimen/_165sdp">
 
 
 
@@ -110,38 +110,37 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_120sdp"
             android:layout_below="@+id/image_View_item_me_video"
-            android:layout_margin="10dp"
+            android:id="@+id/layout_me_ved"
             android:layout_toLeftOf="@id/image_View_item_me_video">
 
             <ImageView
-                android:background="@color/black"
-                android:id="@+id/video_player_me"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp" />
-
-            <FrameLayout
-                android:id="@+id/media_controller_me"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
-            </FrameLayout>
-
+                android:background="#9C000000"
+                android:id="@+id/ved_view_me"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_120sdp"/>
             <ImageView
-                android:id="@+id/holder_me"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/ic_play_me" />
 
-            <ProgressBar
-                android:id="@+id/buffereing_me"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_play_me"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"/>
         </RelativeLayout>
+        <TextView
+            android:id="@+id/date_body_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_me_ved"
+            android:layout_alignParentLeft="true"
+            android:text="233333"
+            android:elevation="2dp"
+            android:gravity="right"
+
+            android:paddingTop="@dimen/_2sdp"
+
+
+            android:textSize="11sp" />
     </RelativeLayout>
 </RelativeLayout>

@@ -12,7 +12,85 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         tools:context=".ui.auth.LoginActivity">
+        <RelativeLayout
+android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/layout_location_internet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_15ssp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_15ssp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/drawble_edit2"
+            android:padding="@dimen/_8ssp"
+
+            >
+
+            <LinearLayout
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_10ssp">
+
+                <ImageView
+                    android:layout_width="@dimen/_50ssp"
+                    android:layout_height="@dimen/_50ssp"
+                    android:layout_gravity="center"
+
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/ic_logopages" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:text="تأكد من وجود الانترنت "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp" />
+
+                <LinearLayout
+                    android:id="@+id/btn_dissmes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_4sdp"
+                        android:background="@drawable/drawble_button_dialog"
+                        android:fontFamily="@font/medium"
+                        android:paddingLeft="@dimen/_15sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingRight="@dimen/_15sdp"
+                        android:paddingBottom="@dimen/_6sdp"
+                        android:text="موافق"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 <androidx.core.widget.NestedScrollView
+    android:id="@+id/layout_home"
+    android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -89,7 +167,7 @@
 
                         android:background="@drawable/drawble_edite"
                         android:gravity="right"
-                        android:hint="اسم المستخدم "
+                        android:hint="@string/nameofuser"
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxStrokeWidth="0dp"
                         app:boxStrokeWidthFocused="0dp">
@@ -111,7 +189,7 @@
 
                         android:background="@drawable/drawble_edite"
                         android:gravity="right"
-                        android:hint="كلمة المرور "
+                        android:hint="@string/password"
                         app:boxBackgroundColor="@android:color/transparent"
                         app:boxStrokeWidth="0dp"
                         app:boxStrokeWidthFocused="0dp">
@@ -196,11 +274,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bold"
-                    android:text="عضو جديد؟ "
+                    android:text="@string/new_coustomer"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -212,7 +290,7 @@
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/tv_quiz"
+                    app:layout_constraintStart_toEndOf="@id/tv_quiz"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

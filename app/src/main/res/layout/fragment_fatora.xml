@@ -69,6 +69,7 @@ xmlns:tools="http://schemas.android.com/tools">
             app:srcCompat="@drawable/ic_menu" />
 
         <ImageView
+            android:id="@+id/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -87,6 +88,7 @@ xmlns:tools="http://schemas.android.com/tools">
     <FrameLayout
         android:layout_below="@id/app_bar"
         android:background="@color/white"
+        android:visibility="visible"
         android:id="@+id/layout_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -403,28 +405,60 @@ xmlns:tools="http://schemas.android.com/tools">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_25sdp">
+<FrameLayout
+    android:id="@+id/layout_done"
+    android:layout_width="@dimen/_130sdp"
+    android:layout_height="@dimen/_55sdp"
+    android:background="@drawable/darwble_round_button_red"
+    android:layout_alignParentLeft="true">
 
-                    <TextView
-                        android:id="@+id/tv_close_oprator"
-                        android:layout_width="@dimen/_120sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:background="@drawable/darwble_round_button_red"
-                        android:fontFamily="@font/medium"
-                        android:padding="@dimen/_15sdp"
-                        android:text="الغاء العملية"
-                        android:textSize="@dimen/_15ssp" />
+    <ProgressBar
+        android:id="@+id/prodone"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/tv_close_oprator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-                    <TextView
-                        android:id="@+id/tv_finsh_oprator"
-                        android:layout_width="@dimen/_120sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+android:layout_gravity="center"
+        android:fontFamily="@font/medium"
+
+        android:text="@string/cancelopratpr"
+        android:textSize="@dimen/_13ssp" />
+</FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layout_sucess"
+                        android:layout_width="@dimen/_130sdp"
+                        android:layout_height="@dimen/_55sdp"
                         android:background="@drawable/darwble_round_button_yallow"
-                        android:fontFamily="@font/medium"
-                        android:padding="@dimen/_15sdp"
-                        android:text="@string/done_oprator"
-                        android:textSize="@dimen/_15ssp" />
+                        android:layout_alignParentRight="true">
+
+                        <ProgressBar
+                            android:id="@+id/prodSucces"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            />
+                        <TextView
+                            android:id="@+id/tv_finsh_oprator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                           android:layout_gravity="center"
+                            android:fontFamily="@font/medium"
+
+                            android:text="@string/done_oprator"
+                            android:textSize="@dimen/_13ssp" />
+                    </FrameLayout>
+
+
+
 
                 </RelativeLayout>
             </LinearLayout>

@@ -34,6 +34,9 @@ shardEditor=new ShardEditor(this);
 
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
+
+
+
         if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
 
             Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));

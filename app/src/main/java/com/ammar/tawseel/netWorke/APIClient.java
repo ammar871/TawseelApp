@@ -1,5 +1,6 @@
 package com.ammar.tawseel.netWorke;
 
+import com.ammar.tawseel.uitllis.Cemmon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,6 +18,7 @@ public class APIClient {
 
 
     private static Retrofit retrofit = null;
+    private static Retrofit retrofit2 = null;
     final static String BASE_URL = "https://tawseel.pal-dev.com/";
 
     public static Retrofit getClient() {
@@ -47,5 +49,35 @@ public class APIClient {
         }
         return retrofit;
     }
+
+    public static Retrofit getClientMap() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(interceptor)
+                .connectionSpecs(
+                        Arrays.asList(
+                                ConnectionSpec.MODERN_TLS,
+                                ConnectionSpec.COMPATIBLE_TLS,
+                                ConnectionSpec.CLEARTEXT
+                        )
+                )
+                .build();
+
+        if (retrofit2 == null) {
+            retrofit2 = new Retrofit.Builder()
+                    .baseUrl(Cemmon.BASE_URL_MAP)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(client)
+                    .build();
+        }
+        return retrofit2;
+    }
+
 
 }

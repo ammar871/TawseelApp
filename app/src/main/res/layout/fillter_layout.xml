@@ -3,20 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/_5ssp"
-    android:paddingTop="@dimen/_10sdp"
-    android:layout_marginTop="@dimen/_5sdp"
-    android:paddingBottom="@dimen/_5sdp"
+    android:layout_height="match_parent"
+
+
     android:layout_marginBottom="@dimen/_10sdp"
-    android:background="@drawable/draw_arround"
+
     android:orientation="vertical">
 
     <FrameLayout
-        android:padding="@dimen/_5sdp"
+        android:layout_margin="@dimen/_5sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:background="@drawable/draw_arround"
         >
 
         <LinearLayout
@@ -37,7 +35,7 @@
                     android:id="@+id/tv_text_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:fontFamily="@font/medium"
@@ -51,10 +49,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_text_rate"
                     android:saveEnabled="true"
                     android:isIndicator="false"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_toEndOf="@id/tv_text_rate"
+                    android:layout_marginLeft="@dimen/_10sdp"
+
                     android:textColor="@color/login_color2"
                     android:theme="@style/RatingBar" />
             </RelativeLayout>
@@ -110,7 +109,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp">
+                android:padding="@dimen/_5sdp">
 
                 <TextView
                     android:id="@+id/tv_text"
@@ -118,29 +117,32 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/medium"
                     android:gravity="center_horizontal"
-                    android:text="موقع المندوب :"
+                    android:text="@string/locationdriver"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_11ssp"
+                    android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:gravity="left"
                     android:id="@+id/group_radio_fillter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_text"
+                    app:layout_constraintLeft_toRightOf="@id/tv_text"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".70">
 
                     <RadioButton
+                        android:layout_gravity="left"
                         android:id="@+id/box_outSide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/medium"
-                        android:text="أبعد من 5 كيلو"
+                        android:text="@string/out_from_5"
                         android:textColor="@color/black"
                         android:theme="@style/RadioButtonTheme"
                         android:textSize="11dp" />
@@ -149,10 +151,10 @@
                         android:id="@+id/box_inside"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        android:layout_gravity="left"
                         android:fontFamily="@font/medium"
                         android:theme="@style/RadioButtonTheme"
-                        android:text="أقرب من 5 كيلو"
+                        android:text="@string/in_5_killo"
                         android:textColor="@color/black"
                         android:textSize="11dp" />
                 </RadioGroup>

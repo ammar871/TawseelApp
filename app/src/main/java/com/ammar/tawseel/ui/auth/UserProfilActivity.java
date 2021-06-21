@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.loader.content.CursorLoader;
 
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Resources;
@@ -18,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.ammar.tawseel.uitllis.PathVideo;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -88,47 +91,79 @@ public class UserProfilActivity extends AppCompatActivity {
 
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_profil);
+        if (Cemmon.isNetworkOnline(this)) {
 
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
-
-        shardEditor = new ShardEditor(this);
-
-        getProfile();
-        enableLoc();
-        binding.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDialogBottomSheetLogin();
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
             }
-        });
+            binding.layoutHome.setVisibility(View.VISIBLE);
 
 
-        binding.btnMap.setOnClickListener(v -> {
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
-            Intent intent = new Intent(UserProfilActivity.this, SelectLocationActivity.class);
-            startActivityForResult(intent, 1);
+            shardEditor = new ShardEditor(this);
 
-        });
+            getProfile();
+            enableLoc();
+            binding.profileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getDialogBottomSheetLogin();
+                }
+            });
 
 
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+            binding.btnMap.setOnClickListener(v -> {
+
+                Intent intent = new Intent(UserProfilActivity.this, SelectLocationActivity.class);
+                startActivityForResult(intent, 1);
+
+            });
+
+
+            binding.btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    binding.tvSave.setVisibility(View.GONE);
+                    binding.progressbar.setVisibility(View.VISIBLE);
+                    if (isValue()) {
+
+
+                        editeProfil(latitude, longitude, Objects.requireNonNull(binding.editTextLocation.getText()).toString(), binding.editTextName.getText().toString()
+                                , Objects.requireNonNull(binding.editTextPhone.getText()).toString(), saveuri);
+
+                    } else {
+                        binding.tvSave.setVisibility(View.VISIBLE);
+                        binding.progressbar.setVisibility(View.GONE);
+
+                    }
+                }
+            });
+
+
+
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.tvSave.setVisibility(View.GONE);
-                binding.progressbar.setVisibility(View.VISIBLE);
-                if (isValue()) {
-
-
-                    editeProfil(latitude, longitude, Objects.requireNonNull(binding.editTextLocation.getText()).toString(), binding.editTextName.getText().toString()
-                            , Objects.requireNonNull(binding.editTextPhone.getText()).toString(), saveuri);
-
-                } else {
-                    binding.tvSave.setVisibility(View.VISIBLE);
-                    binding.progressbar.setVisibility(View.GONE);
-
+                try{
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch (ActivityNotFoundException ignored){
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 }
             }
         });
+
     }
 
     MultipartBody.Part multipartBody;
@@ -305,7 +340,7 @@ public class UserProfilActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
 
-                    File file = new File(getRealPathFromURI(data.getData()));
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, data.getData())));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
@@ -336,7 +371,7 @@ public class UserProfilActivity extends AppCompatActivity {
 
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     Uri uri = getImageUri(photo);
-                    File file = new File(getRealPathFromURI(uri));
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, uri)));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);

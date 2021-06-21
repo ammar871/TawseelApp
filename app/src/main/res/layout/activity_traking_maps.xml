@@ -65,7 +65,7 @@
                             android:id="@+id/tv_name_lable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
                             android:fontFamily="@font/medium"
                             android:text="@string/name_drive"
                             android:textColor="@color/black"
@@ -75,16 +75,16 @@
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@id/tv_name_lable"
+                            android:layout_toEndOf="@id/tv_name_lable"
                             android:fontFamily="@font/medium"
-                            android:text="أحمد على عمر "
+                        android:layout_marginStart="@dimen/_3ssp"
                             android:textColor="@color/login_color2"
                             android:textSize="@dimen/_11sdp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentEnd="true"
                             android:orientation="vertical">
 
                             <TextView
@@ -154,12 +154,12 @@ android:id="@+id/tv_date"
 
                                 android:layout_width="@dimen/_100sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="right"
+                                android:layout_gravity="center_horizontal"
 
 
                                 android:drawablePadding="@dimen/_4sdp"
                                 android:fontFamily="@font/medium"
-                                android:gravity="center_vertical"
+                                android:gravity="center_vertical|center_horizontal"
 
                                 android:text="@string/number_bill"
                                 android:textAllCaps="false"
@@ -179,7 +179,7 @@ android:id="@+id/numberFatora"
                                 android:drawablePadding="@dimen/_4sdp"
                                 android:fontFamily="@font/medium"
 
-                                android:gravity="right"
+                                android:gravity="center_horizontal"
                                 android:text="23455"
                                 android:textAllCaps="false"
                                 android:textColor="@color/login_color2"

@@ -9,6 +9,7 @@ import androidx.loader.content.CursorLoader;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -21,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ import com.ammar.tawseel.ui.auth.SelectLocationActivity;
 import com.ammar.tawseel.ui.auth.UserProfilActivity;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.ammar.tawseel.uitllis.PathVideo;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -77,10 +80,48 @@ public class EditeProfilActivity extends AppCompatActivity {
 
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edite_profil);
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
-        onClicksButtons();
 
-        loadDataProfile();
+        if (Cemmon.isNetworkOnline(this)) {
+
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
+            }
+            binding.layoutHome.setVisibility(View.VISIBLE);
+
+
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
+            onClicksButtons();
+
+            loadDataProfile();
+            binding.imgBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch (ActivityNotFoundException ignored){
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
+            }
+        });
+
 
     }
 
@@ -192,7 +233,7 @@ public class EditeProfilActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
 
-                    File file = new File(getRealPathFromURI(data.getData()));
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, data.getData())));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                      multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
@@ -223,7 +264,7 @@ public class EditeProfilActivity extends AppCompatActivity {
 
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     Uri uri = getImageUri(photo);
-                    File file = new File(getRealPathFromURI(uri));
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, uri)));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);

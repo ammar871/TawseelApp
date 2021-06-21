@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
@@ -11,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -53,6 +56,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -93,25 +97,55 @@ public class LoginActivity extends AppCompatActivity {
         shardEditor = new ShardEditor(this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
-        enableLoc();
-        printHashKey();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        callbackManager = CallbackManager.Factory.create();
-        onClicksButtons();
+        if (Cemmon.isNetworkOnline(this)) {
+
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                    binding.layoutLocationInternet.setVisibility(View.GONE);
+            }
+            binding.layoutHome.setVisibility(View.VISIBLE);
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
+            enableLoc();
+            printHashKey();
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            callbackManager = CallbackManager.Factory.create();
+            onClicksButtons();
 
 
-        textSpan();
-        binding.loginFace.setOnClickListener(v -> {
+            textSpan();
+            binding.loginFace.setOnClickListener(v -> {
 
 
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
-            loginManferFace();
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+                loginManferFace();
+            });
+
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch (ActivityNotFoundException ignored){
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
+            }
         });
+
+
     }
 
     @Override
@@ -319,12 +353,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void textSpan() {
-        String text = "عند قيامك بتسجيل جديد، فانك توافق على كافة شروط سياسة الخصوصية و الاستخدام";
+        String text = getString(R.string.proxy);
         SpannableString ss = new SpannableString(text);
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                Toast.makeText(LoginActivity.this, "One", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(LoginActivity.this, "One", Toast.LENGTH_SHORT).show();
             }
 
             @Override

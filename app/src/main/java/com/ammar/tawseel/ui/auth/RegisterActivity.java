@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -24,9 +27,14 @@ import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.ui.EditeProfilActivity;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.facebook.CallbackManager;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -48,33 +56,65 @@ ActivityRegisterBinding binding;
 
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
-        apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
-        binding.layoutRegister.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-       if (isValue()){
-           callRegisterApi(binding.inputLayoutName.getEditText().getText().toString()
-           ,binding.inputLayoutPass.getEditText().getText().toString(),
-                   binding.inputLayoutEmail.getEditText().getText().toString());
+        if (Cemmon.isNetworkOnline(this)) {
+
+            if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
+                binding.layoutLocationInternet.setVisibility(View.GONE);
+            }
+            binding.layoutHome.setVisibility(View.VISIBLE);
 
 
-       }
+            apiInterFace = APIClient.getClient().create(APIInterFace.class);
+
+            binding.layoutRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isValue()){
+                        callRegisterApi(binding.inputLayoutName.getEditText().getText().toString()
+                                ,binding.inputLayoutPass.getEditText().getText().toString(),
+                                binding.inputLayoutEmail.getEditText().getText().toString());
 
 
-    }
-});
+                    }
+
+
+                }
+            });
 
 
 
-        binding.tvLogin.setOnClickListener(new View.OnClickListener() {
+            binding.tvLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                }
+            });
+            textSpan();
+
+
+        }
+        else {
+            binding.layoutLocationInternet.setVisibility(View.VISIBLE);
+            binding.layoutHome.setVisibility(View.GONE);
+        }
+
+
+        binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                try{
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
+                    intent.setComponent(cn);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }catch (ActivityNotFoundException ignored){
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
             }
         });
-        textSpan();
-
 
     }
 
@@ -152,18 +192,18 @@ ActivityRegisterBinding binding;
                 && binding.inputLayoutName.getEditText().getText().toString().equals("")
         ) {
 
-            binding.inputLayoutName.getEditText().setError("أدخــل اسمك ");
+            binding.inputLayoutName.getEditText().setError(getString(R.string.error_name));
             return false;
 
         } else if (binding.inputLayoutPass.getEditText().getText().toString().isEmpty()
                 && binding.inputLayoutPass.getEditText().getText().toString().equals("")) {
-            binding.inputLayoutPass.getEditText().setError("أدخــل الرقم الباســورد ");
+            binding.inputLayoutPass.getEditText().setError(getString(R.string.error_pass));
             return false;
 
         } else if (binding.inputLayoutEmail.getEditText().getText().toString().isEmpty()
                 && binding.inputLayoutEmail.getEditText().getText().toString().equals("")&&
         vaildatEmail(binding.inputLayoutEmail.getEditText().getText().toString())) {
-            binding.inputLayoutPass.getEditText().setError("أدخــل ايميل صحيح ");
+            binding.inputLayoutPass.getEditText().setError(getString(R.string.error_email));
             return false;
 
         } else {
@@ -175,12 +215,12 @@ ActivityRegisterBinding binding;
 
 
     private void textSpan() {
-        String text = "عند قيامك بتسجيل جديد، فانك توافق على كافة شروط سياسة الخصوصية و الاستخدام" ;
+        String text = getString(R.string.proxy);
         SpannableString ss = new SpannableString(text);
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                Toast.makeText(RegisterActivity.this, "One", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(RegisterActivity.this, "One", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void updateDrawState(TextPaint ds) {

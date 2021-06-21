@@ -1,61 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    android:layout_height="wrap_content">
 
 
     <RelativeLayout
-        android:layout_margin="@dimen/_5sdp"
-        android:visibility="gone"
         android:id="@+id/message_audio_layout_me"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_250sdp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="5dp"
+android:layout_alignParentRight="true"
+        android:visibility="gone">
 
         <androidx.cardview.widget.CardView
-            android:layout_marginRight="@dimen/_3ssp"
-         android:layout_alignParentRight="true"
-            android:id="@+id/cardView"
 
-            android:layout_width="300sp"
+            android:id="@+id/cardView_me"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
 
-            android:layout_marginLeft="?android:attr/actionBarSize"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
+
+
             app:cardBackgroundColor="@color/login_color2"
-            >
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                >
+                android:layout_gravity="left|center_vertical">
+
                 <de.hdodenhof.circleimageview.CircleImageView
 
-                    android:padding="@dimen/_3sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@drawable/imagerat"
                     android:id="@+id/imageViewaudio_me"
+                    android:layout_width="@dimen/_38ssp"
+                    android:layout_height="@dimen/_38ssp"
                     android:layout_alignParentTop="true"
-                    android:layout_width="@dimen/_35ssp"
-                    android:layout_height="@dimen/_35ssp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="@dimen/_1sdp"
                     android:layout_marginRight="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_4sdp"
-                    />
+                    android:padding="@dimen/_3sdp"
+                    android:src="@drawable/imagerat"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <FrameLayout
-                  android:layout_alignParentLeft="true"
                     android:id="@+id/play_audio_lay_me"
                     android:layout_width="30dp"
                     android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"
-                    >
+                    android:layout_marginLeft="3dp">
 
                     <ImageView
                         android:id="@+id/thumbnail_video_icon_me"
@@ -65,34 +63,26 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_baseline_play_me_24"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:paddingBottom="5dp"
-                       />
+                        android:src="@drawable/ic_baseline_play_me_24" />
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_me"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:visibility="gone"
-                        />
+
 
                 </FrameLayout>
 
                 <LinearLayout
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_toRightOf="@id/play_audio_lay_me"
                     android:layout_width="190dp"
-
                     android:layout_height="wrap_content"
-
-
                     android:layout_marginTop="15dp"
-                    android:orientation="vertical">
+                    android:layout_toRightOf="@id/play_audio_lay_me"
+
+                    android:orientation="vertical"
+
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <SeekBar
 
@@ -101,9 +91,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:rotationY="180"
                         android:minHeight="2dip"
                         android:progressTint="#FFFFFF"
+                        android:rotationY="180"
                         android:thumbTint="#FFFFFF" />
 
                     <LinearLayout
@@ -121,11 +111,10 @@
                             android:layout_gravity="left|bottom"
                             android:layout_weight="1"
                             android:gravity="bottom|center|left"
+                            android:text="02:10"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="#FFFFFF"
-                            android:textSize="10.00sp"
-                            android:text="02:10" />
-
+                            android:textSize="10.00sp" />
 
 
                         <!--                        <ImageView-->
@@ -144,52 +133,72 @@
 
         </androidx.cardview.widget.CardView>
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:visibility="gone"
-        android:layout_margin="@dimen/_5sdp"
-        android:id="@+id/message_layout_their"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp">
+        <TextView
+            android:id="@+id/date_body_me_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardView_me"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:elevation="2dp"
+            android:gravity="right"
 
+            android:paddingTop="@dimen/_2sdp"
+
+
+            android:textSize="11sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/message_layout_their"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="7dp"
+        android:paddingRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="visible">
 
 
         <androidx.cardview.widget.CardView
-
-
+            android:id="@+id/card_there"
             android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="?android:attr/actionBarSize"
+            android:layout_below="@+id/username_text"
+
+
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            android:layout_below="@+id/username_text">
+            app:cardElevation="0dp">
 
             <RelativeLayout
-                android:layout_width="@dimen/_250sdp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical">
+
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/imagerat"
                     android:id="@+id/imageViewaudio_there"
-                    android:layout_alignParentTop="true"
-                    android:layout_width="@dimen/_35ssp"
-                    android:layout_height="@dimen/_35ssp"
+                    android:layout_width="@dimen/_38ssp"
+                    android:layout_height="@dimen/_38ssp"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/_1sdp"
+                    android:padding="@dimen/_3sdp"
                     android:layout_marginRight="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_4sdp"
-                    />
+                    android:src="@drawable/imagerat" />
 
                 <FrameLayout
-                    android:layout_centerVertical="true"
                     android:id="@+id/layout_play"
-android:layout_toRightOf="@id/imageViewaudio_there"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="@dimen/_3ssp"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/imageViewaudio_there">
 
                     <ImageView
                         android:id="@+id/thumbnail_video_icon_there"
@@ -199,63 +208,65 @@ android:layout_toRightOf="@id/imageViewaudio_there"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_baseline_play_thier"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:paddingBottom="5dp"/>
+                        android:src="@drawable/ic_baseline_play_thier" />
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar__there"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:visibility="gone"
-                        />
 
                 </FrameLayout>
+<LinearLayout
+    android:id="@+id/seekbar_t_l"
+   android:layout_centerVertical="true"
+    android:layout_width="@dimen/_190sdp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_toRightOf="@id/layout_play">
+    <SeekBar
+        android:layout_marginTop="@dimen/_8sdp"
+        android:id="@+id/seekBar__there"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
 
-                <LinearLayout
-                    android:layout_centerVertical="true"
-                    android:layout_width="@dimen/_190sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@id/layout_play"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <SeekBar
-                        android:id="@+id/seekBar__there"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:minHeight="2dip"
-                        android:progressTint="@color/login_color2"
-                        android:thumbTint="@color/login_color2" />
-
+        android:minHeight="2dip"
+        android:progressTint="@color/login_color2"
+        android:thumbTint="@color/login_color2" />
 
 
+    <TextView
+        android:id="@+id/date_text_there"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/seekbar_t_l"
+android:layout_gravity="left"
+        android:layout_marginRight="8dp"
 
+        android:text="03:50 am"
 
-                        <TextView
-                            android:id="@+id/date_text_there"
-                            android:layout_width="wrap_content"
-                            android:layout_height="3dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="8dp"
-                            android:text="03:50 am"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/color_bar"
-                            android:textSize="10sp" />
+        android:textColor="@color/color_bar"
+        android:textSize="10sp" />
+</LinearLayout>
 
-
-                </LinearLayout>
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/date_body_there_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_there"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:elevation="2dp"
+            android:gravity="right"
+            android:paddingTop="@dimen/_2sdp"
+            android:text="3333333333333"
+
+
+            android:textSize="11sp" />
     </RelativeLayout>
 </RelativeLayout>
