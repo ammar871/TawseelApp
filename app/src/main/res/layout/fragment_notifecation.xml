@@ -161,16 +161,7 @@
 
             >
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="right"
-                                android:layout_marginTop="@dimen/_10ssp"
-                                android:layout_marginRight="@dimen/_12sdp"
-                                android:fontFamily="@font/medium"
-                                android:text="@string/today"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_15ssp" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_list_notify_today"
@@ -185,30 +176,7 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
-                      <TextView
-                          android:id="@+id/tv_date"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_gravity="right"
-                          android:layout_marginTop="@dimen/_10ssp"
-                          android:layout_marginRight="@dimen/_12sdp"
 
-                          android:fontFamily="@font/medium"
-                          android:textColor="@color/black"
-                          android:textSize="@dimen/_15ssp" />
-
-                      <androidx.recyclerview.widget.RecyclerView
-                          android:id="@+id/rv_list_notify"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginLeft="@dimen/_6sdp"
-                          android:layout_marginTop="@dimen/_10ssp"
-                          android:layout_marginRight="@dimen/_6sdp"
-                          android:layout_marginBottom="@dimen/_15sdp"
-                          android:nestedScrollingEnabled="false"
-                          android:visibility="visible">
-
-                      </androidx.recyclerview.widget.RecyclerView>
             <ProgressBar
                 android:visibility="gone"
                 android:layout_centerVertical="true"

@@ -4,26 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -37,16 +30,6 @@ import com.ammar.tawseel.ui.DisplayVideoActivity;
 import com.ammar.tawseel.ui.ShowImageChatActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -54,7 +37,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -64,10 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class AdapterChatePage extends RecyclerView.Adapter {
-APIInterFace apiInterFace;
+    APIInterFace apiInterFace;
     ArrayList<Message> list;
     private Context mcontext;
     private OnclickMessageAudio onclickMessage;
@@ -76,7 +56,8 @@ APIInterFace apiInterFace;
 
     public interface OnclickMessageAudio {
 
-        void itemOnclickPlaying(Message dataMessags, ViewHolderVideo viewHolderVideo);
+
+        void startPlaying(MediaPlayer mediaPlayer1, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2);
     }
 
     int layout;
@@ -100,11 +81,11 @@ APIInterFace apiInterFace;
 
     }
 
-    public AdapterChatePage(ArrayList<Message> list, Context mcontext, String image) {
+    public AdapterChatePage(ArrayList<Message> list, Context mcontext, String image,OnclickMessageAudio onclickMessage) {
         this.list = list;
         this.mcontext = mcontext;
         this.image = image;
-
+        this.onclickMessage = onclickMessage;
     }
 
     public AdapterChatePage(ArrayList<Message> list, Context mcontext, OnclickMessageAudio onclickMessage, String image) {
@@ -165,8 +146,6 @@ APIInterFace apiInterFace;
 
 
     }
-
-    private Handler mHandler = new Handler();
 
 
     Runnable run;
@@ -242,7 +221,7 @@ APIInterFace apiInterFace;
                     }
                 });
 
-                //     holder.bodyMeMessage.setText(list.get(getItemCount() - 1 -position).getMessage());
+
                 if (Cemmon.IMAGE_OF_USER != null) {
                     Picasso.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
                             .into(viewHolderContact.imageViewme);
@@ -379,7 +358,7 @@ APIInterFace apiInterFace;
                     String lattuid = separated[0];
                     String longtude = separated[1];
 
-                    getPhotoMapCall(lattuid,longtude,viewHolderLocation.bodyMeMessage);
+                    getPhotoMapCall(lattuid, longtude, viewHolderLocation.bodyMeMessage);
 
                     viewHolderLocation.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -394,14 +373,14 @@ APIInterFace apiInterFace;
 
 
                 viewHolderLocation.bodyMeMessage.setImageResource(R.drawable.location);
-        }
-        if (Cemmon.IMAGE_OF_USER != null) {
-            Glide.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
-                    .into(viewHolderLocation.imageViewme);
-        }
+            }
+            if (Cemmon.IMAGE_OF_USER != null) {
+                Glide.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
+                        .into(viewHolderLocation.imageViewme);
+            }
 
 
-    }  else {
+        } else {
 
             viewHolderLocation.thierMessag.setVisibility(View.VISIBLE);
             viewHolderLocation.myMessage.setVisibility(View.GONE);
@@ -419,11 +398,11 @@ APIInterFace apiInterFace;
                 String[] separated = list.get(position).getMessage().split(",");
                 String lattuid = separated[0];
                 String longtude = separated[1];
-                getPhotoMapCall(lattuid,longtude,viewHolderLocation.bodyTheirMessage);
+                getPhotoMapCall(lattuid, longtude, viewHolderLocation.bodyTheirMessage);
                 viewHolderLocation.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    //    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(lattuid), Double.parseDouble(longtude));
+                        //    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(lattuid), Double.parseDouble(longtude));
                         String uri = "http://maps.google.com/maps?saddr=" + lattuid + "," + longtude + "&daddr=" + lattuid + "," + longtude;
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                         intent.setPackage("com.google.android.apps.maps");
@@ -441,14 +420,14 @@ APIInterFace apiInterFace;
 
     }
 
-    private void getPhotoMapCall(String lattuid, String longtude,ImageView view) {
-        apiInterFace= APIClient.getClientMap().create(APIInterFace.class);
+    private void getPhotoMapCall(String lattuid, String longtude, ImageView view) {
+        apiInterFace = APIClient.getClientMap().create(APIInterFace.class);
 
-        Call<ResponseBody> call=apiInterFace.getPhoto(lattuid,longtude);
+        Call<ResponseBody> call = apiInterFace.getPhoto(lattuid, longtude);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (response.code()==200){
+                if (response.code() == 200) {
                     try {
                         Glide.with(mcontext).load(response.body().string()).placeholder(R.drawable.location)
                                 .into(view);
@@ -462,7 +441,7 @@ APIInterFace apiInterFace;
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("suuuuuuuuuuuu", "onResponse: "+t.getMessage());
+                Log.d("suuuuuuuuuuuu", "onResponse: " + t.getMessage());
             }
         });
 
@@ -574,9 +553,8 @@ APIInterFace apiInterFace;
 
             viewHolderText.bodyTheirMessage.setText(list.get(position).getMessage() + "");
 
-                Glide.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_DRIVER).placeholder(R.drawable.imagerat)
-                        .into(viewHolderText.imageViewthier);
-
+            Glide.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_DRIVER).placeholder(R.drawable.imagerat)
+                    .into(viewHolderText.imageViewthier);
 
 
         }
@@ -601,7 +579,7 @@ APIInterFace apiInterFace;
             viewHolderAudio.myMessage.setVisibility(View.VISIBLE);
             viewHolderAudio.thierMessag.setVisibility(View.GONE);
 
-            // Initializing MediaPlayer
+
             playAudio(position, viewHolderAudio.seekBarMe, viewHolderAudio.txt_audio_time_me, viewHolderAudio.iconplayme, R.drawable.ic_baseline_pause_24, R.drawable.ic_baseline_play_me_24);
 
 
@@ -621,8 +599,10 @@ APIInterFace apiInterFace;
             }
             String formatted = output.format(d);
             viewHolderAudio.datetheir.setText(formatted);
-            playAudio(position, viewHolderAudio.seekBarThier, viewHolderAudio.txt_audio_time_thier, viewHolderAudio.iconplaeThere, R.drawable.pause_thier, R.drawable.ic_baseline_play_thier);
 
+     playAudio(position, viewHolderAudio.seekBarThier, viewHolderAudio.txt_audio_time_thier, viewHolderAudio.iconplaeThere, R.drawable.pause_thier, R.drawable.ic_baseline_play_thier);
+       // onclickMessage.onClickAudioDriver(position, list.get(position), viewHolderAudio.seekBarThier, viewHolderAudio.txt_audio_time_thier, viewHolderAudio.iconplaeThere, R.drawable.pause_thier, R.drawable.ic_baseline_play_thier);
+            // void onClickAudioDriver(int position, Message message, SeekBar seekBarMe, TextView txt_audio_time_me, ImageView iconplayme, int ic_baseline_pause_24, int ic_baseline_play_me_24);
 
             Glide.with(mcontext).load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_DRIVER).placeholder(R.drawable.imagerat)
                     .into(viewHolderAudio.imageViewthier);
@@ -630,6 +610,8 @@ APIInterFace apiInterFace;
 
         }
     }
+
+    Handler handler = new Handler();
 
     private void playAudio(int position, SeekBar seekBarThier, TextView txt_audio_time_thier,
                            ImageView iconplaeThere, int p, int p2) {
@@ -668,62 +650,68 @@ APIInterFace apiInterFace;
 
         iconplaeThere.setOnClickListener(v -> {
 
-            seekBarThier.setProgress(0);
+//            seekBarThier.setProgress(0);
 
-            if (!mediaPlayer1.isPlaying()) {
-
-                mediaPlayer1.start();
-
-                iconplaeThere.setImageResource(p);
-                run = new Runnable() {
-                    @Override
-                    public void run() {
-                        // Updateing SeekBar every 100 miliseconds
-                        seekBarThier.setProgress(mediaPlayer1.getCurrentPosition());
-                        seekBarThier.postDelayed(run, 100);
-                        //For Showing time of audio(inside runnable)
-                        int miliSeconds = mediaPlayer1.getCurrentPosition();
-                        if (miliSeconds != 0) {
-                            //if audio is playing, showing current time;
-                            long minutes = TimeUnit.MILLISECONDS.toMinutes(miliSeconds);
-                            long seconds = TimeUnit.MILLISECONDS.toSeconds(miliSeconds);
-                            if (minutes == 0) {
-                                txt_audio_time_thier.setText("0:" + seconds + "/" + calculateDuration(mediaPlayer1.getDuration()));
-                            } else {
-                                if (seconds >= 60) {
-                                    long sec = seconds - (minutes * 60);
-                                    txt_audio_time_thier.setText(minutes + ":" + sec + "/" + calculateDuration(mediaPlayer1.getDuration()));
-                                }
-                            }
-                        } else {
-                            //Displaying total time if audio not playing
-                            int totalTime = mediaPlayer1.getDuration();
-                            long minutes = TimeUnit.MILLISECONDS.toMinutes(totalTime);
-                            long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
-                            if (minutes == 0) {
-                                txt_audio_time_thier.setText("0:" + seconds);
-                            } else {
-                                if (seconds >= 60) {
-                                    long sec = seconds - (minutes * 60);
-                                    txt_audio_time_thier.setText(minutes + ":" + sec);
-                                }
-                            }
-                        }
-                        if (mediaPlayer1.getDuration() == mediaPlayer1.getCurrentPosition()) {
-                            iconplaeThere.setImageResource(p2);
-                            seekBarThier.setProgress(0);
-                        }
-                    }
-
-                };
-                run.run();
-            } else {
-
-                mediaPlayer1.pause();
-                iconplaeThere.setImageResource(p2);
-            }
+            onclickMessage.startPlaying(mediaPlayer1,seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2);
+           // startPlaying(seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2, mediaPlayer1);
 
         });
+    }
+
+    private void startPlaying(SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2, MediaPlayer mediaPlayer1) {
+        if (!mediaPlayer1.isPlaying()) {
+
+            mediaPlayer1.start();
+
+            iconplaeThere.setImageResource(p);
+            run = new Runnable() {
+                @Override
+                public void run() {
+                    // Updateing SeekBar every 100 miliseconds
+                    seekBarThier.setProgress(mediaPlayer1.getCurrentPosition());
+                    handler.postDelayed(run, 100);
+                    //For Showing time of audio(inside runnable)
+                    int miliSeconds = mediaPlayer1.getCurrentPosition();
+                    if (miliSeconds != 0) {
+                        //if audio is playing, showing current time;
+                        long minutes = TimeUnit.MILLISECONDS.toMinutes(miliSeconds);
+                        long seconds = TimeUnit.MILLISECONDS.toSeconds(miliSeconds);
+                        if (minutes == 0) {
+                            txt_audio_time_thier.setText("0:" + seconds + "/" + calculateDuration(mediaPlayer1.getDuration()));
+                        } else {
+                            if (seconds >= 60) {
+                                long sec = seconds - (minutes * 60);
+                                txt_audio_time_thier.setText(minutes + ":" + sec + "/" + calculateDuration(mediaPlayer1.getDuration()));
+                            }
+                        }
+                    } else {
+                        //Displaying total time if audio not playing
+                        int totalTime = mediaPlayer1.getDuration();
+                        long minutes = TimeUnit.MILLISECONDS.toMinutes(totalTime);
+                        long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
+                        if (minutes == 0) {
+                            txt_audio_time_thier.setText("0:" + seconds);
+                        } else {
+                            if (seconds >= 60) {
+                                long sec = seconds - (minutes * 60);
+                                txt_audio_time_thier.setText(minutes + ":" + sec);
+                            }
+                        }
+                    }
+                    if (mediaPlayer1.getDuration() == mediaPlayer1.getCurrentPosition()) {
+                        iconplaeThere.setImageResource(p2);
+                        seekBarThier.setProgress(0);
+                    }
+                }
+
+            };
+            run.run();
+
+        } else {
+
+            mediaPlayer1.pause();
+            iconplaeThere.setImageResource(p2);
+        }
     }
 
 
@@ -872,10 +860,9 @@ APIInterFace apiInterFace;
 
         CircleImageView imageViewme, imageViewthier;
         ImageView bodyMeMessage, bodyTheirMessage;
-    //    GoogleMap mapCurrent;
+        //    GoogleMap mapCurrent;
         OnclickMessageAudio lisrner;
         TextView date_me, date_Theier;
-
 
 
         public RelativeLayout myMessage, layoutAudiome, getLayoutAudioThere;

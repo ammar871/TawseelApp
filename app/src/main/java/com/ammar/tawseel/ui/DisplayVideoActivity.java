@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
@@ -27,6 +28,7 @@ ActivityDisplayVideoBinding binding;
     String uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_display_video);
 
@@ -35,14 +37,15 @@ ActivityDisplayVideoBinding binding;
         if (getIntent()!=null){
             uri=getIntent().getStringExtra("uri");
         }
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) binding.videoPlayerMe.getLayoutParams();
-        params.width = metrics.widthPixels;
-        params.height = metrics.heightPixels;
-        params.leftMargin = 0;
-        binding.videoPlayerMe.setLayoutParams(params);
-        binding.videoPlayerMe.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//        android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) binding.videoPlayerMe.getLayoutParams();
+//        params.width = metrics.widthPixels;
+//        params.height = metrics.heightPixels;
+//        params.leftMargin = 0;
+//        binding.videoPlayerMe.setLayoutParams(params);
+//        binding.videoPlayerMe.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//
         binding.videoPlayerMe.setVideoPath(uri);
         binding.videoPlayerMe.start();
         MediaController mediaController = new MediaController(this);

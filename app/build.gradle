@@ -122,5 +122,7 @@ dependencies {
 
     // progress
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
+//show pass
+    implementation 'com.maksim88:PasswordEditText:v0.9'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -202,7 +202,10 @@ int page = 1;
                         binding.proBarPag.setVisibility(View.GONE);
                     }
 
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
 
             }
 
@@ -267,10 +270,10 @@ int page = 1;
                         binding.rvOrdersCurrent.setAdapter(adapterFatora);
                         binding.layoutProgress.setVisibility(View.GONE);
                         binding.nestscroll.setVisibility(View.VISIBLE);
-                    }else {
-                        binding.nestscroll.setVisibility(View.VISIBLE);
-                        binding.layoutProgress.setVisibility(View.GONE);
+                    }else if (response.code() == 401) {
+                        shardEditor.logOut();
                     }
+
 
                 }
 
@@ -310,10 +313,12 @@ int page = 1;
                         binding.nestscrollfinshed.setVisibility(View.VISIBLE);
                     }
 
-                }else {
-                    binding.layoutProgress.setVisibility(View.GONE);
-                    binding.nestscrollfinshed.setVisibility(View.VISIBLE);
                 }
+                    else if (response.code() == 401) {
+                        shardEditor.logOut();
+                    }
+
+
 
             }
 

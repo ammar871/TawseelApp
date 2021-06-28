@@ -84,6 +84,8 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 && !shardEditor.loadData().get(ShardEditor.KEY_TOKEN).equals("")) {
 
             Log.d("tokennn", "onCreate: " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+
+            Cemmon.USER_TOKEN =shardEditor.loadData().get(ShardEditor.KEY_TOKEN);
         }
 
         navigationBottom();

@@ -39,7 +39,7 @@
     <string name="start_here">ابدأ من هنا</string>
     <string name="login_with">أو الدخول باستخدام</string>
     <string name="current_order">الحالية</string>
-    <string name="finshed_order">الملغية</string>
+    <string name="finshed_order">المنتهية</string>
     <string name="pr_policy">سياسة الخصوصية والاستخدام</string>
     <string name="rating_drivers">تقييمات مناديب التوصيل</string>
     <string name="welecom_fotr_join">مرحباً بانضمامك الينا!</string>
@@ -131,7 +131,7 @@
     <string name="order_retrant">توصيل طلبات مطاعم وغيرها</string>
     <string name="order_percent">توصيل هدية فى مدينة أخرى</string>
     <string name="order_products">توصيل شحنات وبضائع</string>
-    <string name="other">Delivery of cargo and merchandise</string>
+    <string name="other">أخرى</string>
     <string name="family_details">عزيزي العميل سيتم توجيهك إلى موقع الأسر المنتجه، كل ماعليك هو التواصل مع اقرب الأسر منك، واختيار طلبك، والأسرة ستقوم بالتواصل مع المندوب وإيصال الطلب</string>
     <string name="follow">متابعة</string>
     <string name="today">اليـوم</string>
@@ -146,4 +146,12 @@
     <string name="size_video">هذا الفيديو أكبر من 3 ميغا بايت وقد يستغرق وقتًا أطول للتحميل ....</string>
     <string name="lang_display">لغة العرض</string>
     <string name="rate">تقييم</string>
+    <string name="busey">مندوب التوصيل لديه طلب حالي, لايمكنك التواصل به فى الوقت الحالى</string>
+    <string name="off">مندوب التوصيل غير متوفر حاليا</string>
+    <string name="loading">....جارى التحميل</string>
+    <string name="fill_details">من فضلك املئ البيانات ....</string>
+    <string name="empty_message">لايمكن ارسال رسالة فارغة</string>
+    <string name="select_loca">اختار الموقع</string>
+    <string name="send_to_email">تم ارسال الرسالة الى بريدك الاكترونى</string>
+    <string name="enter_phon">اكتب رقم الموبايل</string>
 </resources>

@@ -56,8 +56,8 @@ xmlns:tools="http://schemas.android.com/tools">
             android:id="@+id/toggls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/_20sdp"
             android:layout_centerVertical="true"
 
             android:layout_marginBottom="@dimen/_20sdp"
@@ -72,9 +72,9 @@ xmlns:tools="http://schemas.android.com/tools">
             android:id="@+id/img_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/_15ssp"
+            android:layout_marginEnd="@dimen/_15ssp"
             android:layout_marginBottom="@dimen/_20sdp"
 
             android:background="@drawable/circle_image"

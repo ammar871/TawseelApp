@@ -282,10 +282,7 @@ public class ChatAppActivity extends AppCompatActivity implements
                         }
                         list = (ArrayList<Message>) response.body().getData().getMessages();
 
-                        adapterChatePage = new AdapterChatePage(list
-                                , ChatAppActivity.this, (dataMessags, viewHolderVideo) -> {
 
-                        }, response.body().getData().getDriver().getAvatar());
                         recyclerViewMessages.setAdapter(adapterChatePage);
 
                         if (response.body().getData().getDriver().getIDName() != null) {
@@ -344,13 +341,6 @@ public class ChatAppActivity extends AppCompatActivity implements
                         }
                         list = (ArrayList<Message>) response.body().getData().getMessages();
 
-                        adapterChatePage = new AdapterChatePage(list
-                                , ChatAppActivity.this, new AdapterChatePage.OnclickMessageAudio() {
-                            @Override
-                            public void itemOnclickPlaying(Message dataMessags, AdapterChatePage.ViewHolderVideo viewHolderVideo) {
-
-                            }
-                        }, response.body().getData().getDriver().getAvatar());
                         recyclerViewMessages.setAdapter(adapterChatePage);
 
                         if (response.body().getData().getDriver().getIDName() != null) {
@@ -543,8 +533,8 @@ public class ChatAppActivity extends AppCompatActivity implements
             Message receivedText = intent.getParcelableExtra("com.codinginflow.EXTRA_TEXT");
 
             if (receivedText.getOrderId().equals(String.valueOf(orderId)))
-                adapterChatePage.refreshData(receivedText);
-            refreshAdpter(adapterChatePage, list);
+//                adapterChatePage.refreshData(receivedText);
+//            refreshAdpter(adapterChatePage, list);
             adapterChatePage.notifyItemInserted(list.size());
             recyclerViewMessages.smoothScrollToPosition(list.size());
         }
@@ -607,7 +597,7 @@ public class ChatAppActivity extends AppCompatActivity implements
                         Log.d("oooooooooo", "onResponse: " + response.body().getData().getMessage());
 
                         //   adapterChatePage = new AdapterChatePage(list, getActivity(), image);
-                        refreshAdpter(adapterChatePage, list);
+                        //refreshAdpter(adapterChatePage, list);
                         adapterChatePage.notifyItemInserted(list.size());
                         recyclerViewMessages.smoothScrollToPosition(list.size());
 
@@ -693,21 +683,21 @@ public class ChatAppActivity extends AppCompatActivity implements
 //
 //
 //    }
-
-    public void refreshAdpter(AdapterChatePage adapterChatePagep, ArrayList<Message> list) {
-
-        if (list.size() > 1) {
-            adapterChatePagep = new AdapterChatePage(list, this, image);
-            //Removed SmoothScroll form here
-            adapterChatePagep.notifyDataSetChanged();
-            recyclerViewMessages.setAdapter(adapterChatePagep);
-
-        } else {
-            Collections.reverse(list);
-            adapterChatePagep = new AdapterChatePage(list, this, image);
-            recyclerViewMessages.setAdapter(adapterChatePagep);
-        }
-    }
+//
+//    public void refreshAdpter(AdapterChatePage adapterChatePagep, ArrayList<Message> list) {
+//
+//        if (list.size() > 1) {
+//            adapterChatePagep = new AdapterChatePage(list, this, image,this);
+//            //Removed SmoothScroll form here
+//            adapterChatePagep.notifyDataSetChanged();
+//            recyclerViewMessages.setAdapter(adapterChatePagep);
+//
+//        } else {
+//            Collections.reverse(list);
+//            adapterChatePagep = new AdapterChatePage(list, this, image);
+//            recyclerViewMessages.setAdapter(adapterChatePagep);
+//        }
+//    }
 
 
     ////////////////////////////////////////////               sound

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -12,9 +13,12 @@ import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
@@ -25,6 +29,8 @@ import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.data.DataUser;
 import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.ui.EditeProfilActivity;
+import com.ammar.tawseel.ui.PrivacyPolicyActivity;
+import com.ammar.tawseel.ui.PrivacyPolicyActivityTwo;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.facebook.CallbackManager;
@@ -42,15 +48,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-ActivityRegisterBinding binding;
+    ActivityRegisterBinding binding;
     APIInterFace apiInterFace;
     ShardEditor shardEditor;
+    String visbilty = "hide";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        shardEditor=new ShardEditor(this);
-        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+        shardEditor = new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG) != "") {
 
             Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
 
@@ -62,17 +70,20 @@ ActivityRegisterBinding binding;
             if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
                 binding.layoutLocationInternet.setVisibility(View.GONE);
             }
+
             binding.layoutHome.setVisibility(View.VISIBLE);
 
+            visibaltyPass();
 
             apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
             binding.layoutRegister.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isValue()){
+                    if (isValue()) {
+                        Cemmon.hideKeyboard(RegisterActivity.this);
                         callRegisterApi(binding.inputLayoutName.getEditText().getText().toString()
-                                ,binding.inputLayoutPass.getEditText().getText().toString(),
+                                , binding.inputLayoutPass.getEditText().getText().toString(),
                                 binding.inputLayoutEmail.getEditText().getText().toString());
 
 
@@ -81,7 +92,6 @@ ActivityRegisterBinding binding;
 
                 }
             });
-
 
 
             binding.tvLogin.setOnClickListener(new View.OnClickListener() {
@@ -93,8 +103,7 @@ ActivityRegisterBinding binding;
             textSpan();
 
 
-        }
-        else {
+        } else {
             binding.layoutLocationInternet.setVisibility(View.VISIBLE);
             binding.layoutHome.setVisibility(View.GONE);
         }
@@ -103,19 +112,49 @@ ActivityRegisterBinding binding;
         binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
+                try {
                     Intent intent = new Intent(Intent.ACTION_MAIN, null);
                     intent.addCategory(Intent.CATEGORY_LAUNCHER);
                     ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
                     intent.setComponent(cn);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }catch (ActivityNotFoundException ignored){
+                } catch (ActivityNotFoundException ignored) {
                     startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 }
             }
         });
 
+    }
+
+    private void visibaltyPass() {
+        binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+        if (visbilty.equals("hide")) {
+            binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_off_24);
+            binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+
+
+        } else if (visbilty.equals("show")) {
+            binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_24);
+            binding.editTextPass.setTransformationMethod(null);
+        }
+        binding.showHideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (visbilty.equals("hide")) {
+                    binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_24);
+                    binding.editTextPass.setTransformationMethod(null);
+
+
+                    visbilty = "show";
+
+                } else if (visbilty.equals("show")) {
+                    binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_off_24);
+                    binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+                    visbilty = "hide";
+                }
+            }
+        });
     }
 
     private void callRegisterApi(String name, String pass, String email) {
@@ -125,7 +164,7 @@ ActivityRegisterBinding binding;
 
         Call<APIResponse.ResponseRegister> call = apiInterFace.registerAPI(
                 shardEditor.loadData().get(ShardEditor.KEY_LANG),
-                name, pass,email,"android", Cemmon.FIREBASE_TOKEN);
+                name, pass, email, "android", Cemmon.FIREBASE_TOKEN);
 
         call.enqueue(new Callback<APIResponse.ResponseRegister>() {
             @Override
@@ -141,23 +180,19 @@ ActivityRegisterBinding binding;
 
 
                         shardEditor.saveToken(response.body().getToken());
-                        Cemmon.NAME_OF_USER=response.body().getData().getUsername();
-//                       shardEditor.saveData(  new DataUser(response.body().getData().getId(),
-//                               response.body().getData().getUsername()
-//                               ,response.body().getData().getEmail()
-//                               ,"","","","","","",
-//                               response.body().getData().getUpdatedAt()
-//                               ,response.body().getData().getCreatedAt()));
+                        Cemmon.NAME_OF_USER = response.body().getData().getUsername();
+
 
                         assert response.body() != null;
+                        binding.progressbar.setVisibility(View.GONE);
+                        binding.imgRegister.setVisibility(View.VISIBLE);
                         startActivity(new Intent(RegisterActivity.this, UserProfilActivity.class));
                         finish();
 
-                        binding.progressbar.setVisibility(View.GONE);
-                        binding.imgRegister.setVisibility(View.VISIBLE);
+
 
                     } else {
-                        Toast.makeText(RegisterActivity.this,response.body().getMessage().get(0).toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, response.body().getMessage().get(0).toString(), Toast.LENGTH_SHORT).show();
                         binding.progressbar.setVisibility(View.GONE);
                         binding.imgRegister.setVisibility(View.VISIBLE);
                     }
@@ -171,7 +206,7 @@ ActivityRegisterBinding binding;
             public void onFailure(@NonNull Call<APIResponse.ResponseRegister> call, @NonNull Throwable t) {
                 binding.progressbar.setVisibility(View.GONE);
                 binding.imgRegister.setVisibility(View.VISIBLE);
-                Toast.makeText(RegisterActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -201,8 +236,8 @@ ActivityRegisterBinding binding;
             return false;
 
         } else if (binding.inputLayoutEmail.getEditText().getText().toString().isEmpty()
-                && binding.inputLayoutEmail.getEditText().getText().toString().equals("")&&
-        vaildatEmail(binding.inputLayoutEmail.getEditText().getText().toString())) {
+                && binding.inputLayoutEmail.getEditText().getText().toString().equals("") &&
+                vaildatEmail(binding.inputLayoutEmail.getEditText().getText().toString())) {
             binding.inputLayoutPass.getEditText().setError(getString(R.string.error_email));
             return false;
 
@@ -220,8 +255,10 @@ ActivityRegisterBinding binding;
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-              //  Toast.makeText(RegisterActivity.this, "One", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RegisterActivity.this, PrivacyPolicyActivityTwo.class));
+                //  Toast.makeText(RegisterActivity.this, "One", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);

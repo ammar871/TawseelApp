@@ -92,11 +92,10 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
                         startActivity(new Intent(DetailesActivity.this, HomeActivity.class));
                         finish();
                     }
-                } else {
-                    binding.progressDelete.setVisibility(View.GONE);
-                    binding.tvCloseOprator.setVisibility(View.VISIBLE);
-                    Log.d("eiled", "onResponse: " + response.body().getMessage());
+                } else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
             }
 
             @Override

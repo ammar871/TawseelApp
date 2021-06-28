@@ -97,11 +97,10 @@ public class ConfirmActivity extends AppCompatActivity {
                         Toast.makeText(ConfirmActivity.this, ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
 
                     }
-                } else {
-                    binding.tvCancelOrder.setVisibility(View.VISIBLE);
-                    binding.progressbarRatingcancel.setVisibility(View.GONE);
-                    Log.d("eeeeeeeeeeeeee", "onResponse: "+response.body().getMessage().get(0));
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
 
             }
 
@@ -141,6 +140,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
                     }
                 } else {
+                    Toast.makeText(ConfirmActivity.this, ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
                     binding.doneOrder.setVisibility(View.VISIBLE);
                     binding.progressbarRating.setVisibility(View.GONE);
                     Log.d("eeeeeeeeeeeeee", "onResponse: "+response.body().getMessage().get(0));
@@ -200,7 +200,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
                         if (response.body().getStatus()) {
                             Toast.makeText(ConfirmActivity.this,
-                                    "تم التقييم ",
+                                    getString(R.string.rated),
                                     Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(ConfirmActivity.this, HomeActivity.class));
                             finish();

@@ -4,12 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRatingBar;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,9 +38,15 @@ import com.ammar.tawseel.pojo.data.DataOrder;
 import com.ammar.tawseel.pojo.data.Rating;
 import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.uitllis.Cemmon;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,20 +54,23 @@ import retrofit2.http.Field;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 
-public class RatingUsersActivity extends AppCompatActivity {
+public class RatingUsersActivity extends AppCompatActivity implements View.OnClickListener{
     ActivityRatingUsersBinding binding;
     ShardEditor shardEditor;
     APIInterFace apiInterFace;
     AdapterRatinge adapterRatinge;
     private AlertDialog alertDialog = null;
-
+    ArrayList<Rating> list = new ArrayList<>();
+    int page = 1;
+    CircleImageView imgProfile;
+    TextView tv_nam;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        shardEditor=new ShardEditor(this);
-        if (shardEditor.loadData().get(ShardEditor.KEY_LANG)!=""){
+        shardEditor = new ShardEditor(this);
+        if (shardEditor.loadData().get(ShardEditor.KEY_LANG) != "") {
 
             Cemmon.setLocale(this, shardEditor.loadData().get(ShardEditor.KEY_LANG));
 
@@ -65,22 +81,38 @@ public class RatingUsersActivity extends AppCompatActivity {
 
         binding.rvRatings.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         binding.rvRatings.setHasFixedSize(true);
-binding.imgBack.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        onBackPressed();
-    }
-});
-        loadRatings("1");
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        loadRatings(page);
+        inItView();
 
+        loadDataProfile();
+        openDraw();
+        binding.scroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    binding.proBarPagFinshid.setVisibility(View.VISIBLE);
+                    page++;
+                    if (list.size() > 0) {
+                        loadRatingPage(page);
+                    } else {
+                        binding.proBarPagFinshid.setVisibility(View.GONE);
+                    }
+
+
+                }
+            }
+        });
     }
 
-    private void loadRatings(String page) {
-        if (binding.layoutProgress.getVisibility() == View.GONE && binding.rvRatings.getVisibility() == View.VISIBLE) {
-            binding.rvRatings.setVisibility(View.GONE);
-            binding.layoutProgress.setVisibility(View.VISIBLE);
-        }
-        Call<APIResponse.ResponseRating> call = apiInterFace.getRating(page, "application/json",
+    private void loadRatingPage(int page) {
+
+        Call<APIResponse.ResponseRating> call = apiInterFace.getRating(page + "", "application/json",
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 "ar"
         );
@@ -91,8 +123,224 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
 
                 if (response.code() == 200) {
                     assert response.body() != null;
+                    list.addAll(response.body().getRatings());
+                    adapterRatinge = new AdapterRatinge(list,
+                            RatingUsersActivity.this, new AdapterRatinge.OnclickMessage() {
+                        @Override
+                        public void itemOnclickNewRating(Rating dataNotification) {
+                            showDialogUpdateRating(dataNotification);
 
-                    adapterRatinge = new AdapterRatinge((ArrayList<Rating>) response.body().getRatings(),
+                        }
+                    });
+                    binding.rvRatings.setAdapter(adapterRatinge);
+
+
+                    }else if (response.code() == 401) {
+                    shardEditor.logOut();
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<APIResponse.ResponseRating> call, @NonNull Throwable t) {
+                binding.proBarPagFinshid.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void inItView() {
+        TextView tv_userProfil = findViewById(R.id.nav_userProfil);
+        TextView tv_logout = findViewById(R.id.nav_logout);
+
+        imgProfile = findViewById(R.id.profile_image);
+        TextView tv_rates = findViewById(R.id.tv_rates);
+        TextView tv_order = findViewById(R.id.nav_order);
+        TextView tv_sitting = findViewById(R.id.tv_sitting);
+        TextView tv_about_us = findViewById(R.id.tv_about_us);
+        TextView tv_call_us = findViewById(R.id.tv_call_us);
+        TextView tv_plociy = findViewById(R.id.tv_plociy);
+        TextView tv_shar = findViewById(R.id.tv_shar);
+        TextView tv_rate = findViewById(R.id.tv_rate);
+        tv_nam = findViewById(R.id.tv_name_user);
+
+        tv_userProfil.setOnClickListener(this);
+        tv_logout.setOnClickListener(this);
+        tv_order.setOnClickListener(this);
+        tv_rates.setOnClickListener(this);
+        tv_sitting.setOnClickListener(this);
+        tv_about_us.setOnClickListener(this);
+        tv_call_us.setOnClickListener(this);
+        tv_plociy.setOnClickListener(this);
+        tv_shar.setOnClickListener(this);
+        tv_rate.setOnClickListener(this);
+
+
+    }
+
+    private void loadDataProfile() {
+
+        Call<APIResponse.ResponseShowProfile> call = apiInterFace.showProfile(
+                "application/json",
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                shardEditor.loadData().get(ShardEditor.KEY_LANG));
+        call.enqueue(new Callback<APIResponse.ResponseShowProfile>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.ResponseShowProfile> call, @NonNull Response<APIResponse.ResponseShowProfile> response) {
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
+
+                        //  Objects.requireNonNull(binding.inputLayoutLocation.getEditText()).setText(response.body().getData().getGpsAddress() + "");
+                        Log.d("dataprofil", "onResponse: " + response.body().getData().getName());
+                        if (response.body().getData().getAvatar() != null && !response.body().getData().getAvatar().equals("")) {
+
+                            Cemmon.NAME_OF_USER = response.body().getData().getName();
+                            tv_nam.setText(Cemmon.NAME_OF_USER + "");
+                            Cemmon.IMAGE_OF_USER = response.body().getData().getAvatar() + "";
+                            Log.d("iiiiiiiiiiii", "onResponse: " + Cemmon.IMAGE_OF_USER);
+                            Picasso.with(RatingUsersActivity.this)
+                                    .load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
+                                    .into(imgProfile);
+
+
+                        }
+                    } else {
+
+                    }
+
+                } else if (response.code() == 401) {
+                    shardEditor.logOut();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<APIResponse.ResponseShowProfile> call, @NonNull Throwable t) {
+//                Toast.makeText(EditeProfilActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    @SuppressLint("WrongConstant")
+    private void openDraw() {
+        binding.imgTogless.setOnClickListener((View.OnClickListener) v -> {
+
+
+            binding.draw.openDrawer(Gravity.START);
+
+        });
+    }
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = null;
+        switch (v.getId()) {
+            case R.id.nav_userProfil:
+                startActivity(new Intent(this, EditeProfilActivity.class));
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+
+
+            case R.id.nav_logout:
+                isLoginWitch();
+
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+            case R.id.nav_order:
+
+                startActivity(new Intent(RatingUsersActivity.this, RatingUsersActivity.class));
+                binding.draw.closeDrawer(Gravity.START);
+
+                break;
+            case R.id.tv_rates:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(RatingUsersActivity.this, RatingUsersActivity.class));
+
+                break;
+            case R.id.tv_sitting:
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(RatingUsersActivity.this, SettingsActivity.class));
+                break;
+            case R.id.tv_about_us:
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(RatingUsersActivity.this, WhoUsActivity.class));
+                break;
+            case R.id.tv_call_us:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(RatingUsersActivity.this, ContactUsActivity.class));
+                break;
+            case R.id.tv_plociy:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(RatingUsersActivity.this, PrivacyPolicyActivity.class));
+                break;
+            case R.id.tv_shar:
+
+                startActivity(new Intent(RatingUsersActivity.this, ShareAppActivity.class));
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+            case R.id.tv_rate:
+
+                Uri uri = Uri.parse("market://details?id=" + "com.ammar.tawseel");
+                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(myAppLinkToMarket);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+                }
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+
+        }
+    }
+    private void isLoginWitch() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.
+                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient.signOut();
+
+        LoginManager.getInstance().logOut();
+
+        shardEditor.logOut();
+
+    }
+
+    private void loadRatings(int page) {
+        if (binding.layoutProgress.getVisibility() == View.GONE && binding.rvRatings.getVisibility() == View.VISIBLE) {
+            binding.rvRatings.setVisibility(View.GONE);
+            binding.layoutProgress.setVisibility(View.VISIBLE);
+        }
+        Call<APIResponse.ResponseRating> call = apiInterFace.getRating(page + "", "application/json",
+                "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                "ar"
+        );
+        call.enqueue(new Callback<APIResponse.ResponseRating>() {
+            @Override
+            public void onResponse(@NonNull Call<APIResponse.ResponseRating> call,
+                                   @NonNull Response<APIResponse.ResponseRating> response) {
+
+                if (response.code() == 200) {
+                    assert response.body() != null;
+                    list = (ArrayList<Rating>) response.body().getRatings();
+                    adapterRatinge = new AdapterRatinge(list,
                             RatingUsersActivity.this, new AdapterRatinge.OnclickMessage() {
                         @Override
                         public void itemOnclickNewRating(Rating dataNotification) {
@@ -103,7 +351,10 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
                     binding.rvRatings.setAdapter(adapterRatinge);
                     binding.layoutProgress.setVisibility(View.GONE);
                     binding.rvRatings.setVisibility(View.VISIBLE);
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
 
 
             }
@@ -116,7 +367,9 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
 
 
     }
+
     float getrating;
+
     private void showDialogUpdateRating(Rating rating) {
         View customLayout = LayoutInflater.from(this).inflate(R.layout.dilog_rating, null);
 
@@ -131,7 +384,7 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
         AppCompatRatingBar ratingBar = customLayout.findViewById(R.id.tv_rating_dialog);
         ratingBar.setRating(Float.parseFloat(rating.getStars()));
 
-        ratingBar.setOnRatingBarChangeListener((ratingBar1, rating1, fromUser) -> getrating= ratingBar1.getRating());
+        ratingBar.setOnRatingBarChangeListener((ratingBar1, rating1, fromUser) -> getrating = ratingBar1.getRating());
         btnRating.setOnClickListener(v -> {
 
             progressBar.setVisibility(View.VISIBLE);
@@ -140,13 +393,13 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
             Log.d("ratingaaa", "showDialogUpdateRating: " +
                     rating.getTo() + rating.getId() + ed_text.getText()
                     .toString() + "\n" + shardEditor.loadData().get(ShardEditor.KEY_TOKEN)
-                    + "\n"+Math.round(ratingBar.getRating()));
+                    + "\n" + Math.round(ratingBar.getRating()));
 
             Call<APIResponse.ResponseUpdateRating> call = apiInterFace.upDateRating(
                     rating.getTo()
                     , ed_text.getText().toString(),
                     Math.round(ratingBar.getRating()) + "", rating.getId() + "", "application/json",
-                    "Bearer" + " "+ shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+                    "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                     shardEditor.loadData().get(ShardEditor.KEY_LANG)
             );
 
@@ -176,7 +429,7 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
 
                         alertDialog.dismiss();
 
-                        loadRatings("1");
+                        loadRatings(1);
                     }
                 }
 
@@ -193,4 +446,6 @@ binding.imgBack.setOnClickListener(new View.OnClickListener() {
         alertDialog.show();
 
     }
+
+
 }

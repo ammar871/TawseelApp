@@ -12,11 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/_8ssp"
-        android:layout_marginRight="@dimen/_8ssp"
+       android:layout_margin="@dimen/_15sdp"
 
         android:orientation="vertical"
-        android:padding="@dimen/_25ssp"
+        android:padding="@dimen/_8ssp"
         android:paddingTop="@dimen/_15ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

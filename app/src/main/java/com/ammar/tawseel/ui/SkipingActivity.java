@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivitySkipingBinding;
@@ -129,6 +130,7 @@ ActivitySkipingBinding binding;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+
         }
 
         @Override
@@ -143,8 +145,10 @@ ActivitySkipingBinding binding;
                 binding.btnStart.setVisibility(View.VISIBLE);
             } else {
                 // still pages are left
-                binding.btnNext.setText("التالى");
+                binding.btnNext.setText(getString(R.string.next));
                 binding.btnSkip.setVisibility(View.VISIBLE);
+                binding.btnStart.setVisibility(View.GONE);
+                binding.btnNext.setVisibility(View.VISIBLE);
             }
         }
 

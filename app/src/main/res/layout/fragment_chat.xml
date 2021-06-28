@@ -11,7 +11,6 @@
         android:id="@+id/layoutMainchat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:background="@color/core_mask"
         tools:context=".ui.fragments.ChatFragment">
         <RelativeLayout
@@ -306,19 +305,6 @@
 
 
 
-                <ProgressBar
-                    android:layout_above="@id/layout_gchat_chatbox"
-                    android:id="@+id/pro_bar_im"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="100"
-                    android:visibility="gone"
-                    android:progressDrawable="@drawable/my_drawable_settings1"
-
-                    android:progress="0" />
 
 
 
@@ -415,6 +401,28 @@
                                 android:outlineSpotShadowColor="@color/text_color"
                                 android:visibility="gone" />
 
+
+                            <ProgressBar
+                                android:layout_toRightOf="@id/img_file"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/pro_bar_im"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginRight="@dimen/_10sdp"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:progressDrawable="@drawable/circular_progress_bar"
+                                android:background="@drawable/circle_shape"
+                                android:indeterminate="false"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:max="100"
+                                android:visibility="gone"
+                                android:layout_marginBottom="@dimen/_5sdp"
+
+
+                                tools:progress="40"/>
+
+
+
                             <EditText
 
                                 android:id="@+id/edit_gchat_message"
@@ -435,6 +443,7 @@
                                 android:paddingRight="@dimen/_10sdp"
                                 android:paddingBottom="@dimen/_8sdp"
                                 android:text=""
+
                                 tools:ignore="Autofill" />
                         </RelativeLayout>
 
@@ -446,75 +455,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_15ssp"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-            <ImageView
-
-                android:id="@+id/img_send"
-               app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_send"/>
-            <ImageView
-                android:id="@+id/img_record"
-                android:layout_marginLeft="@dimen/_5sdp"
-               app:layout_constraintLeft_toRightOf="@id/img_send"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_record"/>
-            <androidx.cardview.widget.CardView
-              app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="@dimen/_5sdp"
-                android:layout_width="0dp"
-                app:layout_constraintWidth_percent=".75"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@id/img_record"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="@dimen/_5sdp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/img_file"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/_8sdp"
-                app:srcCompat="@drawable/ic_attach_file"/>
-
-            <EditText
-                android:id="@+id/edit_chat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:hint="اكتب هنا "
-                android:layout_toRightOf="@id/img_file"
-                android:fontFamily="@font/medium"
-                android:gravity="right|center_vertical"
-        android:text="eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                android:layout_centerVertical="true"/>
-
-        </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -29,7 +29,7 @@
                 android:layout_height="@dimen/_110sdp"
                 android:layout_gravity="center"
                 android:background="@drawable/backround_circle"
-                android:src="@drawable/imagerat"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

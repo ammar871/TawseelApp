@@ -273,7 +273,10 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
                         binding.layoutHome.setVisibility(View.VISIBLE);
                     }
 
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
 
             }
 
@@ -305,7 +308,10 @@ public class OrdersActivity extends AppCompatActivity implements  View.OnClickLi
                         binding.layoutHome.setVisibility(View.VISIBLE);
                     }
 
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
 
             }
 

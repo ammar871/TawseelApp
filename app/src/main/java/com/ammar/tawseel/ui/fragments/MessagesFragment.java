@@ -208,10 +208,10 @@ binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
                         setupAdapter(list);
                         binding.layoutProgress.setVisibility(View.GONE);
                         binding.rvMessage.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.layoutProgress.setVisibility(View.GONE);
-                        binding.rvMessage.setVisibility(View.VISIBLE);
+                    } else if (response.code() == 401) {
+                        shardEditor.logOut();
                     }
+
 
                 }
 

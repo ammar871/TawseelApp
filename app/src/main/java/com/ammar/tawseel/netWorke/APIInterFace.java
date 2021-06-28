@@ -32,7 +32,14 @@ public interface APIInterFace {
             @Field("fcm_token") String fcm_token
 
     );
+    @FormUrlEncoded
+    @POST("api/user/reset-password")
+    Call<APIResponse.RestPassResponse> forgetPass(
+            @Field("username") String email,
+            @Field("email") String password
 
+
+    );
 
     @FormUrlEncoded
     @POST("api/user/register")
@@ -166,8 +173,7 @@ public interface APIInterFace {
 
     @GET("api/user/drivers")
     Call<APIResponse.ResponseDrivers> getDrivers(
-            @Query("lat") String lat,
-            @Query("lng") String lng,
+
             @Header("Authorization") String token,
             @Header("lang") String lang,
             @Header("Accept") String accept);
@@ -303,8 +309,6 @@ public interface APIInterFace {
     @FormUrlEncoded
     @POST("api/user/filter-drivers")
     Call<APIResponse.ResponseFillter> filtersDrivires(
-            @Field("lat") String lat,
-            @Field("lng") String lng,
             @Field("stars") int stars,
             @Field("kilometers") String kilometers,
             @Field("inside") boolean inside,
@@ -343,7 +347,7 @@ public interface APIInterFace {
 
     @GET("api/policies")
     Call<APIResponse.PoeloyProxyResponse> poeloyProxyResponse(
-            @Header("Accept") String Accept,
+           // @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );

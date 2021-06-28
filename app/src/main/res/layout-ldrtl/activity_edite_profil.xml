@@ -370,7 +370,7 @@ android:padding="@dimen/_5sdp"
                     android:id="@+id/profile_imagee"
                     android:layout_width="@dimen/_90sdp"
                     android:layout_height="@dimen/_90sdp"
-
+                 
                     android:enabled="false"
 
                     app:layout_constraintBottom_toBottomOf="parent"

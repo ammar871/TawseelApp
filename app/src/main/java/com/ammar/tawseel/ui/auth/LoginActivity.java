@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -14,16 +15,19 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
@@ -32,6 +36,8 @@ import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.PrivacyPolicyActivity;
+import com.ammar.tawseel.ui.PrivacyPolicyActivityTwo;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.facebook.AccessToken;
@@ -80,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     //for facebook
     private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 1;
-
+    String visbilty = "hide";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +109,10 @@ public class LoginActivity extends AppCompatActivity {
             if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
                     binding.layoutLocationInternet.setVisibility(View.GONE);
             }
+
+            visibaltyPass();
+
+
             binding.layoutHome.setVisibility(View.VISIBLE);
             apiInterFace = APIClient.getClient().create(APIInterFace.class);
             enableLoc();
@@ -148,6 +158,37 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void visibaltyPass() {
+        binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+        if (visbilty.equals("hide")) {
+            binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_off_24);
+            binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+
+
+        } else if (visbilty.equals("show")) {
+            binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_24);
+            binding.editTextPass.setTransformationMethod(null);
+        }
+        binding.showHideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (visbilty.equals("hide")) {
+                    binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_24);
+                    binding.editTextPass.setTransformationMethod(null);
+
+
+                    visbilty = "show";
+
+                } else if (visbilty.equals("show")) {
+                    binding.showHideBtn.setImageResource(R.drawable.ic_baseline_visibility_off_24);
+                    binding.editTextPass.setTransformationMethod(new PasswordTransformationMethod());
+                    visbilty = "hide";
+                }
+            }
+        });
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -182,11 +223,12 @@ public class LoginActivity extends AppCompatActivity {
         binding.layoutLogin.setOnClickListener(v -> {
 
             if (isValueLogin()) {
+                Cemmon.hideKeyboard(this);
                 callAPILogin(Objects.requireNonNull(binding.inputLayoutName.getEditText()).getText().toString().trim(),
                         Objects.requireNonNull(binding.inputLayoutPass.getEditText()).getText().toString().trim());
             } else {
 
-                Toast.makeText(LoginActivity.this, "من فضلك املئ البيانات ....", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, getString(R.string.fill_details), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -358,6 +400,7 @@ public class LoginActivity extends AppCompatActivity {
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
+                startActivity(new Intent(LoginActivity.this, PrivacyPolicyActivityTwo.class));
                // Toast.makeText(LoginActivity.this, "One", Toast.LENGTH_SHORT).show();
             }
 
@@ -398,11 +441,12 @@ public class LoginActivity extends AppCompatActivity {
                      //   Log.d("dddddddddddddd", "onResponse: "+ response.body().getUser().getId());
                         assert response.body() != null;
 //                        Cemmon.NAME_OF_USER=response.body().getUser().getName();
+                        binding.progressbar.setVisibility(View.GONE);
+                        binding.imgLogin.setVisibility(View.VISIBLE);
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         finish();
 
-                        binding.progressbar.setVisibility(View.GONE);
-                        binding.imgLogin.setVisibility(View.VISIBLE);
+
 
                     } else {
                         Toast.makeText(LoginActivity.this, response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
@@ -419,7 +463,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<APIResponse.ResponseLogin> call, @NonNull Throwable t) {
                 binding.progressbar.setVisibility(View.GONE);
                 binding.imgLogin.setVisibility(View.VISIBLE);
-                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -444,12 +488,12 @@ public class LoginActivity extends AppCompatActivity {
                 && binding.inputLayoutName.getEditText().getText().toString().equals("")
         ) {
 
-            binding.inputLayoutName.getEditText().setError("أدخــل اسمك ");
+            binding.inputLayoutName.getEditText().setError(getString(R.string.error_name));
             return false;
 
         } else if (binding.inputLayoutPass.getEditText().getText().toString().isEmpty()
                 && binding.inputLayoutPass.getEditText().getText().toString().equals("")) {
-            binding.inputLayoutPass.getEditText().setError("أدخــل الرقم السرى ");
+            binding.inputLayoutPass.getEditText().setError(getString(R.string.error_pass));
             return false;
 
         } else {
@@ -537,4 +581,5 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
 }

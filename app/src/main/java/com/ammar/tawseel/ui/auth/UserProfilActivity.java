@@ -113,12 +113,12 @@ public class UserProfilActivity extends AppCompatActivity {
             });
 
 
-            binding.btnMap.setOnClickListener(v -> {
-
-                Intent intent = new Intent(UserProfilActivity.this, SelectLocationActivity.class);
-                startActivityForResult(intent, 1);
-
-            });
+//            binding.btnMap.setOnClickListener(v -> {
+//
+//                Intent intent = new Intent(UserProfilActivity.this, SelectLocationActivity.class);
+//                startActivityForResult(intent, 1);
+//
+//            });
 
 
             binding.btnSave.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +129,7 @@ public class UserProfilActivity extends AppCompatActivity {
                     if (isValue()) {
 
 
-                        editeProfil(latitude, longitude, Objects.requireNonNull(binding.editTextLocation.getText()).toString(), binding.editTextName.getText().toString()
+                        editeProfil(latitude, longitude, "address", binding.editTextName.getText().toString()
                                 , Objects.requireNonNull(binding.editTextPhone.getText()).toString(), saveuri);
 
                     } else {
@@ -141,9 +141,7 @@ public class UserProfilActivity extends AppCompatActivity {
             });
 
 
-
-        }
-        else {
+        } else {
             binding.layoutLocationInternet.setVisibility(View.VISIBLE);
             binding.layoutHome.setVisibility(View.GONE);
         }
@@ -151,14 +149,14 @@ public class UserProfilActivity extends AppCompatActivity {
         binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
+                try {
                     Intent intent = new Intent(Intent.ACTION_MAIN, null);
                     intent.addCategory(Intent.CATEGORY_LAUNCHER);
                     ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
                     intent.setComponent(cn);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }catch (ActivityNotFoundException ignored){
+                } catch (ActivityNotFoundException ignored) {
                     startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 }
             }
@@ -171,12 +169,20 @@ public class UserProfilActivity extends AppCompatActivity {
     private void editeProfil(String latitude, String longitude, String addresss, String name, String phone, Uri saveuri) {
         RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), name);
         RequestBody userphoneBody = RequestBody.create(MediaType.parse("text/plain"), phone);
+        Call<APIResponse.ResponseProfile> call = null;
+        if (latitude != null && longitude != null) {
+            call = apiInterFace.editProfile(
+                    Double.parseDouble(latitude)
+                    , Double.parseDouble(longitude), addresss, usernameBody, userphoneBody, multipartBody,
+                    "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
 
 
-        Call<APIResponse.ResponseProfile> call = apiInterFace.editProfile(
-                Double.parseDouble(latitude)
-                , Double.parseDouble(longitude), addresss, usernameBody, userphoneBody, multipartBody,
-                "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+        } else {
+            call = apiInterFace.editProfile(
+                    0.0
+                    , 0.0, addresss, usernameBody, userphoneBody, multipartBody,
+                    "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+        }
 
 
         call.enqueue(new Callback<APIResponse.ResponseProfile>() {
@@ -250,20 +256,13 @@ public class UserProfilActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private boolean isValue() {
-        if (binding.editTextLocation.getText().toString().isEmpty() && binding.editTextLocation.getText().toString().equals("")) {
-            binding.editTextLocation.setError("Select your location");
-            return false;
-
-        } else if (binding.editTextName.getText().toString().isEmpty() && binding.editTextName.getText().toString().equals("")) {
-            binding.editTextName.setError("Select your name");
+      if (binding.editTextName.getText().toString().isEmpty() && binding.editTextName.getText().toString().equals("")) {
+            binding.editTextName.setError(getString(R.string.error_name));
             return false;
 
         } else if (binding.editTextPhone.getText().toString().isEmpty() && binding.editTextPhone.getText().toString().equals("")) {
-            binding.editTextPhone.setError("Select your name");
+            binding.editTextPhone.setError(getString(R.string.enter_phon));
             return false;
 
         } else {
@@ -328,33 +327,29 @@ public class UserProfilActivity extends AppCompatActivity {
 
         switch (requestCode) {
 
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    String tv_location = data.getStringExtra("location");
-                    latitude = data.getStringExtra("lantuid");
-                    longitude = data.getStringExtra("lang");
-                    binding.editTextLocation.setText(tv_location);
-
-                }
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                    String tv_location = data.getStringExtra("location");
+//                    latitude = data.getStringExtra("lantuid");
+//                    longitude = data.getStringExtra("lang");
+//                    binding.editTextLocation.setText(tv_location);
+//
+//                }
+//                break;
             case 0:
                 if (resultCode == RESULT_OK) {
 
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    binding.profileImage.setImageBitmap(photo);
 
-                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, data.getData())));
+                    Uri tempUri = getImageUri(photo);
+                    File file = new File(Objects.requireNonNull(getRealPathFromURI(tempUri)));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
 
                     Log.d("mmmmmmmmmm", "onActivityResult: " + multipartBody + "\n" + file);
-                    try {
-                        //getting image from gallery
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
 
-                        //Setting image to ImageView
-                        binding.profileImage.setImageBitmap(bitmap);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     //converting image to base64 string
 
 
@@ -369,27 +364,32 @@ public class UserProfilActivity extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
 
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    Uri uri = getImageUri(photo);
-                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, uri)));
+                    try {
+                        //getting image from gallery
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+
+                        //Setting image to ImageView
+                        binding.profileImage.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    File file = new File(Objects.requireNonNull(PathVideo.getPath(this, data.getData())));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
-
                     try {
                         //getting image from gallery
 
 
                         //Setting image to ImageView
-                        binding.profileImage.setImageBitmap(photo);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     //converting image to base64 string
 
-
-                    imageString = getRealPathFromURI(uri);
 
                     Log.d("aaaaaaaaaaaaa", "onActivityResult: " + imageString);
                 }
@@ -399,10 +399,9 @@ public class UserProfilActivity extends AppCompatActivity {
         }
     }
 
-    private Uri getImageUri(Bitmap photo) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), photo, "Title", null);
+    public Uri getImageUri(Bitmap inImage) {
+        Bitmap OutImage = Bitmap.createScaledBitmap(inImage, 1000, 1000, true);
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), OutImage, "Title", null);
         return Uri.parse(path);
     }
 
@@ -500,7 +499,7 @@ public class UserProfilActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 0);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
     }
 
     private void enableLoc() {

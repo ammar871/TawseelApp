@@ -3,6 +3,9 @@ package com.ammar.tawseel.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +15,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
+import com.ammar.tawseel.helper.RecyclerItemTouchNotification;
 import com.ammar.tawseel.pojo.data.DataNotification;
 import com.ammar.tawseel.ui.ConfirmActivity;
+import com.ammar.tawseel.ui.OrdersActivity;
+import com.ammar.tawseel.ui.RatingUsersActivity;
+import com.ammar.tawseel.ui.fragments.DetailesActivity;
+import com.ammar.tawseel.ui.fragments.FatoraFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,10 +41,13 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     ArrayList<DataNotification> list;
     private Context mcontext;
     private OnclickMessage onclickMessage;
+    AlertDialog alertDialog = null;
+
+
 
     public interface OnclickMessage {
 
-        public void itemOnclickNewBill(DataNotification dataNotification, int i);
+        public void itemOnclickNewBill(Integer dataNotification, String i);
     }
 
     int layout;
@@ -70,7 +84,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
         View view;
 //        if (viewType == 0 ) {
-            view = layoutInflater.inflate(R.layout.item_noty_today, parent, false);
+            view = layoutInflater.inflate(R.layout.item_notify, parent, false);
             return new ViewHolderVidio(view);
 //        }
 //            view = layoutInflater.inflate(R.layout.item_notify, parent, false);
@@ -106,7 +120,19 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 0);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", list.get(position).getTarget() + "");
+                    FatoraFragment category = new FatoraFragment();
+                    category.setArguments(bundle);
+
+                    ((AppCompatActivity) mcontext).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.layout_view, category)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+
                 }
             });
         } else if (list.get(position).getType().equals("deliver-order")) {
@@ -128,7 +154,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 2);
+                   mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
@@ -138,7 +164,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 3);
+                    mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
@@ -149,7 +175,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 4);
+                    mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
@@ -159,7 +185,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 5);
+                    mcontext.startActivity(new Intent(mcontext, RatingUsersActivity.class));
                 }
             });
         } else if (list.get(position).getType().equals("paid-bill")) {
@@ -168,7 +194,9 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 6);
+                    Intent intent = new Intent(mcontext, DetailesActivity.class);
+                    intent.putExtra("idBill", list.get(position).getParams());
+                    mcontext.startActivity(intent);
                 }
             });
         } else if (list.get(position).getType().equals("cancel-bill")) {
@@ -177,7 +205,10 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 7);
+
+                    Intent intent = new Intent(mcontext, DetailesActivity.class);
+                    intent.putExtra("idBill", list.get(position).getParams());
+                    mcontext.startActivity(intent);
                 }
             });
         }
@@ -193,7 +224,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 8);
+
                 }
             });
         }else {
@@ -210,9 +241,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     public void removeItem(int position) {
         list.remove(position);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
         notifyItemRemoved(position);
     }
 

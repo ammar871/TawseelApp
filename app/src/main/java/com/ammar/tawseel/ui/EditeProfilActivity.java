@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.loader.content.CursorLoader;
 
 import android.annotation.SuppressLint;
@@ -25,10 +26,12 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
@@ -44,14 +47,20 @@ import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.ammar.tawseel.uitllis.PathVideo;
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -59,13 +68,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditeProfilActivity extends AppCompatActivity {
+public class EditeProfilActivity extends AppCompatActivity implements View.OnClickListener {
     ActivityEditeProfilBinding binding;
     ShardEditor shardEditor;
     String latitude, longitude;
     Uri saveuri;
     LayoutPicPicureBinding layoutPicPicureBinding;
     APIInterFace apiInterFace;
+    CircleImageView imgProfile;
+    TextView tv_nam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +101,14 @@ public class EditeProfilActivity extends AppCompatActivity {
 
 
             apiInterFace = APIClient.getClient().create(APIInterFace.class);
+
             onClicksButtons();
 
+
+            inItView();
+
             loadDataProfile();
+            openDraw();
             binding.imgBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,8 +116,7 @@ public class EditeProfilActivity extends AppCompatActivity {
                 }
             });
 
-        }
-        else {
+        } else {
             binding.layoutLocationInternet.setVisibility(View.VISIBLE);
             binding.layoutHome.setVisibility(View.GONE);
         }
@@ -109,14 +124,14 @@ public class EditeProfilActivity extends AppCompatActivity {
         binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
+                try {
                     Intent intent = new Intent(Intent.ACTION_MAIN, null);
                     intent.addCategory(Intent.CATEGORY_LAUNCHER);
                     ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.wifi.WifiSettings");
                     intent.setComponent(cn);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }catch (ActivityNotFoundException ignored){
+                } catch (ActivityNotFoundException ignored) {
                     startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 }
             }
@@ -124,6 +139,7 @@ public class EditeProfilActivity extends AppCompatActivity {
 
 
     }
+
 
     private void onClicksButtons() {
         binding.imgEdite.setOnClickListener(new View.OnClickListener() {
@@ -137,15 +153,15 @@ public class EditeProfilActivity extends AppCompatActivity {
             }
         });
 
-        binding.imgMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditeProfilActivity.this, SelectLocationActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
+//        binding.imgMap.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(EditeProfilActivity.this, SelectLocationActivity.class);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
 
-        binding.profileImage.setOnClickListener(new View.OnClickListener() {
+        binding.profileImagee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getDialogBottomSheetLogin();
@@ -159,7 +175,7 @@ public class EditeProfilActivity extends AppCompatActivity {
                 longitude = Cemmon.langtude + "";
 
             }
-            editeProfil(Double.parseDouble(latitude),Double.parseDouble(longitude), Objects.requireNonNull(binding.editTextLocation.getText()).toString(), binding.editTextName.getText().toString()
+            editeProfil(0.0, 0.0, "null", binding.editTextName.getText().toString()
                     , Objects.requireNonNull(binding.editTextPhone.getText()).toString(), Cemmon.BASE_URL + saveuri);
         });
     }
@@ -180,12 +196,21 @@ public class EditeProfilActivity extends AppCompatActivity {
                         binding.layoutProgress.setVisibility(View.GONE);
                         Objects.requireNonNull(binding.inputLayoutName.getEditText()).setText(response.body().getData().getName());
                         Objects.requireNonNull(binding.inputLayoutPhon.getEditText()).setText(response.body().getData().getPhone() + "");
-                        Objects.requireNonNull(binding.inputLayoutLocation.getEditText()).setText(response.body().getData().getGpsAddress() + "");
+                        //  Objects.requireNonNull(binding.inputLayoutLocation.getEditText()).setText(response.body().getData().getGpsAddress() + "");
                         Log.d("dataprofil", "onResponse: " + response.body().getData().getName());
                         if (response.body().getData().getAvatar() != null && !response.body().getData().getAvatar().equals("")) {
-                            Glide.with(EditeProfilActivity.this)
-                                    .load(Cemmon.BASE_URL + response.body().getData().getAvatar())
-                                    .into(binding.profileImage);
+
+                            Cemmon.NAME_OF_USER = response.body().getData().getName();
+                            tv_nam.setText(Cemmon.NAME_OF_USER + "");
+                            Cemmon.IMAGE_OF_USER = response.body().getData().getAvatar() + "";
+                            Log.d("iiiiiiiiiiii", "onResponse: " + Cemmon.IMAGE_OF_USER);
+                            Picasso.with(EditeProfilActivity.this)
+                                    .load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
+                                    .into(imgProfile);
+                            Picasso.with(EditeProfilActivity.this)
+                                    .load(Cemmon.BASE_URL + Cemmon.IMAGE_OF_USER).placeholder(R.drawable.imagerat)
+                                    .into(binding.profileImagee);
+
 
                         }
                     } else {
@@ -194,11 +219,11 @@ public class EditeProfilActivity extends AppCompatActivity {
                         binding.layoutProgress.setVisibility(View.GONE);
                     }
 
-                } else {
-                    Toast.makeText(EditeProfilActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    binding.layoutHome.setVisibility(View.VISIBLE);
-                    binding.layoutProgress.setVisibility(View.GONE);
+                } else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
+
+
             }
 
             @Override
@@ -214,21 +239,22 @@ public class EditeProfilActivity extends AppCompatActivity {
     String imageString;
     String imagepath;
     MultipartBody.Part multipartBody;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
 
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    String tv_location = data.getStringExtra("location");
-                    latitude = data.getStringExtra("lantuid");
-                    longitude = data.getStringExtra("lang");
-                    Log.d("eeeeeeeee", "onActivityResult: "+longitude+latitude);
-                    binding.editTextLocation.setText(tv_location);
-
-                }
-                break;
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                    String tv_location = data.getStringExtra("location");
+//                    latitude = data.getStringExtra("lantuid");
+//                    longitude = data.getStringExtra("lang");
+//                    Log.d("eeeeeeeee", "onActivityResult: "+longitude+latitude);
+//                    binding.editTextLocation.setText(tv_location);
+//
+//                }
+//                break;
             case 0:
                 if (resultCode == RESULT_OK) {
 
@@ -236,15 +262,15 @@ public class EditeProfilActivity extends AppCompatActivity {
                     File file = new File(Objects.requireNonNull(PathVideo.getPath(this, data.getData())));
                     RequestBody requestFile = RequestBody.create((MediaType.parse("multipart/form-data")),
                             file);
-                     multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+                    multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
 
-                    Log.d("mmmmmmmmmm", "onActivityResult: "+multipartBody  +  "\n"+ file);
+                    Log.d("mmmmmmmmmm", "onActivityResult: " + multipartBody + "\n" + file);
                     try {
                         //getting image from gallery
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
 
                         //Setting image to ImageView
-                        binding.profileImage.setImageBitmap(bitmap);
+                        binding.profileImagee.setImageBitmap(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -274,7 +300,7 @@ public class EditeProfilActivity extends AppCompatActivity {
 
 
                         //Setting image to ImageView
-                        binding.profileImage.setImageBitmap(photo);
+                        binding.profileImagee.setImageBitmap(photo);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -291,6 +317,7 @@ public class EditeProfilActivity extends AppCompatActivity {
 
         }
     }
+
     private void showDialogScuccess(int dialog_success, int statuts) {
 
 
@@ -325,6 +352,7 @@ public class EditeProfilActivity extends AppCompatActivity {
         }.start();
 
     }
+
     private Uri getImageUri(Bitmap photo) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -332,10 +360,9 @@ public class EditeProfilActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
-    public String getRealPathFromURI(Uri contentUri)
-    {
+    public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
-        CursorLoader loader = new CursorLoader(getApplicationContext(),contentUri,proj,null,null,null);
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
         Cursor cursor = loader.loadInBackground();
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
@@ -347,9 +374,6 @@ public class EditeProfilActivity extends AppCompatActivity {
     private void editeProfil(double latitude, double longitude, String addresss, String name, String phone, String saveuri) {
         RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), name);
         RequestBody userphoneBody = RequestBody.create(MediaType.parse("text/plain"), phone);
-
-
-
 
 
         Call<APIResponse.ResponseProfile> call = apiInterFace.editProfile(
@@ -452,6 +476,16 @@ public class EditeProfilActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("WrongConstant")
+    private void openDraw() {
+        binding.toogles.setOnClickListener((View.OnClickListener) v -> {
+
+
+            binding.draw.openDrawer(Gravity.START);
+
+        });
+    }
+
     private void getPictureFromGalary() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -469,4 +503,121 @@ public class EditeProfilActivity extends AppCompatActivity {
         return temp;
     }
 
+    @SuppressLint("SetTextI18n")
+    private void inItView() {
+        TextView tv_userProfil = findViewById(R.id.nav_userProfil);
+        TextView tv_logout = findViewById(R.id.nav_logout);
+
+        imgProfile = findViewById(R.id.profile_image);
+        TextView tv_rates = findViewById(R.id.tv_rates);
+        TextView tv_order = findViewById(R.id.nav_order);
+        TextView tv_sitting = findViewById(R.id.tv_sitting);
+        TextView tv_about_us = findViewById(R.id.tv_about_us);
+        TextView tv_call_us = findViewById(R.id.tv_call_us);
+        TextView tv_plociy = findViewById(R.id.tv_plociy);
+        TextView tv_shar = findViewById(R.id.tv_shar);
+        TextView tv_rate = findViewById(R.id.tv_rate);
+        tv_nam = findViewById(R.id.tv_name_user);
+
+        tv_userProfil.setOnClickListener(this);
+        tv_logout.setOnClickListener(this);
+        tv_order.setOnClickListener(this);
+        tv_rates.setOnClickListener(this);
+        tv_sitting.setOnClickListener(this);
+        tv_about_us.setOnClickListener(this);
+        tv_call_us.setOnClickListener(this);
+        tv_plociy.setOnClickListener(this);
+        tv_shar.setOnClickListener(this);
+        tv_rate.setOnClickListener(this);
+
+
+    }
+
+    private void isLoginWitch() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.
+                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient.signOut();
+
+        LoginManager.getInstance().logOut();
+
+        shardEditor.logOut();
+
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = null;
+        switch (v.getId()) {
+            case R.id.nav_userProfil:
+                startActivity(new Intent(this, EditeProfilActivity.class));
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+
+
+            case R.id.nav_logout:
+                isLoginWitch();
+
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+            case R.id.nav_order:
+
+                startActivity(new Intent(EditeProfilActivity.this, OrdersActivity.class));
+                binding.draw.closeDrawer(Gravity.START);
+
+                break;
+            case R.id.tv_rates:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(EditeProfilActivity.this, RatingUsersActivity.class));
+
+                break;
+            case R.id.tv_sitting:
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(EditeProfilActivity.this, SettingsActivity.class));
+                break;
+            case R.id.tv_about_us:
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(EditeProfilActivity.this, WhoUsActivity.class));
+                break;
+            case R.id.tv_call_us:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(EditeProfilActivity.this, ContactUsActivity.class));
+                break;
+            case R.id.tv_plociy:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+                startActivity(new Intent(EditeProfilActivity.this, PrivacyPolicyActivity.class));
+                break;
+            case R.id.tv_shar:
+
+                startActivity(new Intent(EditeProfilActivity.this, ShareAppActivity.class));
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+            case R.id.tv_rate:
+
+                Uri uri = Uri.parse("market://details?id=" + "com.ammar.tawseel");
+                Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(myAppLinkToMarket);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, " unable to find market app", Toast.LENGTH_LONG).show();
+                }
+                binding.draw.closeDrawer(Gravity.START);
+                break;
+
+        }
+    }
 }

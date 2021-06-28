@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Callback;
 
 public class AdapterRatinge extends RecyclerView.Adapter<AdapterRatinge.ViewHolderVidio> {
@@ -78,7 +79,7 @@ public class AdapterRatinge extends RecyclerView.Adapter<AdapterRatinge.ViewHold
         holder.comment.setText(list.get(position).getText());
         holder.ratingBar.setRating(Float.parseFloat(list.get(position).getStars()));
         if (list.get(position).getDriver().getAvatar() != null) {
-            Glide.with(mcontext).load(Cemmon.BASE_URL+list.get(position)).placeholder(R.drawable.imagerat).into(holder.imageView);
+            Glide.with(mcontext).load(Cemmon.BASE_URL+list.get(position).getDriver().getAvatar()).placeholder(R.drawable.imagerat).into(holder.imageView);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +119,7 @@ public class AdapterRatinge extends RecyclerView.Adapter<AdapterRatinge.ViewHold
         public RelativeLayout viewBackground;
         public FrameLayout viewForeground;
         TextView name_rate, comment;
-        RoundedImageView imageView;
+        CircleImageView imageView;
         AppCompatRatingBar ratingBar;
         CardView cardView;
 

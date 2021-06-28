@@ -124,9 +124,10 @@ public class FatoraFragment extends Fragment {
 
 
 
+                }else if (response.code() == 401) {
+                    shardEditor.logOut();
                 }
-                binding.prodSucces.setVisibility(View.GONE);
-                binding.tvFinshOprator.setVisibility(View.VISIBLE);
+
             }
 
             @Override

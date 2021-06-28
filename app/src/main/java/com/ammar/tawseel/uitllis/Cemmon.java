@@ -1,17 +1,21 @@
 package com.ammar.tawseel.uitllis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
 
 public class Cemmon {
+    public  static String USER_TOKEN  ;
     public static String FIREBASE_TOKEN;
     public static String BASE_URL = "https://tawseel.pal-dev.com";
     public final static String BASE_URL_MAP = "https://appweb.website/100top/";
@@ -56,5 +60,15 @@ public class Cemmon {
         }
         return status;
 
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

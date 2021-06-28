@@ -16,9 +16,7 @@ public class FiltterData {
     @SerializedName("gpsLng")
     @Expose
     private Double gpsLng;
-    @SerializedName("gpsAddress")
-    @Expose
-    private String gpsAddress;
+
     @SerializedName("stars")
     @Expose
     private String stars;
@@ -58,13 +56,6 @@ public class FiltterData {
         this.gpsLng = gpsLng;
     }
 
-    public String getGpsAddress() {
-        return gpsAddress;
-    }
-
-    public void setGpsAddress(String gpsAddress) {
-        this.gpsAddress = gpsAddress;
-    }
 
     public String getStars() {
         return stars;
