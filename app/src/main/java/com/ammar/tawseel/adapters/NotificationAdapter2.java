@@ -48,6 +48,11 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
         this.notificationList = notificationList;
         this.onclickMessage = onclickMessage;
     }
+    public NotificationAdapter2(Context context, Map<Integer, List<DataNotification>> notificationList) {
+        this.context = context;
+        this.notificationList = notificationList;
+
+    }
 
     public interface OnclickMessage {
 
@@ -65,31 +70,32 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
     }
 
     AdapterNotification notificationAdapter;
-
+    List<DataNotification> notifications;
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        List<DataNotification> notifications = notificationList.get(position);
+      notifications = notificationList.get(position);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         DateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
         long time;
 
 
-        notificationAdapter = new AdapterNotification((ArrayList<DataNotification>) notifications, context);
-        holder.notificationBody.setAdapter(notificationAdapter);
         try {
 
 
 
-                time = sdf.parse(notifications.get(0).getCreatedAt()).getTime();
-                String strDate = dateFormat.format(time);
-                holder.title.setText(strDate);
+            time = sdf.parse(notifications.get(0).getCreatedAt()).getTime();
+            String strDate = dateFormat.format(time);
+            holder.title.setText(strDate);
 
 
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        notificationAdapter = new AdapterNotification((ArrayList<DataNotification>) notifications, context);
+        holder.notificationBody.setAdapter(notificationAdapter);
+
     }
 
     public void removeItem(int position) {
@@ -142,6 +148,8 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+//            deletFromNotifcation(notifications.get(position).getId() , viewHolder.getAdapterPosition());
+
             if (viewHolder instanceof AdapterNotification.ViewHolderVidio) {
                 View customLayout = LayoutInflater.from(context).inflate(R.layout.dialog_delete, null);
 
@@ -152,22 +160,41 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
 
                 TextView tv_delete = customLayout.findViewById(R.id.tv_delete);
                 TextView tv_cancel = customLayout.findViewById(R.id.tv_cancel);
-                List<DataNotification> notifications = notificationList.get(position);
+
                 tv_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        Log.d("swippp", "onClick: " + position);
 
 
-////
-                        onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(),viewHolder.getAdapterPosition(),
-                                (notifications.get(getAdapterPosition()).getTarget()+""));
-
-// deletFromNotifcation(notifications.get(viewHolder.getAdapterPosition()).getId(),viewHolder.getAdapterPosition());
+                  //    deletFromNotifcation();
+//
 
 //
-//                            notificationAdapter.removeItem(viewHolder.getAdapterPosition());
+
+                     /*   onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(),viewHolder.getAdapterPosition(),
+                                (notifications.get(getAdapterPosition()).getTarget()+""));*/
+//                        if (notifications.size() == 1){
+                          Log.d("swippp", "onClick: " + notifications.get(position).getTarget());
+//                deletFromNotifcation(notifications.get(position).getId() , viewHolder.getAdapterPosition());
+//                            onclickMessage.deletingFromNoty(notifications.get(position).getId(),viewHolder.getAdapterPosition(),
+//                                    (notifications.get(getAdapterPosition()).getTarget()+""));
+////                            removeItemParent(getAdapterPosition());
+////                            notificationAdapter.removeItem(viewHolder.getAdapterPosition());
+////                            notificationAdapter.notifyDataSetChanged();
+////                            notifyDataSetChanged();
+//
+//                        }else {
+////                       deletFromNotifcation(notifications.get(position).getId(),viewHolder.getAdapterPosition());
+//                            onclickMessage.deletingFromNoty(notifications.get(position).getId(),viewHolder.getAdapterPosition(),
+//                                    (notifications.get(getAdapterPosition()).getTarget()+""));
+////                            notificationAdapter.removeItem(viewHolder.getAdapterPosition());
+////                            notificationAdapter.notifyDataSetChanged();
+////                            notifyDataSetChanged();
+//                        }
+
+//
+
 //
 //                            notifyDataSetChanged();
 

@@ -10,13 +10,15 @@ public class FiltterData {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
     @SerializedName("gpsLat")
     @Expose
     private Double gpsLat;
     @SerializedName("gpsLng")
     @Expose
     private Double gpsLng;
-
     @SerializedName("stars")
     @Expose
     private String stars;
@@ -40,6 +42,14 @@ public class FiltterData {
         this.id = id;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public Double getGpsLat() {
         return gpsLat;
     }
@@ -55,7 +65,6 @@ public class FiltterData {
     public void setGpsLng(Double gpsLng) {
         this.gpsLng = gpsLng;
     }
-
 
     public String getStars() {
         return stars;

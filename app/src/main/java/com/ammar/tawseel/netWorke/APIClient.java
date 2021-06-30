@@ -1,5 +1,6 @@
 package com.ammar.tawseel.netWorke;
 
+import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 
@@ -15,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
-
+    APIInterFace apiInterFace;
 
     private static Retrofit retrofit = null;
     private static Retrofit retrofit2 = null;

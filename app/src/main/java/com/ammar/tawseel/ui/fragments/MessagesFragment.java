@@ -151,8 +151,10 @@ binding.btnDissmes.setOnClickListener(new View.OnClickListener() {
                     assert response.body() != null;
                     if (response.body().getStatus()) {
 
-                        Log.d("responses", "onResponse: " + response.body().getData().size());
+                     //   Log.d("responses", "onResponse: " + response.body().getData().size());
                         list.addAll( response.body().getData());
+                        Log.d("responses", "onResponse: " + list.size());
+
                         adapterMessages = new AdapterMessages(list, getActivity(), dataMessags -> {
                             Bundle bundle = new Bundle();
                             bundle.putString("orderId", dataMessags.getOrderId().toString());

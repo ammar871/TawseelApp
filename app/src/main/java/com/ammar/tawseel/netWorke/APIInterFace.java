@@ -3,6 +3,7 @@ package com.ammar.tawseel.netWorke;
 
 import com.ammar.tawseel.pojo.response.APIResponse;
 
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -173,6 +174,14 @@ public interface APIInterFace {
 
     @GET("api/user/drivers")
     Call<APIResponse.ResponseDrivers> getDrivers(
+
+            @Header("Authorization") String token,
+            @Header("lang") String lang,
+            @Header("Accept") String accept);
+
+
+    @GET("api/user/drivers")
+    Observable<APIResponse.ResponseDrivers> getRXDrivers(
 
             @Header("Authorization") String token,
             @Header("lang") String lang,

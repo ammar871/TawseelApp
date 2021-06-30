@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 
 import android.Manifest;
@@ -25,17 +27,21 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -61,6 +67,7 @@ import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.example.audio_record_view.ChatTest.ChatAppActivity;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
+import com.ammar.tawseel.netWorke.RX.ViewModelRX;
 import com.ammar.tawseel.pojo.data.Driver;
 import com.ammar.tawseel.pojo.response.APIResponse;
 
@@ -83,11 +90,23 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import java.util.Locale;
 import java.util.Objects;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -111,6 +130,15 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     private final static int LOCATION_PER_REQUEST = 9999;
     ArrayList<Driver> listDrivers = new ArrayList<>();
     AlertDialog alertDialogfilltere;
+    ViewModelRX viewModelCategories;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+
+    }
 
     @Nullable
     @Override
@@ -135,7 +163,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
 
-
+        viewModelCategories = ViewModelProviders.of(getActivity()).get(ViewModelRX.class);
         if (Cemmon.isNetworkOnline(getActivity())) {
             if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
                 binding.layoutLocationInternet.setVisibility(View.GONE);
@@ -145,6 +173,8 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
             binding.tvSearsh.setSelected(true);
+
+            //   getDataRx();
             getLastLocation();
             checkGPS();
             openDraw();
@@ -172,6 +202,21 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
         return binding.getRoot();
     }
+
+//    private void getDataRx() {
+//        viewModelCategories.getDrivers(  "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+//                shardEditor.loadData().get(ShardEditor.KEY_LANG),
+//                "application/json");
+//
+//        viewModelCategories.listProductsHome.observe(Objects.requireNonNull(getActivity()), new Observer<APIResponse.ResponseDrivers>() {
+//            @Override
+//            public void onChanged(APIResponse.ResponseDrivers responseDrivers) {
+//                drivers= (ArrayList<Driver>) responseDrivers.getData();
+//                Log.d("dfffffffffff", "onChanged: "+drivers.get(0).getAvatar());
+//            }
+//        });
+//
+//    }
 
     SupportMapFragment mapFragment;
 
@@ -268,7 +313,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                                        boolean b) {
         binding.progressMapsearsh.setVisibility(View.VISIBLE);
         binding.layoyutMaping.setVisibility(View.GONE);
-        Call<APIResponse.ResponseFillter> call = apiInterFace.filtersDrivires( star
+        Call<APIResponse.ResponseFillter> call = apiInterFace.filtersDrivires(star
                 , kiloometrs, b, "application/json",
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG));
@@ -398,168 +443,6 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
     }
 
-  /*  private void searshCallApi(String searchName) {
-        if (searchName != null && !searchName.isEmpty()) {
-            if (map != null) {
-                map.clear();
-            }
-            Call<APIResponse.ResponseSearchDrivers> call = apiInterFace.searshDrivires(searchName,
-                    "application/json",
-                    "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                    shardEditor.loadData().get(ShardEditor.KEY_LANG)
-            );
-
-            call.enqueue(new Callback<APIResponse.ResponseSearchDrivers>() {
-                @Override
-                public void onResponse(@NonNull Call<APIResponse.ResponseSearchDrivers> call,
-                                       @NonNull Response<APIResponse.ResponseSearchDrivers> response) {
-
-
-                    if (response.code() == 200) {
-                        listDrivers.clear();
-
-                        assert response.body() != null;
-                        if (response.body().getStatus()) {
-
-                            binding.progressMapsearsh.setVisibility(View.GONE);
-                            binding.layoyutMaping.setVisibility(View.VISIBLE);
-                            if (response.body().getData().size() > 0) {
-
-
-                             *//*   if (map != null && getActivity() != null) {
-                                    if (listDrivers.get(i).getStatus().equals("off")) {
-                                        int posstion = i;
-                                        googleMapOff = map;
-
-
-                                        Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-                                                bitmapDescriptorFromVector(R.drawable.ic_off)));
-                                        marker.setTag(listDrivers.get(i).getId() + "");
-
-                                    } else if (listDrivers.get(i).getStatus().equals("on")) {
-                                        int posstion = i;
-                                        googleMapOn = map;
-
-                                        Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
-                                                bitmapDescriptorFromVector(R.drawable.ic_icon_on)));
-                                        marker.setTag(listDrivers.get(i).getId() + "");
-
-                                    } else if (listDrivers.get(i).getStatus().equals("busey")) {
-                                        int posstion = i;
-                                        googleMapBusey = map;
-                                        Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
-                                                bitmapDescriptorFromVector(R.drawable.ic_icon_bussy)));
-                                        marker.setTag(listDrivers.get(i).getId() + "");
-
-//                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
-//                                                        listDrivers.get(i).getId()+""
-//                                                ).icon(
-//                                                        bitmapDescriptorFromVector(R.drawable.ic_map_bussy)));
-
-
-                                    }
-
-                                }*//*
-
-
-                                for (int i = 0; i < response.body().getData().size(); i++) {
-                                    id = response.body().getData().get(i).getId().toString();
-
-                                    if (response.body().getData().get(i).getGpsLat() != null &&
-                                            response.body().getData().get(i).getGpsLng() != null) {
-
-
-                                        double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
-                                        Log.d("latlang", "onResponse: " + lat);
-                                        double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
-                                        LatLng latLng = new LatLng(lat, lang);
-                                        MarkerOptions markerOptions;
-                                        if (response.body().getData().get(i).getStatus().equals("off")) {
-                                            googleMapOff = map;
-
-
-                                            googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_map_off)
-                                            ));
-
-
-                                        } else if (response.body().getData().get(i).getStatus().equals("on")) {
-                                            googleMapOn = map;
-                                            googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_icon_on)));
-
-                                        } else if (response.body().getData().get(i).getStatus().equals("busey")) {
-
-                                            googleMapBusey = map;
-                                            googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_map_bussy)));
-
-
-                                        }
-
-                                        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                            @Override
-                                            public boolean onMarkerClick(Marker marker) {
-
-                                                if (marker.getTitle().equals("off"))
-                                                    openDialog("مندوب التوصيل غير متوفر الآن");
-                                                else if (marker.getTitle().equals("busey"))
-                                                    openDialog("مندوب التوصيل لديه طلب حالي، لا يمكنك التواصل معه الآن");
-                                                else if (marker.getTitle().equals("on"))
-//                                                    if (shardEditor.loadData().get(ShardEditor.ORDER_ID).equals("")) {
-                                                    showDialogSelecteService(id);
-                                                //    callSendMessage(id);
-
-//                                                    } else {
-//                                                        showDialogSelecteService(id);
-//                                                        //  callSendTwoMessage(id);
-//                                                    }
-
-
-                                                return false;
-                                            }
-                                        });
-
-
-                                    }
-
-
-                                }
-                                map.animateCamera(CameraUpdateFactory.zoomTo(17), 200, null);
-                                LatLng latLngMe = new LatLng(latitude, longitude);
-                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMe, 14f));
-                                map.addMarker(new MarkerOptions().position(latLngMe).title("My Location").icon(
-                                        BitmapDescriptorFactory.fromBitmap(resizeBitmap(110, 110))));
-
-
-                            }
-
-
-                        } else {
-                            binding.progressMapsearsh.setVisibility(View.GONE);
-                            binding.layoyutMaping.setVisibility(View.VISIBLE);
-
-                        }
-
-                    }
-
-                }
-
-
-                @Override
-                public void onFailure(@NonNull Call<APIResponse.ResponseSearchDrivers> call, @NonNull Throwable t) {
-                    binding.progressMapsearsh.setVisibility(View.GONE);
-                    binding.layoyutMaping.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-        } else {
-            Toast.makeText(getActivity(), "اكتب كلمة البحث", Toast.LENGTH_SHORT).show();
-        }
-
-    }*/
 
     @SuppressLint("WrongConstant")
     private void openDraw() {
@@ -751,7 +634,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     @Override
     public void onStart() {
         super.onStart();
-           }
+    }
 
     String id;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -767,13 +650,23 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
             }
 
-            showDriversOnTheMap(googleMap);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            showDriversOnTheMap(googleMap, lat, lng);
+                        }
+                    },
+                    5000
+            );
+
 
 
         }
     };
 
-    private void showDriversOnTheMap(GoogleMap googleMap) {
+
+    private void showDriversOnTheMap(GoogleMap googleMap, Double lattud, Double lng) {
         Call<APIResponse.ResponseDrivers> call = apiInterFace.getDrivers(
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG),
@@ -796,6 +689,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                         binding.progressMap.setVisibility(View.GONE);
                         if (response.body().getData().size() > 0) {
                             listDrivers = (ArrayList<Driver>) response.body().getData();
+                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + response.body().getData().get(0).getAvatar());
 
                             for (int i = 0; i < listDrivers.size(); i++) {
                                 id = response.body().getData().get(i).getId().toString();
@@ -812,27 +706,35 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
                                     if (map != null && getActivity() != null) {
                                         if (listDrivers.get(i).getStatus().equals("off")) {
-                                            int posstion = i;
+
                                             googleMapOff = map;
-
-
+                                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + response.body().getData().get(i).getAvatar());
+//
+//                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
+//                                                    bitmapDescriptorFromVector(R.drawable.ic_off)));
+//                                            marker.setTag(listDrivers.get(i).getId() + "");
                                             Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_off)));
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
                                             marker.setTag(listDrivers.get(i).getId() + "");
 
                                         } else if (listDrivers.get(i).getStatus().equals("on")) {
-                                            int posstion = i;
+
                                             googleMapOn = map;
 
                                             Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_icon_on)));
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+                                                                 Color.GREEN))));
                                             marker.setTag(listDrivers.get(i).getId() + "");
 
                                         } else if (listDrivers.get(i).getStatus().equals("busey")) {
                                             int posstion = i;
                                             googleMapBusey = map;
                                             Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
-                                                    bitmapDescriptorFromVector(R.drawable.ic_icon_bussy)));
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+                                                                Color.GRAY))));
                                             marker.setTag(listDrivers.get(i).getId() + "");
 
 //                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
@@ -891,8 +793,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
                     }
 
-                }
-                else if (response.code() == 401) {
+                } else if (response.code() == 401) {
                     shardEditor.logOut();
 
                 }
@@ -907,16 +808,151 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                 //Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
+//            viewModelCategories.getDrivers(  "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
+//                shardEditor.loadData().get(ShardEditor.KEY_LANG),
+//                "application/json");
+//
+//        viewModelCategories.listProductsHome.observe(Objects.requireNonNull(getActivity()), responseDrivers -> {
+//
+//            binding.layoutHome.setVisibility(View.VISIBLE);
+//            binding.progressMap.setVisibility(View.GONE);
+//         //   drivers= (ArrayList<Driver>) responseDrivers.getData();
+//            for (int i = 0; i < responseDrivers.getData().size(); i++) {
+//
+//                if (responseDrivers.getData().get(i).getGpsLat() != null &&
+//                        responseDrivers.getData().get(i).getGpsLng() != null) {
+//
+//
+//                    double lat = Double.parseDouble(responseDrivers.getData().get(i).getGpsLat() + "");
+//                    Log.d("latlang", "onResponse: " + lat);
+//                    double lang = Double.parseDouble(responseDrivers.getData().get(i).getGpsLng().toString().trim());
+//                    LatLng latLng = new LatLng(lat, lang);
+//                    MarkerOptions markerOptions;
+//
+//                    if (map != null && getActivity() != null) {
+//                        if (responseDrivers.getData().get(i).getStatus().equals("off")) {
+//
+//                            googleMapOff = map;
+//                            Log.d(";;;;;;;;;;;;;;;", "onResponse: "+responseDrivers.getData().get(i).getAvatar());
+////
+////                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
+////                                                    bitmapDescriptorFromVector(R.drawable.ic_off)));
+////                                            marker.setTag(listDrivers.get(i).getId() + "");
+//                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
+//                                    BitmapDescriptorFactory.fromBitmap(
+//                                            createCustomMarker(getActivity(),Cemmon.BASE_URL+responseDrivers.getData().get(i).getAvatar()+""))));
+//                            marker.setTag(responseDrivers.getData().get(i).getId() + "");
+//
+//                        } else if (responseDrivers.getData().get(i).getStatus().equals("on")) {
+//
+//                            googleMapOn = map;
+//
+//                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
+//                                    bitmapDescriptorFromVector(R.drawable.ic_icon_on)));
+//                            marker.setTag(responseDrivers.getData().get(i).getId() + "");
+//
+//                        } else if (responseDrivers.getData().get(i).getStatus().equals("busey")) {
+//                            int posstion = i;
+//                            googleMapBusey = map;
+//                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
+//                                    bitmapDescriptorFromVector(R.drawable.ic_icon_bussy)));
+//                            marker.setTag(responseDrivers.getData().get(i).getId() + "");
+//
+////                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
+////                                                        listDrivers.get(i).getId()+""
+////                                                ).icon(
+////                                                        bitmapDescriptorFromVector(R.drawable.ic_map_bussy)));
+//
+//
+//                        }
+//
+//                    }
+//
+//
+//                }
+//
+//                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                    @Override
+//                    public boolean onMarkerClick(Marker marker) {
+//
+//                        Log.d("aggdgsgsg", "onMarkerClick: " + marker.getTag());
+//                        if (marker.getTitle().equals("off"))
+//                            openDialog(getString(R.string.off));
+//                        else if (marker.getTitle().equals("busey"))
+//                            openDialog(getString(R.string.busey));
+//                        else if (marker.getTitle().equals("on"))
+////                                                    if (shardEditor.loadData().get(ShardEditor.ORDER_ID).equals("")) {
+//                            showDialogSelecteService(marker.getTag() + "");
+//                        //    callSendMessage(id);
+//
+////                                                    } else {
+////                                                        showDialogSelecteService(id);
+////                                                        //  callSendTwoMessage(id);
+////                                                    }
+//
+//
+//                        return false;
+//                    }
+//                });
+//            }
+//            if (getActivity() != null) {
+//
+//                googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 500, null);
+//                LatLng latLngMe = new LatLng(Cemmon.latude,Cemmon.langtude);
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngMe, 14f));
+//                googleMap.addMarker(new MarkerOptions().position(latLngMe).title(getString(R.string.my_location)).icon(
+//                        BitmapDescriptorFactory.fromBitmap(resizeBitmap(110, 110))));
+//            }
+//
+//        });
     }
 
-    public static Bitmap createCustomMarker(Context context, @DrawableRes int resource, String uri) {
+    public Bitmap displayImage(String uri) throws IOException {
+        URL url = new URL(uri);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoInput(true);
+        conn.connect();
+        InputStream is = conn.getInputStream();
+        Bitmap bmImg = BitmapFactory.decodeStream(is);
+
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        bmImg = Bitmap.createBitmap(80, 80, conf);
+        Canvas canvas1 = new Canvas(bmImg);
+
+// paint defines the text color, stroke width and size
+        Paint color = new Paint();
+        color.setTextSize(35);
+        color.setColor(Color.BLACK);
+
+// modify canvas
+        return bmImg;
+
+    }
+
+
+    @SuppressLint("ResourceAsColor")
+    public static Bitmap createCustomMarker(Context context, String uri, int color) {
 
         View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_map, null);
+        CircleImageView markerImage = marker.findViewById(R.id.user_dp);
 
-        CircleImageView markerImage = (CircleImageView) marker.findViewById(R.id.user_dp);
 
-        Glide.with(context).load("https://i.stack.imgur.com/7pUVC.jpg")
-                .into(markerImage);
+            markerImage.setBorderColor(color);
+
+        Picasso.with(context).load(uri).placeholder(R.drawable.imge_test).into(markerImage);
+
+//        try {
+//            URL url = new URL(uri);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setDoInput(true);
+//            conn.connect();
+//            InputStream is = conn.getInputStream();
+//            Bitmap  bmImg = BitmapFactory.decodeStream(is);
+//            markerImage.setImageBitmap(bmImg);
+//        } catch (IOException ignored) {
+//        }
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -930,6 +966,34 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
         return bitmap;
     }
+
+    private static class ExampleAsyncTask extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                Bitmap bmImg = BitmapFactory.decodeStream(is);
+
+            } catch (IOException ignored) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("llllllllllll", "onPostExecute: " + s);
+        }
+    }
+
+//
 
     RadioGroup radioGroup;
     RadioButton radioButton;
@@ -999,7 +1063,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
                     assert response.body() != null;
                     if (response.body().getStauts()) {
-                        drivers = (ArrayList<Driver>) response.body().getData();
+                        //   drivers = (ArrayList<Driver>) response.body().getData();
 
 
                     }

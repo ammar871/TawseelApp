@@ -8,14 +8,15 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_dp"
-        android:layout_width="@dimen/_50ssp"
-        android:layout_height="@dimen/_50ssp"
+        android:layout_width="@dimen/_43ssp"
+        android:layout_height="@dimen/_43ssp"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="4dp"
+        android:layout_margin="4dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@null"
-        android:src="@drawable/imge_test"
-        app:civ_border_color="#fff" />
+
+        app:civ_border_width="@dimen/_2sdp" />
 
 
 </RelativeLayout>

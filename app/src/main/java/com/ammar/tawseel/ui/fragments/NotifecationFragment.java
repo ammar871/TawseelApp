@@ -76,8 +76,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class NotifecationFragment extends Fragment implements RecyclerItemTouchNotification.RecyclerItemTouchHelperListener
-        , RecyclerHelperToutchNotyLast.RecyclerItemTouchHelperListener ,AdapterNotification.OnclickMessage,NotificationAdapter2.OnclickMessage{
+public class NotifecationFragment extends Fragment implements  AdapterNotification.OnclickMessage, NotificationAdapter2.OnclickMessage {
 
     int page = 1;
     Map<Integer, List<DataNotification>> lists;
@@ -87,31 +86,30 @@ public class NotifecationFragment extends Fragment implements RecyclerItemTouchN
     }
 
     ArrayList<ModelNotifyDate> modelNotifyDates = new ArrayList<>();
-
+    HashMap<Integer, List<DataNotification>> hashMap = new HashMap<Integer, List<DataNotification>>();
     FragmentNotifecationBinding binding;
     APIInterFace apiInterFace;
     ShardEditor shardEditor;
-    AdapterNotiyLasted adapterNotiyLasted;
-    ArrayList<DataNotification> listNotiyToday = new ArrayList<>();
+
+
     ArrayList<DataNotification> listlast = new ArrayList<>();
     NotificationAdapter2 adapter2;
     ArrayList<DataNotification> listlastnew = new ArrayList<>();
     AdapterNotification adapterNotification;
     ArrayList<ModelNotifyDate> listHome = new ArrayList<>();
     public static final String TAG = "Notifecation";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         lists = new HashMap<>();
+        adapter2 = new NotificationAdapter2(getActivity(), lists,this);
 
-
-            adapter2 = new NotificationAdapter2(getActivity(), lists,this);
-
-          }
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         shardEditor = new ShardEditor(getActivity());
@@ -128,16 +126,17 @@ public class NotifecationFragment extends Fragment implements RecyclerItemTouchN
             if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
                 binding.layoutLocationInternet.setVisibility(View.GONE);
             }
+
             binding.layoutHome.setVisibility(View.VISIBLE);
 
             apiInterFace = APIClient.getClient().create(APIInterFace.class);
 //            ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchNotification(0, ItemTouchHelper.RIGHT, this);
 //            new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvListNotifyToday);
-loadDataNotification(page+"");
+
+            loadDataNotification(page + "");
 
 //            ItemTouchHelper.SimpleCallback itemTouchHelperCallbacklast = new RecyclerHelperToutchNotyLast(0, ItemTouchHelper.RIGHT, this);
 //            new ItemTouchHelper(itemTouchHelperCallbacklast).attachToRecyclerView(binding.rvListNotify);
-
 
 
             inItView();
@@ -150,8 +149,15 @@ loadDataNotification(page+"");
                     if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                         binding.proBarPag.setVisibility(View.VISIBLE);
 
-                        page++;
-                       loadDataNotificationPagenation(page + "");
+
+                        if (listlastnew.size() ==0) {
+                            binding.proBarPag.setVisibility(View.GONE);
+
+                        } else {
+                            page++;
+                            Log.d("pppppppppppppp", "onScrollChange: " + page);
+                            loadDataNotificationPagenation(page + "");
+                        }
 
 
                     }
@@ -217,8 +223,11 @@ loadDataNotification(page+"");
     }
 
     int i = 0;
+    int id = 1;
+    List<DataNotification> dayDates;
 
     private void loadDataNotification(String page) {
+
         binding.layoutProgress.setVisibility(View.VISIBLE);
         binding.homeContant.setVisibility(View.GONE);
         Call<APIResponse.ResponseNotification> call = apiInterFace.getNotification(page, "application/json", "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
@@ -232,16 +241,16 @@ loadDataNotification(page+"");
 
                 if (response.code() == 200) {
                     assert response.body() != null;
-//                    Date today = new Date();
-//                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-//                    String dateToStr = format.format(today);
+                    listlastnew.clear();
                     if (response.body().getStatus()) {
                         listlastnew = (ArrayList<DataNotification>) response.body().getData();
+
+
+
+
                         long millisPerDay = TimeUnit.DAYS.toMillis(1);
                         Map<Long, List<DataNotification>> datesByDay = new HashMap<>();
                         Map<Integer, List<DataNotification>> datesByDay1 = new HashMap<>();
-
-
                         for (DataNotification date : listlastnew) {
                             try {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -251,7 +260,7 @@ loadDataNotification(page+"");
                                 time = sdf.parse(date.getCreatedAt()).getTime();
 
                                 long day = time / millisPerDay;
-                                List<DataNotification> dayDates = datesByDay.get(day);
+                                dayDates = datesByDay.get(day);
                                 if (dayDates == null) {
                                     dayDates = new ArrayList<>();
                                     datesByDay.put(day, dayDates);
@@ -264,24 +273,12 @@ loadDataNotification(page+"");
                             }
                         }
                         Log.e("fffffffffffffff", datesByDay1.toString());
-//        Log.e("fffffffffff", datesByDay.toString());
+
                         adapter2.addMore(datesByDay1);
                         binding.rvListNotifyToday.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         binding.rvListNotifyToday.setAdapter(adapter2);
-
-//                            try {
-//                                d = input.parse(listlastnew.get(i).getCreatedAt());
-//                                String formatted = output.format(d);
-//                                Log.d("sjjjjjjjjjj", "onResponse: "+formatted+dateToStr);
-//
-//
-//
-//                            } catch (ParseException e) {
-//                                e.printStackTrace();
-//                            }
                         binding.layoutProgress.setVisibility(View.GONE);
                         binding.homeContant.setVisibility(View.VISIBLE);
-
                     }
 
 
@@ -331,7 +328,7 @@ loadDataNotification(page+"");
                     assert response.body() != null;
                     if (response.body().getStatus()) {
                         binding.proBarPag.setVisibility(View.GONE);
-//                        listlast.addAll((ArrayList<DataNotification>) response.body().getData());
+
 //
 //                        adapterNotification = new AdapterNotification(listlast, getActivity(),
 //                                (dataNotification, i) -> {
@@ -367,8 +364,13 @@ loadDataNotification(page+"");
 //
 //                                });
 //                        binding.rvListNotifyToday.setAdapter(adapterNotification);
+listlastnew.clear();
 
-                        listlastnew = (ArrayList<DataNotification>) response.body().getData();
+                        listlastnew= (ArrayList<DataNotification>) response.body().getData();
+
+
+
+                        Log.d("hhhhhhhhhhhhh", "onResponse: " + response.body().getData().size());
                         long millisPerDay = TimeUnit.DAYS.toMillis(1);
                         Map<Long, List<DataNotification>> datesByDay = new HashMap<>();
                         Map<Integer, List<DataNotification>> datesByDay1 = new HashMap<>();
@@ -383,7 +385,7 @@ loadDataNotification(page+"");
                                 time = sdf.parse(date.getCreatedAt()).getTime();
 
                                 long day = time / millisPerDay;
-                                List<DataNotification> dayDates = datesByDay.get(day);
+                                dayDates = datesByDay.get(day);
                                 if (dayDates == null) {
                                     dayDates = new ArrayList<>();
                                     datesByDay.put(day, dayDates);
@@ -397,7 +399,6 @@ loadDataNotification(page+"");
                         }
 
                         adapter2.addMore(datesByDay1);
-                        binding.rvListNotifyToday.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                         binding.rvListNotifyToday.setAdapter(adapter2);
 
 //                            try {
@@ -410,12 +411,10 @@ loadDataNotification(page+"");
 //                            } catch (ParseException e) {
 //                                e.printStackTrace();
 //                            }
-                        binding.layoutProgress.setVisibility(View.GONE);
-                        binding.homeContant.setVisibility(View.VISIBLE);
+//                        binding.layoutProgress.setVisibility(View.GONE);
+//                        binding.homeContant.setVisibility(View.VISIBLE);
 
                     }
-
-
 
 
                 }
@@ -434,45 +433,12 @@ loadDataNotification(page+"");
     @Override
     public void onStart() {
         super.onStart();
-        loadDataNotification(page+"");
+
     }
 
     AlertDialog alertDialog = null;
 
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof AdapterNotification.ViewHolderVidio) {
 
-
-            Log.d("idOrder", "onSwiped: " + listNotiyToday.get(viewHolder.getAdapterPosition()).getTarget());
-
-            dialog_Deleting(viewHolder);
-
-            // get the removed item name to display it in snack bar
-         /*   String name = cartList.get(viewHolder.getAdapterPosition()).getName();
-
-            // backup of removed item for undo purpose
-            final Item deletedItem = cartList.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
-
-            // remove the item from recycler view
-            mAdapter.removeItem(viewHolder.getAdapterPosition());
-
-//            // showing snack bar with Undo option*/
-//            Snackbar snackbar = Snackbar
-//                    .make(binding.coordinatorLayout,  list.get(0).toString()+" removed from cart!", Snackbar.LENGTH_LONG);
-//            snackbar.setAction("UNDO", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    // undo is selected, restore the deleted item
-//
-//                }
-//            });
-//            snackbar.setActionTextColor(Color.YELLOW);
-//            snackbar.show();
-        }
-    }
 
     private void dialog_Deleting(RecyclerView.ViewHolder viewHolder) {
         View customLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete, null);
@@ -488,8 +454,8 @@ loadDataNotification(page+"");
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deletFromNotifcation(listNotiyToday.get(viewHolder.getAdapterPosition()).getId(), listNotiyToday
-                        .get(viewHolder.getAdapterPosition()).getTarget()+"");
+//                deletFromNotifcation(listNotiyToday.get(viewHolder.getAdapterPosition()).getId(), listNotiyToday
+//                        .get(viewHolder.getAdapterPosition()).getTarget() + "");
                 adapterNotification.removeItem(viewHolder.getAdapterPosition());
                 alertDialog.dismiss();
             }
@@ -518,14 +484,15 @@ loadDataNotification(page+"");
         );
         chatCall.enqueue(new Callback<APIResponse.ResponseDeleteChat>() {
             @Override
-            public void onResponse(Call<APIResponse.ResponseDeleteChat> call, Response<APIResponse.ResponseDeleteChat> response) {
+            public void onResponse(@NonNull Call<APIResponse.ResponseDeleteChat> call, @NonNull Response<APIResponse.ResponseDeleteChat> response) {
                 if (response.code() == 200) {
+                    loadDataNotification(page+"");
                     binding.layoutProgress.setVisibility(View.GONE);
                     binding.homeContant.setVisibility(View.VISIBLE);
                     if (response.body().getStatus()) {
 
                         Snackbar snackbar = Snackbar
-                                .make(binding.coordinatorLayout, target + " تم حذفه من قائمة الاشعارات ", Snackbar.LENGTH_LONG);
+                                .make(binding.coordinatorLayout, target + getString(R.string.delete_from_noty), Snackbar.LENGTH_LONG);
 
                         snackbar.setActionTextColor(Color.YELLOW);
                         snackbar.show();
@@ -539,87 +506,21 @@ loadDataNotification(page+"");
             }
 
             @Override
-            public void onFailure(Call<APIResponse.ResponseDeleteChat> call, Throwable t) {
+            public void onFailure(@NonNull Call<APIResponse.ResponseDeleteChat> call, @NonNull Throwable t) {
                 Log.d("eiled", "onResponse: " + t.getMessage());
             }
         });
     }
 
-    @Override
-    public void onSwipedLast(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof AdapterNotiyLasted.ViewHolderVidio) {
-            View customLayout = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_delete, null);
-
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setView(customLayout);
-
-
-            TextView tv_delete = customLayout.findViewById(R.id.tv_delete);
-            TextView tv_cancel = customLayout.findViewById(R.id.tv_cancel);
-
-            tv_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deletFromNotifcation(listlast.get(viewHolder.getAdapterPosition()).getId(), listlast
-                            .get(viewHolder.getAdapterPosition()).getTarget());
-                    adapterNotiyLasted.removeItem(viewHolder.getAdapterPosition());
-                    alertDialog.dismiss();
-                }
-            });
-
-            tv_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    adapterNotiyLasted.notifyDataSetChanged();
-                    alertDialog.dismiss();
-                }
-            });
-
-
-            builder.setCancelable(true);
-            alertDialog = builder.create();
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            alertDialog.show();
-
-//            Log.d("idOrder", "onSwiped: " + listlast.get(viewHolder.getAdapterPosition()).getTarget());
-//            deletFromNotifcation(listlast.get(viewHolder.getAdapterPosition()).getId(), listlast
-//                    .get(viewHolder.getAdapterPosition()).getTarget());
-//            adapterNotiyLasted.removeItem(viewHolder.getAdapterPosition());
-            // get the removed item name to display it in snack bar
-         /*   String name = cartList.get(viewHolder.getAdapterPosition()).getName();
-
-            // backup of removed item for undo purpose
-            final Item deletedItem = cartList.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
-
-            // remove the item from recycler view
-            mAdapter.removeItem(viewHolder.getAdapterPosition());
-
-//            // showing snack bar with Undo option*/
-//            Snackbar snackbar = Snackbar
-//                    .make(binding.coordinatorLayout,  list.get(0).toString()+" removed from cart!", Snackbar.LENGTH_LONG);
-//            snackbar.setAction("UNDO", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    // undo is selected, restore the deleted item
-//
-//                }
-//            });
-//            snackbar.setActionTextColor(Color.YELLOW);
-//            snackbar.show();
-        }
-    }
 
     @Override
     public void itemOnclickNewBill(Integer dataNotification, String i) {
-        deletFromNotifcation(dataNotification,i);
+        deletFromNotifcation(dataNotification, i);
     }
 
     @Override
-    public void deletingFromNoty(Integer dataNotification, int i,String target) {
-        deletFromNotifcation(dataNotification,target);
+    public void deletingFromNoty(Integer dataNotification, int i, String target) {
+        deletFromNotifcation(dataNotification, target);
     }
 }
 

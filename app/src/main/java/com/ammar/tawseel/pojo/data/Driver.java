@@ -8,6 +8,9 @@ public class Driver {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("distance")
+    @Expose
+    private Integer distance;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -17,12 +20,9 @@ public class Driver {
     @SerializedName("gpsLng")
     @Expose
     private Double gpsLng;
-    @SerializedName("gpsAddress")
+    @SerializedName("avatar")
     @Expose
-    private Object gpsAddress;
-    @SerializedName("distance")
-    @Expose
-    private Double distance;
+    private String avatar;
 
     public String getStatus() {
         return status;
@@ -30,6 +30,14 @@ public class Driver {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 
     public Integer getId() {
@@ -56,19 +64,12 @@ public class Driver {
         this.gpsLng = gpsLng;
     }
 
-    public Object getGpsAddress() {
-        return gpsAddress;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setGpsAddress(Object gpsAddress) {
-        this.gpsAddress = gpsAddress;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
 }
