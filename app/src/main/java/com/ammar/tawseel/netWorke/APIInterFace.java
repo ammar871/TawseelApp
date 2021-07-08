@@ -42,6 +42,13 @@ public interface APIInterFace {
 
     );
 
+
+    @POST("api/user/logout")
+    Call<APIResponse.LogOutResponse>logOut(
+            @Header("Authorization") String token
+    );
+
+
     @FormUrlEncoded
     @POST("api/user/register")
     Call<APIResponse.ResponseRegister> registerAPI(

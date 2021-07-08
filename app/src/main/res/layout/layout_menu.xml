@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -69,10 +70,20 @@
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:orientation="vertical"
-        android:weightSum="8"
+        android:weightSum="9"
         app:layout_constraintHeight_percent=".55"
         app:layout_constraintTop_toBottomOf="@id/header_layout">
-
+        <TextView
+            android:id="@+id/tv_home"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_drawble"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:fontFamily="@font/medium"
+            android:gravity="center_vertical|left"
+            android:textColor="@color/black"
+            android:text="@string/home" />
         <TextView
             android:id="@+id/nav_userProfil"
             android:layout_width="match_parent"
@@ -181,7 +192,21 @@
 
 
     </LinearLayout>
-
+    <ProgressBar
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:id="@+id/nav_logout_pro"
+        android:textColor="@color/black"
+        android:layout_margin="@dimen/_15sdp"
+        android:fontFamily="@font/medium"
+        android:gravity="center_vertical|right"
+android:visibility="gone"
+        android:text="@string/logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

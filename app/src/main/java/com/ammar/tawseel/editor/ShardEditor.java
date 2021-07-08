@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.ammar.tawseel.netWorke.APIClient;
+import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.data.DataUser;
 import com.ammar.tawseel.ui.SplashActivity;
 import com.ammar.tawseel.ui.auth.LoginActivity;
@@ -15,7 +17,7 @@ public class ShardEditor {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     Context _context;
-
+    APIInterFace apiInterFace;
     // shared pref mode
     int PRIVATE_MODE = 0;
 
@@ -37,6 +39,7 @@ public class ShardEditor {
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String IS_TOKEN ="token" ;
     public ShardEditor(Context context) {
+        apiInterFace = APIClient.getClient().create(APIInterFace.class);
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
@@ -145,6 +148,8 @@ public class ShardEditor {
         _context.startActivity(mIntent);
 
     }
+
+
 
 
 }

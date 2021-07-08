@@ -35,19 +35,19 @@
         <activity android:name=".ui.ShowImageChatActivity" />
         <activity android:name=".ui.ConfirmActivity" />
         <activity android:name=".ui.DisplayVideoActivity" />
-        <activity android:name=".ui.OrdersActivity" />
+        <activity android:name=".ui.menus.OrdersActivity" />
         <activity android:name=".example.audio_record_view.ChatTest.ChatAppActivity" />
         <activity android:name=".example.AudioOnTouchActivity" />
         <activity android:name=".ui.ContactUsActivity" />
-        <activity android:name=".ui.WhoUsActivity" />
-        <activity android:name=".ui.PrivacyPolicyActivity" />
-        <activity android:name=".ui.ShareAppActivity" />
+        <activity android:name=".ui.menus.WhoUsActivity" />
+        <activity android:name=".ui.menus.PrivacyPolicyActivity" />
+        <activity android:name=".ui.menus.ShareAppActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.menus.SettingsActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -57,8 +57,8 @@
             android:name=".ui.TrakingMapsActivity"
             android:label="@string/title_activity_traking_maps" />
         <activity android:name=".uitllis.DrawActivity" />
-        <activity android:name=".ui.RatingUsersActivity" />
-        <activity android:name=".ui.EditeProfilActivity" />
+        <activity android:name=".ui.menus.RatingUsersActivity" />
+        <activity android:name=".ui.menus.EditeProfilActivity" />
         <activity android:name=".ui.fragments.DetailesActivity" />
         <activity android:name=".ui.checkout.ChckOutActivity" />
         <activity

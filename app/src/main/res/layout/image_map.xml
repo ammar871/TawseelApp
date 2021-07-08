@@ -2,21 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_marker_view"
-    android:layout_width="@dimen/_50ssp"
-
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_dp"
-        android:layout_width="@dimen/_43ssp"
-        android:layout_height="@dimen/_43ssp"
+        android:layout_width="@dimen/_45ssp"
+        android:layout_height="@dimen/_45ssp"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="4dp"
         android:scaleType="centerCrop"
         android:contentDescription="@null"
-
-        app:civ_border_width="@dimen/_2sdp" />
+        app:civ_border_width="@dimen/_1sdp" />
 
 
 </RelativeLayout>

@@ -19,11 +19,17 @@ import android.widget.Toast;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivityContactUsBinding;
-import com.ammar.tawseel.databinding.ActivityWhoUsBinding;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.home.HomeActivity;
+import com.ammar.tawseel.ui.menus.EditeProfilActivity;
+import com.ammar.tawseel.ui.menus.PrivacyPolicyActivity;
+import com.ammar.tawseel.ui.menus.RatingUsersActivity;
+import com.ammar.tawseel.ui.menus.SettingsActivity;
+import com.ammar.tawseel.ui.menus.ShareAppActivity;
+import com.ammar.tawseel.ui.menus.WhoUsActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -105,7 +111,8 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
     private void inItView() {
         TextView tv_userProfil = findViewById(R.id.nav_userProfil);
         TextView tv_logout = findViewById(R.id.nav_logout);
-
+        TextView tv_home = findViewById(R.id.tv_home);
+        tv_home.setOnClickListener(this);
         imgProfile = findViewById(R.id.profile_image);
         TextView tv_rates = findViewById(R.id.tv_rates);
         TextView tv_order = findViewById(R.id.nav_order);
@@ -197,7 +204,14 @@ public class ContactUsActivity extends AppCompatActivity implements View.OnClick
 
                 binding.draw.closeDrawer(Gravity.START);
                 break;
+            case R.id.tv_home:
 
+
+                binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(ContactUsActivity.this, HomeActivity.class));
+
+                break;
 
             case R.id.nav_logout:
                 isLoginWitch();

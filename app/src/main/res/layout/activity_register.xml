@@ -228,7 +228,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
 
-
+android:inputType="textPassword"
                                         android:background="@android:color/transparent"
                                         android:gravity="right" />
                                 </com.google.android.material.textfield.TextInputLayout>

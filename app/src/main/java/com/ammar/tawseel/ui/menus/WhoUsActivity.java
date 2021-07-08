@@ -1,6 +1,7 @@
-package com.ammar.tawseel.ui;
+package com.ammar.tawseel.ui.menus;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -8,11 +9,16 @@ import androidx.fragment.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +28,8 @@ import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
-import com.ammar.tawseel.ui.home.HomeActivity;
+import com.ammar.tawseel.ui.ContactUsActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
-import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -36,12 +41,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WhoUsActivity extends AppCompatActivity implements View.OnClickListener{
+public class WhoUsActivity extends AppCompatActivity implements View.OnClickListener {
     ShardEditor shardEditor;
     APIInterFace apiInterFace;
     ActivityWhoUsBinding binding;
     CircleImageView imgProfile;
     TextView tv_nam;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +73,17 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
         loadDataProfile();
         openDraw();
     }
+
+    ProgressBar nav_progress;
+    TextView tv_logout;
+
     @SuppressLint("SetTextI18n")
     private void inItView() {
         TextView tv_userProfil = findViewById(R.id.nav_userProfil);
-        TextView tv_logout = findViewById(R.id.nav_logout);
+        tv_logout = findViewById(R.id.nav_logout);
 
         imgProfile = findViewById(R.id.profile_image);
+        nav_progress = findViewById(R.id.nav_logout_pro);
         TextView tv_rates = findViewById(R.id.tv_rates);
         TextView tv_order = findViewById(R.id.nav_order);
         TextView tv_sitting = findViewById(R.id.tv_sitting);
@@ -82,7 +93,8 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
         TextView tv_shar = findViewById(R.id.tv_shar);
         TextView tv_rate = findViewById(R.id.tv_rate);
         tv_nam = findViewById(R.id.tv_name_user);
-
+        TextView tv_home = findViewById(R.id.tv_home);
+        tv_home.setOnClickListener(this);
         tv_userProfil.setOnClickListener(this);
         tv_logout.setOnClickListener(this);
         tv_order.setOnClickListener(this);
@@ -152,6 +164,8 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
 
         });
     }
+
+
     @SuppressLint("WrongConstant")
     @Override
     public void onClick(View v) {
@@ -166,9 +180,11 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
 
 
             case R.id.nav_logout:
+                tv_logout.setVisibility(View.GONE);
+                nav_progress.setVisibility(View.VISIBLE);
                 isLoginWitch();
 
-                binding.draw.closeDrawer(Gravity.START);
+
                 break;
             case R.id.nav_order:
 
@@ -225,19 +241,67 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
 
         }
     }
+
     private void isLoginWitch() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.
-                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                build();
 
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInClient.signOut();
+        Call<APIResponse.LogOutResponse> call = apiInterFace.logOut("Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+        call.enqueue(new Callback<APIResponse.LogOutResponse>() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onResponse(Call<APIResponse.LogOutResponse> call, Response<APIResponse.LogOutResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
 
-        LoginManager.getInstance().logOut();
+                        GoogleSignInOptions gso = new GoogleSignInOptions.
+                                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                                build();
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(WhoUsActivity.this, gso);
+                        googleSignInClient.signOut();
+                        LoginManager.getInstance().logOut();
 
-        shardEditor.logOut();
+                        binding.draw.closeDrawer(Gravity.START);
+                        shardEditor.logOut();
+
+                    }
+                } else {
+                    LayoutInflater inflater = LayoutInflater.from(WhoUsActivity.this);
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(WhoUsActivity.this)
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse.LogOutResponse> call, Throwable t) {
+                tv_logout.setVisibility(View.VISIBLE);
+                nav_progress.setVisibility(View.GONE);
+            }
+        });
+
 
     }
+
     private void loadData() {
 
         Call<APIResponse.WhoUsResponse> call = apiInterFace.WhoUs("application/json",

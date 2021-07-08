@@ -6,75 +6,53 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ammar.tawseel.R;
-import com.ammar.tawseel.adapters.AdapterChatePage;
-import com.ammar.tawseel.adapters.AdapterMessages;
 import com.ammar.tawseel.adapters.AdapterNotification;
-import com.ammar.tawseel.adapters.AdapterNotiyLasted;
 import com.ammar.tawseel.adapters.NotificationAdapter2;
 import com.ammar.tawseel.databinding.FragmentNotifecationBinding;
 import com.ammar.tawseel.editor.ShardEditor;
-import com.ammar.tawseel.helper.RecyclerHelperToutchNotyLast;
-import com.ammar.tawseel.helper.RecyclerItemTouchHelper;
-import com.ammar.tawseel.helper.RecyclerItemTouchNotification;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.data.DataNotification;
 import com.ammar.tawseel.pojo.data.ModelNotifyDate;
 import com.ammar.tawseel.pojo.response.APIResponse;
-import com.ammar.tawseel.ui.ConfirmActivity;
-import com.ammar.tawseel.ui.OrdersActivity;
-import com.ammar.tawseel.ui.RatingUsersActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.ContentValues.TAG;
 
 public class NotifecationFragment extends Fragment implements  AdapterNotification.OnclickMessage, NotificationAdapter2.OnclickMessage {
 
@@ -120,7 +98,7 @@ public class NotifecationFragment extends Fragment implements  AdapterNotificati
 
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notifecation, container, false);
-
+        binding.rvListNotifyToday.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         if (Cemmon.isNetworkOnline(getActivity())) {
 
             if (binding.layoutLocationInternet.getVisibility() == View.VISIBLE) {
@@ -275,7 +253,7 @@ public class NotifecationFragment extends Fragment implements  AdapterNotificati
                         Log.e("fffffffffffffff", datesByDay1.toString());
 
                         adapter2.addMore(datesByDay1);
-                        binding.rvListNotifyToday.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
                         binding.rvListNotifyToday.setAdapter(adapter2);
                         binding.layoutProgress.setVisibility(View.GONE);
                         binding.homeContant.setVisibility(View.VISIBLE);
@@ -283,7 +261,36 @@ public class NotifecationFragment extends Fragment implements  AdapterNotificati
 
 
                 } else if (response.code() == 401) {
-                    shardEditor.logOut();
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+
+
+
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
                 }
 
             }
@@ -486,11 +493,12 @@ listlastnew.clear();
             @Override
             public void onResponse(@NonNull Call<APIResponse.ResponseDeleteChat> call, @NonNull Response<APIResponse.ResponseDeleteChat> response) {
                 if (response.code() == 200) {
-                    loadDataNotification(page+"");
+
                     binding.layoutProgress.setVisibility(View.GONE);
                     binding.homeContant.setVisibility(View.VISIBLE);
                     if (response.body().getStatus()) {
 
+                       // loadDataNotification(page+"");
                         Snackbar snackbar = Snackbar
                                 .make(binding.coordinatorLayout, target + getString(R.string.delete_from_noty), Snackbar.LENGTH_LONG);
 

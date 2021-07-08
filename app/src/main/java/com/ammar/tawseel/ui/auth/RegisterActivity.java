@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,12 +12,10 @@ import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
@@ -26,22 +23,9 @@ import com.ammar.tawseel.databinding.ActivityRegisterBinding;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
-import com.ammar.tawseel.pojo.data.DataUser;
 import com.ammar.tawseel.pojo.response.APIResponse;
-import com.ammar.tawseel.ui.EditeProfilActivity;
-import com.ammar.tawseel.ui.PrivacyPolicyActivity;
 import com.ammar.tawseel.ui.PrivacyPolicyActivityTwo;
-import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
-import com.facebook.CallbackManager;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;

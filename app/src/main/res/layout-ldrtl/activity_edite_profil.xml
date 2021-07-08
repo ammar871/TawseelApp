@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:layout_gravity="start"
         android:id="@+id/draw"
-        tools:context=".ui.EditeProfilActivity">
+        tools:context=".ui.menus.EditeProfilActivity">
         <RelativeLayout
             android:layout_gravity="center"
             android:visibility="gone"

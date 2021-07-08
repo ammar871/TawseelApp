@@ -22,12 +22,10 @@ import android.widget.Toast;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivityForgetPasswordBinding;
-import com.ammar.tawseel.databinding.ActivityForgetPasswordBindingImpl;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
-import com.ammar.tawseel.ui.PrivacyPolicyActivity;
 import com.ammar.tawseel.ui.PrivacyPolicyActivityTwo;
 import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;

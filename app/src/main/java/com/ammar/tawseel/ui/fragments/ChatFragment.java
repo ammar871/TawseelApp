@@ -203,47 +203,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
             }
 
-//        binding.scroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//
-//                if(scrollY == 0){
-//                    binding.proBarPag.setVisibility(View.VISIBLE);
-//                    if (list.size() > 0) {
-//
-//                        page++;
-//
-//
-//                        getDataWithPagination(page);
-//
-//
-//                    }else {
-//                        binding.proBarPag.setVisibility(View.GONE);
-//                        Toast.makeText(getActivity(), "Not Data", Toast.LENGTH_SHORT).show();
-//                    }
-//                    Log.d("ProductFragment","top");
-//                }
-//
-////                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-////                    binding.proBarPag.setVisibility(View.VISIBLE);
-////                    if (list.size() > 0) {
-////
-////                        page++;
-////
-////
-////                        getDataWithPagination(page);
-////
-////
-////                    }else {
-////                        binding.proBarPag.setVisibility(View.GONE);
-////                        Toast.makeText(getActivity(), "Not Data", Toast.LENGTH_SHORT).show();
-////                    }
-////
-////
-////
-////                }
-//            }
-//        });
+
             binding.toggls.setOnClickListener((View.OnClickListener) v -> {
 
                 DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.draw);
@@ -597,8 +557,6 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                         //   adapterChatePage = new AdapterChatePage(list, getActivity(), image);
                         refreshAdpter(adapterChatePage, list);
                         adapterChatePage.notifyItemInserted(list.size());
-
-
 
 
                         binding.scrollView.post(new Runnable() {
@@ -970,9 +928,10 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                                 }
                                 phones.close();
                             }
-                          //  Log.d("Number", phoneNumber);
+                              Log.d("Number", phoneNumber);
+                            String contact=name +","+phoneNumber;
                             if (phoneNumber != null)
-                                callSendTwoMessage(to, "contact", phoneNumber);
+                                callSendTwoMessage(to, "contact",contact);
                         }
                     }
                     cur.close();
@@ -1082,7 +1041,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
                             @Override
                             public void startPlaying(MediaPlayer mediaPlayer1, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
-                                startPlayingDriver(mediaPlayer1,seekBarThier,txt_audio_time_thier,iconplaeThere,p,p2);
+                                startPlayingDriver(mediaPlayer1, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2);
 
                             }
 
@@ -1114,6 +1073,34 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                     } else {
                         Log.d("rrrdxc", "onResponse: " + response.body().getMessage().get(0));
                     }
+                } else if (response.code() == 401) {
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
                 }
             }
 
@@ -1163,7 +1150,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
                                 @Override
                                 public void startPlaying(MediaPlayer mediaPlayer1, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
-                                    startPlayingDriver(mediaPlayer1,seekBarThier,txt_audio_time_thier,iconplaeThere,p,p2);
+                                    startPlayingDriver(mediaPlayer1, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2);
 
                                 }
 
@@ -1177,7 +1164,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
                                 @Override
                                 public void startPlaying(MediaPlayer mediaPlayer1, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
-                                    startPlayingDriver(mediaPlayer1,seekBarThier,txt_audio_time_thier,iconplaeThere, p, p);
+                                    startPlayingDriver(mediaPlayer1, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p);
 
                                 }
 
@@ -1213,8 +1200,34 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                         binding.progress.setVisibility(View.GONE);
                         Log.d("rrrdxc", "onResponse: " + response.body().getMessage().get(0));
                     }
-                }else if (response.code()==401){
-                    shardEditor.logOut();
+                } else if (response.code() == 401) {
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
                 }
 
             }
@@ -1323,13 +1336,13 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                             binding.scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                 @Override
                                 public void onGlobalLayout() {
-                                    final int scrollViewHeight =  binding.scrollView.getHeight();
+                                    final int scrollViewHeight = binding.scrollView.getHeight();
                                     if (scrollViewHeight > 0) {
                                         binding.scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                                        final View lastView =  binding.scrollView.getChildAt( binding.scrollView.getChildCount() - 1);
-                                        final int lastViewBottom = lastView.getBottom() +  binding.scrollView.getPaddingBottom();
-                                        final int deltaScrollY = lastViewBottom - scrollViewHeight -  binding.scrollView.getScrollY();
+                                        final View lastView = binding.scrollView.getChildAt(binding.scrollView.getChildCount() - 1);
+                                        final int lastViewBottom = lastView.getBottom() + binding.scrollView.getPaddingBottom();
+                                        final int deltaScrollY = lastViewBottom - scrollViewHeight - binding.scrollView.getScrollY();
                                         /* If you want to see the scroll animation, call this. */
                                         binding.scrollView.smoothScrollBy(0, deltaScrollY);
                                         /* If you don't want, call this. */
@@ -1380,14 +1393,14 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
     public void refreshAdpter(AdapterChatePage adapterChatePagep, ArrayList<Message> list) {
 
         if (list.size() > 1) {
-            adapterChatePagep = new AdapterChatePage(list, getActivity(), image,this);
+            adapterChatePagep = new AdapterChatePage(list, getActivity(), image, this);
             //Removed SmoothScroll form here
             adapterChatePagep.notifyDataSetChanged();
             binding.rvChat.setAdapter(adapterChatePagep);
 
         } else {
 
-            adapterChatePagep = new AdapterChatePage(list, getActivity(), image,this);
+            adapterChatePagep = new AdapterChatePage(list, getActivity(), image, this);
             binding.rvChat.setAdapter(adapterChatePagep);
         }
     }
@@ -1511,7 +1524,6 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
     }
 
 
-
     Runnable run;
     private Handler myHandler = new Handler();
 
@@ -1531,10 +1543,9 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
     }
 
 
-
     @Override
-    public void startPlaying(MediaPlayer mediaPlayer,SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
-        startPlayingDriver(mediaPlayer,seekBarThier,txt_audio_time_thier,iconplaeThere,p,p2);
+    public void startPlaying(MediaPlayer mediaPlayer, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
+        startPlayingDriver(mediaPlayer, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2);
 
     }
 
@@ -1562,7 +1573,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
 
                             @Override
-                            public void startPlaying(MediaPlayer mediaPlayer,SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
+                            public void startPlaying(MediaPlayer mediaPlayer, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
                             }
                         }, response.body().getData().getDriver().getAvatar());
                         binding.rvChat.setAdapter(adapterChatePage);
@@ -1659,7 +1670,6 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
         binding.proBarIm.setProgress(100);
         Log.d("hahmyyyyyyyyyy", "onError: " + "end");
     }
-
 
 
     ;

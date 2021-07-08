@@ -3,8 +3,6 @@ package com.ammar.tawseel.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +20,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
-import com.ammar.tawseel.helper.RecyclerItemTouchNotification;
 import com.ammar.tawseel.pojo.data.DataNotification;
 import com.ammar.tawseel.ui.ConfirmActivity;
-import com.ammar.tawseel.ui.OrdersActivity;
-import com.ammar.tawseel.ui.RatingUsersActivity;
+import com.ammar.tawseel.ui.menus.OrdersActivity;
+import com.ammar.tawseel.ui.menus.RatingUsersActivity;
 import com.ammar.tawseel.ui.fragments.DetailesActivity;
 import com.ammar.tawseel.ui.fragments.FatoraFragment;
 

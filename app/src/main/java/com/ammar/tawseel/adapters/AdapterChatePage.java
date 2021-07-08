@@ -206,13 +206,26 @@ public class AdapterChatePage extends RecyclerView.Adapter {
     }
 
     private void onBindContact(@NonNull ViewHolderContact holder, int position) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy HH:mm a",
+                new Locale("en"));
+
+        Date d = null;
+
         ViewHolderContact viewHolderContact = holder;
 
         if (list.get(position).getSenderType().equals("user")) {
             {
                 viewHolderContact.thierMessag.setVisibility(View.GONE);
                 viewHolderContact.myMessage.setVisibility(View.VISIBLE);
+                try {
+                    d = input.parse(list.get(position).getCreatedAt());
 
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String formatted = output.format(d);
+                viewHolderContact.dateme.setText(formatted);
                 viewHolderContact.bodyMeMessage.setText(list.get(position).getMessage() + "");
                 viewHolderContact.bodyMeMessage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -232,7 +245,14 @@ public class AdapterChatePage extends RecyclerView.Adapter {
 
             viewHolderContact.thierMessag.setVisibility(View.VISIBLE);
             viewHolderContact.myMessage.setVisibility(View.GONE);
+            try {
+                d = input.parse(list.get(position).getCreatedAt());
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String formatted = output.format(d);
+            viewHolderContact.dateTheir.setText(formatted);
             viewHolderContact.bodyTheirMessage.setText(list.get(position).getMessage() + "");
             viewHolderContact.bodyTheirMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -252,12 +272,15 @@ public class AdapterChatePage extends RecyclerView.Adapter {
     }
 
     private void CallNumber(String message) {
+        final String[] tokens = message.split(",");
+        String phone=tokens[1];
+
         final AlertDialog.Builder alert = new AlertDialog.Builder(mcontext);
         alert.setMessage(R.string.are_you_sur_call);
         alert.setPositiveButton(R.string.call, (dialog, which) -> {
-
+            Log.d("sdfghjkl", "CallNumber: "+phone);
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" + message));//change the number
+            callIntent.setData(Uri.parse("tel:" + phone));//change the number
             mcontext.startActivity(callIntent);
         });
         alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -763,10 +786,14 @@ public class AdapterChatePage extends RecyclerView.Adapter {
         }
     }
 
+
+
+
     public static class ViewHolderContact extends RecyclerView.ViewHolder {
 
+
         CircleImageView imageViewme, imageViewthier;
-        TextView bodyMeMessage, bodyTheirMessage, date;
+        TextView bodyMeMessage, bodyTheirMessage, dateme, dateTheir;
 
         public RelativeLayout myMessage, layoutAudiome, getLayoutAudioThere;
         public RelativeLayout thierMessag;
@@ -776,6 +803,8 @@ public class AdapterChatePage extends RecyclerView.Adapter {
             super(itemView);
 
             thierMessag = itemView.findViewById(R.id.their_messagec);
+            dateme = itemView.findViewById(R.id.date_body_mec);
+            dateTheir = itemView.findViewById(R.id.date_body_therec);
             myMessage = itemView.findViewById(R.id.myMessagec);
             bodyMeMessage = itemView.findViewById(R.id.message_bodymec);
             imageViewme = itemView.findViewById(R.id.imageView1mec);

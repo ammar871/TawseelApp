@@ -1,6 +1,7 @@
-package com.ammar.tawseel.ui;
+package com.ammar.tawseel.ui.menus;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -8,21 +9,27 @@ import androidx.fragment.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.databinding.ActivityPrivacyPolicyBinding;
-import com.ammar.tawseel.databinding.ActivityWhoUsBinding;
 import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.ContactUsActivity;
+import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,12 +42,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnClickListener{
+public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnClickListener {
     ShardEditor shardEditor;
     APIInterFace apiInterFace;
     ActivityPrivacyPolicyBinding binding;
     CircleImageView imgProfile;
     TextView tv_nam;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +74,15 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
         loadDataProfile();
         openDraw();
     }
+    ProgressBar nav_progress;
+    TextView tv_logout;
     @SuppressLint("SetTextI18n")
     private void inItView() {
         TextView tv_userProfil = findViewById(R.id.nav_userProfil);
-        TextView tv_logout = findViewById(R.id.nav_logout);
+        tv_logout = findViewById(R.id.nav_logout);
 
         imgProfile = findViewById(R.id.profile_image);
+        nav_progress = findViewById(R.id.nav_logout_pro);
         TextView tv_rates = findViewById(R.id.tv_rates);
         TextView tv_order = findViewById(R.id.nav_order);
         TextView tv_sitting = findViewById(R.id.tv_sitting);
@@ -81,7 +92,8 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
         TextView tv_shar = findViewById(R.id.tv_shar);
         TextView tv_rate = findViewById(R.id.tv_rate);
         tv_nam = findViewById(R.id.tv_name_user);
-
+        TextView tv_home = findViewById(R.id.tv_home);
+        tv_home.setOnClickListener(this);
         tv_userProfil.setOnClickListener(this);
         tv_logout.setOnClickListener(this);
         tv_order.setOnClickListener(this);
@@ -151,6 +163,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
         });
     }
+
     @SuppressLint("WrongConstant")
     @Override
     public void onClick(View v) {
@@ -162,12 +175,22 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
                 binding.draw.closeDrawer(Gravity.START);
                 break;
+            case R.id.tv_home:
 
-
-            case R.id.nav_logout:
-                isLoginWitch();
 
                 binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(PrivacyPolicyActivity.this, HomeActivity.class));
+
+                break;
+
+            case R.id.nav_logout:
+
+                nav_progress.setVisibility(View.VISIBLE);
+                tv_logout.setVisibility(View.GONE);
+                isLoginWitch();
+
+
                 break;
             case R.id.nav_order:
                 startActivity(new Intent(PrivacyPolicyActivity.this, RatingUsersActivity.class));
@@ -224,19 +247,68 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
         }
     }
+
     private void isLoginWitch() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.
-                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                build();
 
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInClient.signOut();
+        Call<APIResponse.LogOutResponse> call = apiInterFace.logOut("Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
+        call.enqueue(new Callback<APIResponse.LogOutResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse.LogOutResponse> call, Response<APIResponse.LogOutResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
+                        GoogleSignInOptions gso = new GoogleSignInOptions.
+                                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                                build();
 
-        LoginManager.getInstance().logOut();
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(PrivacyPolicyActivity.this, gso);
+                        googleSignInClient.signOut();
 
-        shardEditor.logOut();
+                        LoginManager.getInstance().logOut();
+                        binding.draw.closeDrawer(Gravity.START);
+                        shardEditor.logOut();
+                    }
+
+                } else {
+                    LayoutInflater inflater = LayoutInflater.from(PrivacyPolicyActivity.this);
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(PrivacyPolicyActivity.this)
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse.LogOutResponse> call, Throwable t) {
+               nav_progress.setVisibility(View.GONE);
+                tv_logout.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
+
     private void loadData() {
 
         Call<APIResponse.PoeloyProxyResponse> call = apiInterFace.poeloyProxyResponse("application/json",
@@ -259,7 +331,6 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
                     shardEditor.logOut();
                 }
-
 
 
             }

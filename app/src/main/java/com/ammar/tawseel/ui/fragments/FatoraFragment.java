@@ -1,13 +1,17 @@
 package com.ammar.tawseel.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -125,7 +129,36 @@ public class FatoraFragment extends Fragment {
 
 
                 }else if (response.code() == 401) {
-                    shardEditor.logOut();
+                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+                    View view = inflater.inflate(R.layout.dialog_logout, null);
+
+
+
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                            .setView(view)
+                            .create();
+                    alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog1.show();
+
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            shardEditor.logOut();
+
+                            alertDialog1.dismiss();
+                        }
+                    }.start();
+
+
                 }
 
             }
