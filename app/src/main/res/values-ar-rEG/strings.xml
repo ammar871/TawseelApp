@@ -154,4 +154,9 @@
     <string name="select_loca">اختار الموقع</string>
     <string name="send_to_email">تم ارسال الرسالة الى بريدك الاكترونى</string>
     <string name="enter_phon">اكتب رقم الموبايل</string>
+    <string name="send_message">تم ارسال رسالتك</string>
+    <string name="please_fill_info">من فضلك أدخل التفاصيل الخاصة بك</string>
+    <string name="rated">تم التقييم</string>
+    <string name="not_whats">ليس لديه واتس</string>
+    <string name="delete_from_noty">تم حذفه من قائمة الاشعارات</string>
 </resources>

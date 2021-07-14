@@ -3,6 +3,7 @@ package com.ammar.tawseel.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.tawseel.R;
 import com.ammar.tawseel.pojo.data.DataNotification;
 import com.ammar.tawseel.ui.ConfirmActivity;
+import com.ammar.tawseel.ui.fragments.DetailesActivity;
+import com.ammar.tawseel.ui.fragments.FatoraFragment;
+import com.ammar.tawseel.ui.menus.OrdersActivity;
+import com.ammar.tawseel.ui.menus.RatingUsersActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.ViewHolderVidio> {
 
@@ -64,8 +72,10 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVidio holder, final int position) {
 
+
+
         @SuppressLint("SimpleDateFormat") SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy",new Locale("en"));
 
         Date d = null;
 
@@ -81,17 +91,29 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
 
 
         if (list.get(position).getType().equals("new-bill")) {
-            holder.name_notiy.setText("فاتورةجدیدةرقم ");
+            holder.name_notiy.setText(R.string.new_bill);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 0);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", list.get(position).getTarget() + "");
+                    FatoraFragment category = new FatoraFragment();
+                    category.setArguments(bundle);
+
+                    ((AppCompatActivity) mcontext).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.layout_view, category)
+                            .addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+
                 }
             });
         } else if (list.get(position).getType().equals("deliver-order")) {
 
-            holder.name_notiy.setText("اشعارطلب توصیل للطلب رقم ");
+            holder.name_notiy.setText(R.string.noty_delviry_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,61 +125,66 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
             });
 
         } else if (list.get(position).getType().equals("deliver-confirm")) {
-            holder.name_notiy.setText("لقد تم توصيل طلبك  ");
+            holder.name_notiy.setText(R.string.deliverd_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 2);
+                    mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
         } else if (list.get(position).getType().equals("accept-order")) {
-            holder.name_notiy.setText("تم تأكید طلب المراسلة" + list.get(position).getTarget() + "  للطلب من قبل مندوب التوصیل  ");
+            holder.name_notiy.setText(R.string.accept_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 3);
+                    mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
         } else if (list.get(position).getType().equals("refuse-order")) {
 
-            holder.name_notiy.setText( "تم رفض طلب المراسلة للطلب   " + list.get(position).getTarget() +"من قبل مندوب التوصيل");
+            holder.name_notiy.setText( R.string.refuse_order);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 4);
+                    mcontext.startActivity(new Intent(mcontext, OrdersActivity.class));
                 }
             });
 
         } else if (list.get(position).getType().equals("user-add-rate")) {
-            holder.name_notiy.setText("تم تقییم السائق: ");
+            holder.name_notiy.setText(R.string.rate_dliviry);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 5);
+                    mcontext.startActivity(new Intent(mcontext, RatingUsersActivity.class));
                 }
             });
         } else if (list.get(position).getType().equals("paid-bill")) {
-            holder.name_notiy.setText("تم دفع فاتورةرقم");
+            holder.name_notiy.setText(R.string.paid_bill_);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 6);
+                    Intent intent = new Intent(mcontext, DetailesActivity.class);
+                    intent.putExtra("idBill", list.get(position).getParams());
+                    mcontext.startActivity(intent);
                 }
             });
         } else if (list.get(position).getType().equals("cancel-bill")) {
-            holder.name_notiy.setText("تم الغاء فاتورة رقم :");
+            holder.name_notiy.setText(R.string.cancel_bill);
             holder.desc_noty.setText(list.get(position).getTarget() + "");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 7);
+
+                    Intent intent = new Intent(mcontext, DetailesActivity.class);
+                    intent.putExtra("idBill", list.get(position).getParams());
+                    mcontext.startActivity(intent);
                 }
             });
         }
@@ -173,12 +200,13 @@ public class AdapterNotiyLasted extends RecyclerView.Adapter<AdapterNotiyLasted.
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onclickMessage.itemOnclickNewBill(list.get(position), 8);
+
                 }
             });
         }else {
             holder.name_notiy.setText(list.get(position).getTarget() + "");
         }
+
 
     }
 

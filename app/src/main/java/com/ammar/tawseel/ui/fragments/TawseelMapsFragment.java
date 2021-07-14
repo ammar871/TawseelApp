@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatRatingBar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -43,6 +44,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -210,7 +212,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         return binding.getRoot();
     }
 
-//    private void getDataRx() {
+    //    private void getDataRx() {
 //        viewModelCategories.getDrivers(  "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
 //                shardEditor.loadData().get(ShardEditor.KEY_LANG),
 //                "application/json");
@@ -225,6 +227,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 //
 //    }
     SupportMapFragment mapFragment;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -297,18 +300,6 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         }
     }
 
-    public int getProgressPercentage(long currentDuration, long totalDuration) {
-        Double percentage = (double) 0;
-
-        long currentSeconds = (int) (currentDuration / 100);
-        long totalSeconds = (int) (totalDuration / 100);
-
-        // calculating percentage
-        percentage = (((double) currentSeconds) / totalSeconds) * 100;
-
-        // return percentage
-        return percentage.intValue();
-    }
 
     private void setApplicationDrivers(double latitude,
                                        double longitude,
@@ -330,34 +321,34 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                     }
                     binding.progressMapsearsh.setVisibility(View.GONE);
                     binding.layoyutMaping.setVisibility(View.VISIBLE);
-                    listDrivers.clear();
+
 
                     assert response.body() != null;
                     if (response.body().getStatus()) {
 
                         binding.progressMapsearsh.setVisibility(View.GONE);
                         binding.layoyutMaping.setVisibility(View.VISIBLE);
+                        Log.d("latlanlllllg", "onResponse: " + response.body().getData().size());
                         if (response.body().getData().size() > 0) {
 
 
-                            for (int i = 0; i < listDrivers.size(); i++) {
+                            for (int i = 0; i < response.body().getData().size(); i++) {
                                 id = response.body().getData().get(i).getId().toString();
+                                double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
 
-                                if (listDrivers.get(i).getGpsLat() != null &&
-                                        listDrivers.get(i).getGpsLng() != null) {
-
+                                double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
+                                LatLng latLng = new LatLng(lat, lang);
+                                if (response.body().getData().get(i).getGpsLat() != null &&
+                                        response.body().getData().get(i).getGpsLng() != null) {
 
 
                                     MarkerOptions markerOptions;
 
                                     if (map != null && getActivity() != null) {
-                                        if (listDrivers.get(i).getStatus().equals("off")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
-                                            Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
-                                            LatLng latLng = new LatLng(lat, lang);
+                                        if (response.body().getData().get(i).getStatus().equals("off")) {
+
                                             googleMapOff = map;
-                                            Log.d(";;;;;;;;;;;;;;;", "onResponse: "+Cemmon.BASE_URL + response.body().getData().get(i).getAvatar());
+                                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + Cemmon.BASE_URL + response.body().getData().get(i).getAvatar());
 //
 //                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
 //                                                    bitmapDescriptorFromVector(R.drawable.ic_off)));
@@ -368,13 +359,10 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 //                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
 //                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                            createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"off",Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED,googleMapOff);
+                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "off", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.RED, googleMapOff);
 
-                                        } else if (listDrivers.get(i).getStatus().equals("on")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
-                                            Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
-                                            LatLng latLng = new LatLng(lat, lang);
+                                        } else if (response.body().getData().get(i).getStatus().equals("on")) {
+
                                             googleMapOn = map;
 
 //                                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
@@ -382,27 +370,21 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 //                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
 //                                                                 Color.GREEN))));
 
-                                            createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"on",Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.GREEN,googleMapOn);
-
+                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "on", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GREEN, googleMapOn);
 
 
 //                                            marker.setTag(listDrivers.get(i).getId() + "");
 
                                         } else if (listDrivers.get(i).getStatus().equals("busey")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
-                                            Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
-                                            LatLng latLng = new LatLng(lat, lang);
-                                            int posstion = i;
+
                                             googleMapBusey = map;
 //                                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
 //                                                    BitmapDescriptorFactory.fromBitmap(
 //                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
 //                                                                Color.GRAY))));
 //                                            marker.setTag(listDrivers.get(i).getId() + "");
-
-                                            createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"busy"
-                                                    ,Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.GRAY,googleMapBusey);
+                                            Log.d("busey", "onResponse: " + "1");
+                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "busey", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GREEN, googleMapBusey);
 
 
 //                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
@@ -665,98 +647,119 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
         alertDialog.show();
     }
+
     @Override
     public void onStart() {
         super.onStart();
     }
+
     String id;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
+
+
             map = googleMap;
             Double lat = new Double(latitude);
             Double lng = new Double(longitude);
             if (lat != null && lng != null) {
                 Log.d("latLang", "onMapReady: " + lat + lng);
             }
-            showDriversOnTheMap(googleMap, lat, lng);
+            Thread thread = new Thread() {
+
+            };
+            showDriversOnTheMap(map, lat, lng);
 
         }
     };
 
 
+    private Bitmap drawBitmapBorder(Bitmap bitmap, int color) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
 
+        int radius = Math.min(h / 2, w / 2);
+        Bitmap output = Bitmap.createBitmap(w + 18, h + 18, Bitmap.Config.ARGB_8888);
 
+        Paint p = new Paint();
+        p.setAntiAlias(true);
 
-   private Bitmap drawBitmapBorder(Bitmap bitmap,int color){
-       int w = bitmap.getWidth();
-       int h = bitmap.getHeight();
+        Canvas c = new Canvas(output);
+        c.drawARGB(0, 0, 0, 0);
+        p.setStyle(Paint.Style.FILL);
 
-       int radius = Math.min(h / 2, w / 2);
-       Bitmap output = Bitmap.createBitmap(w + 18, h + 18, Bitmap.Config.ARGB_8888);
+        c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
 
-       Paint p = new Paint();
-       p.setAntiAlias(true);
+        p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
 
-       Canvas c = new Canvas(output);
-       c.drawARGB(0, 0, 0, 0);
-       p.setStyle(Paint.Style.FILL);
+        c.drawBitmap(bitmap, 4, 4, p);
+        p.setXfermode(null);
+        p.setStyle(Paint.Style.STROKE);
+        p.setColor(color);
+        p.setStrokeWidth(20);
+        c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
 
-       c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+        return output;
+    }
 
-       p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+    protected void createMarker(String id, double latitude, double longitude, String title, String imageUrl, int color, GoogleMap mapp) {
 
-       c.drawBitmap(bitmap, 4, 4, p);
-       p.setXfermode(null);
-       p.setStyle(Paint.Style.STROKE);
-       p.setColor(color);
-       p.setStrokeWidth(20);
-       c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+        Handler handler = new Handler(Looper.getMainLooper());
+        int x = 0;
+        long DELAY = 10;
 
-       return output;
-   }
-    protected void createMarker(String id,double latitude, double longitude, String title, String imageUrl,int color,GoogleMap map) {
-
-
-        View marker = ((LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_map, null);
+        View marker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_map, null);
 
         CircleImageView markerImage = (CircleImageView) marker.findViewById(R.id.user_dp);
-        markerImage.setImageURI(Uri.parse(imageUrl));
-        markerImage.setBorderColor(color);
+        CardView card = (CardView) marker.findViewById(R.id.card_color);
 
+        card.setCardBackgroundColor(color);
 
-        Glide.with(this)
-                .asBitmap()
-                .load(imageUrl).circleCrop()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap b, Transition<? super Bitmap> transition) {
-                        markerImage.setImageBitmap(b);
-                        DisplayMetrics displayMetrics = new DisplayMetrics();
-                        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                        marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-                        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
-                        marker.buildDrawingCache();
-                        Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-                        Canvas canvas = new Canvas(bitmap);
-                        marker.draw(canvas);
+        if (imageUrl != null) {
+            Glide.with(this)
+                    .asBitmap()
+                    .load(imageUrl)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap b, Transition<? super Bitmap> transition) {
+                            markerImage.setImageBitmap(b);
+                            DisplayMetrics displayMetrics = new DisplayMetrics();
+                            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                            marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+                            marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                            marker.buildDrawingCache();
+                            Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(bitmap);
+                            marker.draw(canvas);
 
-
-
-                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(new
-                                                    LatLng(latitude,longitude)).title(title)
-                                                   .icon(BitmapDescriptorFactory.fromBitmap(
+                            handler.postDelayed(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Marker marker = mapp.addMarker(new MarkerOptions().position(new
+                                                    LatLng(latitude, longitude)).title(title)
+                                                    .icon(BitmapDescriptorFactory.fromBitmap(
                                                             bitmap)));
                                             marker.setTag(id + "");
+                                        }
+                                    }, 3000);
 
 
-                    }
-                });
+                        }
+                    });
+
+        } else {
+            Bitmap icon = BitmapFactory.decodeResource(getActivity().getResources(),
+                    R.drawable.imagerat);
+            markerImage.setImageBitmap(icon);
+        }
+
 
     }
 
     private void showDriversOnTheMap(GoogleMap googleMap, Double lattud, Double lng) {
+
         Call<APIResponse.ResponseDrivers> call = apiInterFace.getDrivers(
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG),
@@ -779,71 +782,67 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                         binding.progressMap.setVisibility(View.GONE);
                         if (response.body().getData().size() > 0) {
                             listDrivers = (ArrayList<Driver>) response.body().getData();
-                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + response.body().getData().get(0).getAvatar());
+                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + response.body().getData().size());
 
-                            for (int i = 0; i < listDrivers.size(); i++) {
+                            for (int i = 0; i < response.body().getData().size(); i++) {
                                 id = response.body().getData().get(i).getId().toString();
 
-                                if (listDrivers.get(i).getGpsLat() != null &&
-                                        listDrivers.get(i).getGpsLng() != null) {
-
+                                if (response.body().getData().get(i).getGpsLat() != null &&
+                                        response.body().getData().get(i).getGpsLng() != null) {
 
 
                                     MarkerOptions markerOptions;
 
                                     if (map != null && getActivity() != null) {
-                                        if (listDrivers.get(i).getStatus().equals("off")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
+                                        if (response.body().getData().get(i).getStatus().equals("off")) {
+                                            double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
                                             Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
+                                            double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
                                             LatLng latLng = new LatLng(lat, lang);
                                             googleMapOff = map;
-                                            Log.d(";;;;;;;;;;;;;;;", "onResponse: "+Cemmon.BASE_URL + response.body().getData().get(i).getAvatar());
-//
-//                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-//                                                    bitmapDescriptorFromVector(R.drawable.ic_off)));
-//                                            marker.setTag(listDrivers.get(i).getId() + "");
+                                            Log.d(";;;;;;;;;;;;;;;", "onResponse: " + Cemmon.BASE_URL + response.body().getData().get(i).getAvatar());
 
-//                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-//                                                    BitmapDescriptorFactory.fromBitmap(
-//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
-//                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                     createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"off",Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED,googleMapOff);
+                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
+                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                        } else if (listDrivers.get(i).getStatus().equals("on")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
+                                    //        createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "off", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.RED, googleMapOff);
+
+                                        } else if (response.body().getData().get(i).getStatus().equals("on")) {
+                                            double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
                                             Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
+                                            double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
                                             LatLng latLng = new LatLng(lat, lang);
                                             googleMapOn = map;
 
-//                                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
-//                                                    BitmapDescriptorFactory.fromBitmap(
-//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
-//                                                                 Color.GREEN))));
+                                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+                                                                 Color.GREEN))));
 
-                                            createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"on",Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.GREEN,googleMapOn);
-
+                                    //        createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "on", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GREEN, googleMapOn);
 
 
 //                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                        } else if (listDrivers.get(i).getStatus().equals("busey")) {
-                                            double lat = Double.parseDouble(listDrivers.get(i).getGpsLat() + "");
+                                        } else if (response.body().getData().get(i).getStatus().equals("busey")) {
+
+                                            double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
                                             Log.d("latlang", "onResponse: " + lat);
-                                            double lang = Double.parseDouble(listDrivers.get(i).getGpsLng().toString().trim());
+                                            double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
                                             LatLng latLng = new LatLng(lat, lang);
-                                            int posstion = i;
-                                            googleMapBusey = map;
-//                                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
-//                                                    BitmapDescriptorFactory.fromBitmap(
-//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
-//                                                                Color.GRAY))));
-//                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                            createMarker(listDrivers.get(i).getId() + "",latLng.latitude,latLng.longitude,"busy"
-                                                    ,Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.GRAY,googleMapBusey);
+                                            googleMapBusey = map;
+                                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
+                                                    BitmapDescriptorFactory.fromBitmap(
+                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+                                                                    Color.GREEN))));
+                                            marker.setTag(listDrivers.get(i).getId() + "");
+
+//                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "busey"
+//                                                    , Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GRAY, map);
 
 
 //                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
@@ -1043,7 +1042,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     }
 
 
-    private Bitmap addBorder(Bitmap resource,int color, Context context) {
+    private Bitmap addBorder(Bitmap resource, int color, Context context) {
         int w = resource.getWidth();
         int h = resource.getHeight();
         int radius = Math.min(h / 2, w / 2);
@@ -1067,8 +1066,6 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     public static void createRoundMarker(Context context, String url) {
 
 
-
-
     }
 
     @SuppressLint("ResourceAsColor")
@@ -1077,7 +1074,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         CircleImageView markerImage = marker.findViewById(R.id.user_dp);
 
 
-            markerImage.setBorderColor(color);
+        markerImage.setBorderColor(color);
 
         Picasso.with(context).load(uri).placeholder(R.drawable.imge_test).into(markerImage);
 
@@ -1105,31 +1102,6 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         return bitmap;
     }
 
-    private static class ExampleAsyncTask extends AsyncTask<String, String, String> {
-
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-                URL url = new URL(strings[0]);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setDoInput(true);
-                conn.connect();
-                InputStream is = conn.getInputStream();
-                Bitmap bmImg = BitmapFactory.decodeStream(is);
-
-            } catch (IOException ignored) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d("llllllllllll", "onPostExecute: " + s);
-        }
-    }
 
 //
 

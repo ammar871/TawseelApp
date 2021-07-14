@@ -131,19 +131,6 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-
-        android:id="@+id/layout_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-    </FrameLayout>
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/home_contant"
         android:layout_width="match_parent"
@@ -161,6 +148,17 @@
 
             >
 
+                            <TextView
+                                android:id="@+id/tv_today"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginTop="@dimen/_10ssp"
+                                android:layout_marginRight="@dimen/_12sdp"
+                                android:fontFamily="@font/medium"
+                                android:text="@string/today"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_15ssp" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -175,8 +173,31 @@
                 android:visibility="visible">
 
             </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:id="@+id/other_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:fontFamily="@font/medium"
+                android:text="@string/today"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp" />
 
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_list_notify_last"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_marginRight="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="visible">
+
+            </androidx.recyclerview.widget.RecyclerView>
             <ProgressBar
                 android:visibility="gone"
                 android:layout_centerVertical="true"
@@ -187,13 +208,28 @@
                 android:layout_height="35dp"
 
                 android:indeterminate="true"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:indeterminateTint="@color/text_color"
                 android:outlineAmbientShadowColor="@color/text_color"
                 android:outlineSpotShadowColor="@color/text_color" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+
+        android:id="@+id/layout_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
 </RelativeLayout>
 
 

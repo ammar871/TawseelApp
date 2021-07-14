@@ -3,17 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_marker_view"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/user_dp"
-        android:layout_width="@dimen/_45ssp"
-        android:layout_height="@dimen/_45ssp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center_horizontal"
-        android:scaleType="centerCrop"
-        android:contentDescription="@null"
-        app:civ_border_width="@dimen/_1sdp" />
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+
+        app:cardCornerRadius="@dimen/_50ssp"
+        android:id="@+id/card_color"
+        android:layout_margin="@dimen/_3ssp"
+        >
+        <FrameLayout
+
+            android:background="@drawable/cirvle_layout"
+            android:layout_width="@dimen/_43ssp"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_43ssp">
+            <de.hdodenhof.circleimageview.CircleImageView
+
+                android:id="@+id/user_dp"
+                android:layout_width="@dimen/_40ssp"
+                android:layout_height="@dimen/_40ssp"
+
+
+
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:contentDescription="@null"
+                />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
 
 
 </RelativeLayout>

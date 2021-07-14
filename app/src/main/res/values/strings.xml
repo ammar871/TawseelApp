@@ -209,9 +209,10 @@
     <string name="enter_phon">Enter your phone</string>
     <string name="fill_details">Please fill in the information...</string>
     <string name="send_to_email">The message has been sent to your email.</string>
-    <string name="send_message">\"تم ارسال رسالتك \"</string>
-    <string name="please_fill_info">\"Please,,input your details \"</string>
-    <string name="rated">\"تم التقييم \"</string>
-    <string name="not_whats">\"ليس لديه واتس \"</string>
-    <string name="delete_from_noty">\" تم حذفه من قائمة الاشعارات \"</string>
+    <string name="send_message">Your message has been sent</string>
+    <string name="please_fill_info">"Please,,input your details "</string>
+    <string name="rated">rated</string>
+    <string name="delete_from_noty">It has been removed from the notification list</string>
+    <string name="not_whats">he doesn\'t have whatsapp</string>
+    <string name="try_again">فشل الارسال حاول مرة أخرى</string>
 </resources>

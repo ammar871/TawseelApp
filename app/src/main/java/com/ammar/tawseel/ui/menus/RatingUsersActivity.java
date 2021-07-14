@@ -113,7 +113,7 @@ public class RatingUsersActivity extends AppCompatActivity implements View.OnCli
 
         Call<APIResponse.ResponseRating> call = apiInterFace.getRating(page + "", "application/json",
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
-                "ar"
+                Cemmon.LONG_USER
         );
         call.enqueue(new Callback<APIResponse.ResponseRating>() {
             @Override
@@ -121,16 +121,11 @@ public class RatingUsersActivity extends AppCompatActivity implements View.OnCli
                                    @NonNull Response<APIResponse.ResponseRating> response) {
 
                 if (response.code() == 200) {
+                    binding.proBarPagFinshid.setVisibility(View.GONE);
                     assert response.body() != null;
                     list.addAll(response.body().getRatings());
                     adapterRatinge = new AdapterRatinge(list,
-                            RatingUsersActivity.this, new AdapterRatinge.OnclickMessage() {
-                        @Override
-                        public void itemOnclickNewRating(Rating dataNotification) {
-                            showDialogUpdateRating(dataNotification);
-
-                        }
-                    });
+                            RatingUsersActivity.this, dataNotification -> showDialogUpdateRating(dataNotification));
                     binding.rvRatings.setAdapter(adapterRatinge);
 
 
@@ -268,7 +263,7 @@ public class RatingUsersActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.nav_order:
 
-                startActivity(new Intent(RatingUsersActivity.this, RatingUsersActivity.class));
+                startActivity(new Intent(RatingUsersActivity.this, OrdersActivity.class));
                 binding.draw.closeDrawer(Gravity.START);
 
                 break;
@@ -506,6 +501,7 @@ public class RatingUsersActivity extends AppCompatActivity implements View.OnCli
         });
         builder.setCancelable(true);
         alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
 
     }

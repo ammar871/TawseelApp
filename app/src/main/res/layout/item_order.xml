@@ -205,7 +205,7 @@ android:id="@+id/tv_fatora"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/imge_detail_order"
@@ -216,7 +216,7 @@ android:id="@+id/tv_fatora"
         android:scaleType="fitEnd"/>
     <RelativeLayout
         app:layout_constraintTop_toTopOf="@id/imge_detail_order"
-        app:layout_constraintRight_toLeftOf="@id/imge_detail_order"
+        app:layout_constraintStart_toEndOf="@id/imge_detail_order"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
@@ -227,8 +227,8 @@ android:id="@+id/tv_fatora"
             android:id="@+id/tv_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_alignParentRight="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_alignParentStart="true"
 
 
             android:drawablePadding="@dimen/_4sdp"
@@ -247,12 +247,12 @@ android:id="@+id/tv_fatora"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
 
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_toLeftOf="@id/tv_from"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_toEndOf="@id/tv_from"
 android:id="@+id/tv_place_from"
             android:fontFamily="@font/medium"
 
-            android:text="مكة المكرمة - حي الاسراء"
+            android:text=""
             android:textAllCaps="false"
             android:textColor="@color/login_color2"
             android:textSize="@dimen/_11sdp" />
@@ -261,7 +261,7 @@ android:id="@+id/tv_place_from"
 
     <RelativeLayout
         app:layout_constraintBottom_toBottomOf="@id/imge_detail_order"
-        app:layout_constraintRight_toLeftOf="@id/imge_detail_order"
+        app:layout_constraintStart_toEndOf="@id/imge_detail_order"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
@@ -272,8 +272,8 @@ android:id="@+id/tv_place_from"
             android:id="@+id/tv_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_alignParentRight="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_alignParentStart="true"
 
 
             android:drawablePadding="@dimen/_4sdp"
@@ -292,12 +292,12 @@ android:id="@+id/tv_place_from"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:id="@+id/tv_place_to"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_toLeftOf="@id/tv_to"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_toEndOf="@id/tv_to"
 
             android:fontFamily="@font/medium"
 
-            android:text="مكة المكرمة - حي الاسراء"
+            android:text=""
             android:textAllCaps="false"
             android:textColor="@color/login_color2"
             android:textSize="@dimen/_11sdp" />

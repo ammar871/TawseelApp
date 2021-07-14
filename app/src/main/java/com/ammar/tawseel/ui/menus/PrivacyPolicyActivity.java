@@ -193,7 +193,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
                 break;
             case R.id.nav_order:
-                startActivity(new Intent(PrivacyPolicyActivity.this, RatingUsersActivity.class));
+                    startActivity(new Intent(PrivacyPolicyActivity.this, OrdersActivity.class));
 
                 binding.draw.closeDrawer(Gravity.START);
 

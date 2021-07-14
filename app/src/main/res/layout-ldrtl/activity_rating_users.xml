@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/draw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context=".ui.menus.RatingUsersActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F1F1F1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100ssp"
+
+                android:background="@drawable/drawb_backround_bar"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/imag_back_bar" />
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/bold"
+                        android:text="@string/rating_drivers"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp" />
+                    <!--            <ImageView-->
+
+                    <!--                android:layout_width="wrap_content"-->
+                    <!--                android:layout_height="wrap_content"-->
+                    <!--                android:layout_alignParentLeft="true"-->
+                    <!--                android:layout_centerVertical="true"-->
+                    <!--                android:layout_marginLeft="@dimen/_15ssp"-->
+
+                    <!--                android:fontFamily="@font/bold"-->
+
+                    <!--                android:textColor="@color/white"-->
+
+                    <!--                android:textSize="@dimen/_15ssp"-->
+                    <!--                app:srcCompat="@drawable/ic_menu" />-->
+
+                    <ImageView
+                        android:id="@+id/img_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+
+                        android:layout_marginEnd="@dimen/_15ssp"
+
+                        android:background="@drawable/circle_image"
+                        android:fontFamily="@font/bold"
+                        android:scaleType="centerInside"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_15ssp"
+                        app:srcCompat="@drawable/ic_arrow_back_24px" />
+
+                    <ImageView
+                        android:id="@+id/img_togless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+
+                        android:layout_marginStart="@dimen/_15ssp"
+android:padding="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:fontFamily="@font/bold"
+                        android:scaleType="centerInside"
+                        android:textColor="@color/white"
+
+                        app:srcCompat="@drawable/ic_menu" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/layout_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F3F3F3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_ratings"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:visibility="gone">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+
+                    <ProgressBar
+                        android:id="@+id/pro_bar_pag_finshid"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/_25sdp"
+
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/text_color"
+                        android:outlineAmbientShadowColor="@color/text_color"
+                        android:outlineSpotShadowColor="@color/text_color"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <com.google.android.material.navigation.NavigationView
+
+            android:id="@+id/nav"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:itemIconTint="@color/login_color2"
+            app:itemTextColor="@color/login_color2"
+
+            >
+
+            <include layout="@layout/layout_menu" />
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

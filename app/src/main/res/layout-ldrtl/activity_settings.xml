@@ -71,7 +71,7 @@
                 android:scaleType="centerInside"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                app:srcCompat="@drawable/ic_arrow_back_24px" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -226,14 +226,12 @@ android:layout_alignParentRight="true"
                     android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_height="30dp"
-
                     app:progressTextPosition="center"
                     app:textFontName="Roboto-Medium.otf"
-
+                    app:textFontSize="48sp"
                     app:progress="0.5"
-                    app:seekbarColor="#FAA61A"
-
-                    app:seekbarLoadingColor="#FAA61A"
+                    app:seekbarColor="@color/color_bar_home"
+                    app:seekbarLoadingColor="@color/text_color"
                     app:textColor="#E1BEE7"/>
             </LinearLayout>
 

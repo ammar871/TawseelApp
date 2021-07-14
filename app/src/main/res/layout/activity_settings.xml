@@ -223,15 +223,14 @@
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_height="30dp"
-
                 app:progressTextPosition="center"
                 app:textFontName="Roboto-Medium.otf"
-
+                app:textFontSize="48sp"
                 app:progress="0.5"
-                app:seekbarColor="#FAA61A"
-
-                app:seekbarLoadingColor="#FAA61A"
-                app:textColor="#E1BEE7"/>
+                
+                app:seekbarColor="@color/color_bar_home"
+                app:seekbarLoadingColor="@color/text_color"
+                app:textColor="@color/text_coloe"/>
         </LinearLayout>
 
 

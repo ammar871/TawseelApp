@@ -16,6 +16,7 @@ import java.util.Locale;
 
 public class Cemmon {
     public  static String USER_TOKEN  ;
+    public  static double SOUND_Notifecation  ;
     public static String FIREBASE_TOKEN;
     public static String BASE_URL = "https://tawseel.pal-dev.com";
     public final static String BASE_URL_MAP = "https://appweb.website/100top/";

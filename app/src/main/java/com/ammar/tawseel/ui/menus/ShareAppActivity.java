@@ -205,7 +205,7 @@ public class ShareAppActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.nav_order:
 
-                startActivity(new Intent(ShareAppActivity.this, RatingUsersActivity.class));
+                startActivity(new Intent(ShareAppActivity.this, OrdersActivity.class));
                 binding.draw.closeDrawer(Gravity.START);
 
                 break;

@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -74,7 +75,7 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
     AlertDialog alertDialog = null;
 
     AdapterNotification notificationAdapter;
-
+    List<DataNotification> notifications;
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         List<DataNotification> notifications = notificationList.get(position);
@@ -86,8 +87,10 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
 
         try {
 
-            if (notifications.size() > 0) {
-                time = sdf.parse(notifications.get(0).getCreatedAt()).getTime();
+
+            if (Objects.requireNonNull(notifications).get(0).getCreatedAt() != null) {
+
+                time = Objects.requireNonNull(sdf.parse(notifications.get(0).getCreatedAt())).getTime();
                 String strDate = dateFormat.format(time);
                 holder.title.setText(strDate);
             }
@@ -122,28 +125,32 @@ public class NotificationAdapter2 extends RecyclerView.Adapter<NotificationAdapt
 
                  /*   onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(),viewHolder.getAdapterPosition(),
                             (notifications.get(getAdapterPosition()).getTarget()+""));*/
-                        if (notifications.size() == 1) {
-                            Log.d("swippp", "onClick: " + notifications.get(viewHolder.getAdapterPosition()).getId()
-                            + notifications.size());
-//                deletFromNotifcation(notifications.get(position).getId() , viewHolder.getAdapterPosition());
-//                            onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(), viewHolder.getAdapterPosition(),
-//                                    (notifications.get(viewHolder.getAdapterPosition()).getTarget() + ""));
 
-                            notificationAdapter.removeItem(viewHolder.getAdapterPosition());
-
-                            notificationAdapter.notifyDataSetChanged();
-
-                            removeItemParent(position);
-                            notifyDataSetChanged();
+//                        if (position1 == 0) {
+//                          //  Log.d("swippp", "onClick: " + notifications.get(viewHolder.getAdapterPosition()).getTarget());
 //
-                        } else {
-                            Log.d("swippp", "onClick: " + notifications.get(viewHolder.getAdapterPosition()).getId());
-                            onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(), viewHolder.getAdapterPosition(),
+////                deletFromNotifcation(notifications.get(position).getId() , viewHolder.getAdapterPosition());
+////                            onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(), viewHolder.getAdapterPosition(),
+////                                    (notifications.get(viewHolder.getAdapterPosition()).getTarget() + ""));
+//
+//                       //     notificationAdapter.removeItem(position1);
+//                            removeItemParent(position);
+//                            notificationAdapter.notifyDataSetChanged();
+//                            notificationAdapter = new AdapterNotification((ArrayList<DataNotification>) notifications, context);
+//                            holder.notificationBody.setAdapter(notificationAdapter);
+//
+//                            notifyDataSetChanged();
+//
+////
+//                        } else {
+                         //   Log.d("swippp", "onClick: " + notifications.get(viewHolder.getAdapterPosition()).getTarget());
+                           onclickMessage.deletingFromNoty(notifications.get(viewHolder.getAdapterPosition()).getId(), viewHolder.getAdapterPosition(),
                                     (notifications.get(viewHolder.getAdapterPosition()).getTarget() + ""));
-                            notificationAdapter.removeItem(viewHolder.getAdapterPosition());
+                           notificationAdapter.removeItem(position1);
                             notificationAdapter.notifyDataSetChanged();
+
                             notifyDataSetChanged();
-                        }
+                   //     }
 
 //
 

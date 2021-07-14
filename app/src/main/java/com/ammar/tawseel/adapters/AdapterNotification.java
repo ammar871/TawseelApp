@@ -31,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.ViewHolderVidio> {
@@ -238,9 +239,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     public void removeItem(int position) {
         list.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, getItemCount());
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolderVidio extends RecyclerView.ViewHolder {

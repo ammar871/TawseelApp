@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -43,6 +45,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import az.rasul.triangleseekbar.TriangleSeekbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,10 +58,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     ArrayList<String> languages = new ArrayList<>();
     APIInterFace apiInterFace;
     CircleImageView imgProfile;
+    private AudioManager audioManager;
     TextView tv_nam;
-
+double sound ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -73,6 +78,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         apiInterFace = APIClient.getClient().create(APIInterFace.class);
         inItSpinner();
         inItView();
+        playAudioSitting();
+
 
         loadDataProfile();
         openDraw();
@@ -82,24 +89,45 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
             }
         });
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
+        binding.btnSave.setOnClickListener(v -> {
+            if (itemSelectedSpinner.equals("لغة العرض")) {
+
+            } else if ((itemSelectedSpinner.equals("اللغة العربيـة"))) {
+
+                shardEditor.saveLang("ar");
+                Cemmon.LONG_USER = "ar";
+            } else if ((itemSelectedSpinner.equals("English"))) {
+                shardEditor.saveLang("en");
+                Cemmon.LONG_USER = "en";
+            }
+            Cemmon.SOUND_Notifecation = sound;
+            startActivity(new Intent(SettingsActivity.this, SplashActivity.class));
+            finish();
+        });
+
+        binding.triangleSeekbar.setProgressListener(new TriangleSeekbar.ProgressListener() {
             @Override
-            public void onClick(View v) {
-                if (itemSelectedSpinner.equals("لغة العرض")) {
+            public void onProgressChange(float progress) {
 
-                } else if ((itemSelectedSpinner.equals("اللغة العربيـة"))) {
 
-                    shardEditor.saveLang("ar");
-                    Cemmon.LONG_USER = "ar";
-                } else if ((itemSelectedSpinner.equals("English"))) {
-                    shardEditor.saveLang("en");
-                    Cemmon.LONG_USER = "en";
-                }
-                startActivity(new Intent(SettingsActivity.this, SplashActivity.class));
-                finish();
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        (int) progress, 0);
+
+//     binding.triangleSeekbar.setProgress(Math.round(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+                Log.d("SeekTest", progress+"");
             }
         });
     }
+
+    private void playAudioSitting() {
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+       // binding.triangleSeekbar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+
+    }
+
+
+
 
     private void inItSpinner() {
         languages.add(getString(R.string.lang_display));
@@ -302,7 +330,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.nav_order:
 
-                startActivity(new Intent(SettingsActivity.this, RatingUsersActivity.class));
+                startActivity(new Intent(SettingsActivity.this, OrdersActivity.class));
                 binding.draw.closeDrawer(Gravity.START);
 
                 break;

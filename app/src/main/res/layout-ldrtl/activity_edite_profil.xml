@@ -151,7 +151,7 @@ android:padding="@dimen/_5sdp"
                 android:scaleType="centerInside"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                app:srcCompat="@drawable/ic_arrow_back_24px"/>
         </RelativeLayout>
 
 

@@ -34,6 +34,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -50,6 +51,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -169,6 +172,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                 binding.layoutLocationInternet.setVisibility(View.GONE);
             }
 
+            binding.editGchatMessage.setImeOptions(EditorInfo.IME_ACTION_DONE);
             if (!permissions.isStorageOk(getActivity()))
                 permissions.requestStorage(getActivity());
 
@@ -202,6 +206,20 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
 
             }
+
+            binding.swipeRefresh.setOnRefreshListener(() -> {
+
+                page++;
+                if (list.size() > 0)
+                    getDataWithPagination(page);
+                else {
+                    binding.swipeRefresh.setRefreshing(false);
+                }
+
+            });
+
+
+            binding.swipeRefresh.setColorSchemeResources(R.color.color_bar_home, R.color.color_bar_home, R.color.color_bar_home);
 
 
             binding.toggls.setOnClickListener((View.OnClickListener) v -> {
@@ -643,15 +661,12 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
         tv_send_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (permissions.isContactOk(getActivity())) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                    startActivityForResult(intent, 3);
 
-                    alertDialog.dismiss();
-                } else {
-                    permissions.requestContact(getActivity());
-                    alertDialog.dismiss();
-                }
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, 3);
+
+                alertDialog.dismiss();
+
 
             }
         });
@@ -804,7 +819,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
     @SuppressLint("Recycle")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         switch (requestCode) {
 
             case 0:
@@ -903,43 +918,70 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
                 if (resultCode == RESULT_OK) {
 
                     Uri contactData = data.getData();
-
+                    binding.proBar.setVisibility(View.VISIBLE);
+                    binding.editGchatMessage.setVisibility(View.GONE);
+                    binding.imgRecord.setEnabled(false);
+                    binding.imgSend.setEnabled(false);
+                    binding.imgFile.setEnabled(false);
                     Cursor cur = getActivity().getContentResolver().query(contactData, null, null, null, null);
-                    if (cur.getCount() > 0) {// thats mean some resutl has been found
-                        if (cur.moveToNext()) {
-                            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                            String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            Log.e("Names", name);
+                    // thats mean some resutl has been found
+                    if (cur.moveToNext()) {
+                        String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        String hasPhone = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 
-                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        if (hasPhone.equalsIgnoreCase("1")) {
+                            Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+                            phones.moveToFirst();
+                            phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                                Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-                                while (phones.moveToNext()) {
-                                    phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                    //  Log.d("nnnnnnnnnumber", phoneNumber);
-                                    //     Toast.makeText(getActivity(), ""+phoneNumber, Toast.LENGTH_SHORT).show();
-                                    binding.proBar.setVisibility(View.VISIBLE);
-                                    binding.editGchatMessage.setVisibility(View.GONE);
-                                    binding.imgRecord.setEnabled(false);
-                                    binding.imgSend.setEnabled(false);
-                                    binding.imgFile.setEnabled(false);
-
-
-                                }
-                                phones.close();
-                            }
-                              Log.d("Number", phoneNumber);
-                            String contact=name +","+phoneNumber;
+                            name = cur.getString(cur.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                            Log.e("Names", name + "  " + phoneNumber);
+                            String contact = name + "," + phoneNumber;
                             if (phoneNumber != null)
-                                callSendTwoMessage(to, "contact",contact);
+                                callSendTwoMessage(to, "contact", contact);
+                        } else {
+
+
+                            binding.proBar.setVisibility(View.GONE);
+                            binding.editGchatMessage.setVisibility(View.VISIBLE);
+                            binding.imgRecord.setEnabled(true);
+                            binding.imgSend.setEnabled(true);
+                            binding.imgFile.setEnabled(true);
+                            Toast.makeText(getActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                         }
+
                     }
+
+
+//                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+//
+//                                Cursor phones = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+//                                while (phones.moveToNext()) {
+//                                    phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                    //  Log.d("nnnnnnnnnumber", phoneNumber);
+//                                    //     Toast.makeText(getActivity(), ""+phoneNumber, Toast.LENGTH_SHORT).show();
+//                                    binding.proBar.setVisibility(View.VISIBLE);
+//                                    binding.editGchatMessage.setVisibility(View.GONE);
+//                                    binding.imgRecord.setEnabled(false);
+//                                    binding.imgSend.setEnabled(false);
+//                                    binding.imgFile.setEnabled(false);
+//
+//
+//                                }
+//                                phones.close();
+//                            }
+//                            Log.d("Number", phoneNumber);
+
+
                     cur.close();
                 }
                 break;
 
 
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public String generatePath(Uri uri, Context context) {
@@ -1560,27 +1602,25 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
         call.enqueue(new Callback<APIResponse.ResponseChatBetween>() {
             @Override
-            public void onResponse(@NonNull Call<APIResponse.ResponseChatBetween> call, @NonNull Response<APIResponse.ResponseChatBetween> response) {
+            public void onResponse(@NonNull Call<APIResponse.ResponseChatBetween> call,
+                                   @NonNull Response<APIResponse.ResponseChatBetween> response) {
                 if (response.code() == 200) {
 
                     assert response.body() != null;
                     if (response.body().getStatus()) {
-                        list.addAll(response.body().getData().getMessages());
-                        binding.proBarPag.setVisibility(View.GONE);
+                        list.addAll(0, response.body().getData().getMessages());
+                        binding.swipeRefresh.setRefreshing(false);
+                        adapterChatePage = new AdapterChatePage(list, Objects.requireNonNull(getActivity()), (mediaPlayer, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2) -> {
+                            startPlayingDriver(mediaPlayer, seekBarThier, txt_audio_time_thier, iconplaeThere, p, p2);
 
-                        adapterChatePage = new AdapterChatePage(list
-                                , getActivity(), new AdapterChatePage.OnclickMessageAudio() {
 
-
-                            @Override
-                            public void startPlaying(MediaPlayer mediaPlayer, SeekBar seekBarThier, TextView txt_audio_time_thier, ImageView iconplaeThere, int p, int p2) {
-                            }
                         }, response.body().getData().getDriver().getAvatar());
                         binding.rvChat.setAdapter(adapterChatePage);
 
 
                     } else {
-                        binding.proBarPag.setVisibility(View.GONE);
+                        binding.swipeRefresh.setRefreshing(false);
+                        //binding.proBarPag.setVisibility(View.GONE);
                         Log.d("rrrdxc", "onResponse: " + response.body().getMessage().get(0));
                     }
                 }
@@ -1588,7 +1628,7 @@ public class ChatFragment extends Fragment implements AdapterChatePage.OnclickMe
 
             @Override
             public void onFailure(@NonNull Call<APIResponse.ResponseChatBetween> call, @NonNull Throwable t) {
-                binding.proBarPag.setVisibility(View.GONE);
+                binding.swipeRefresh.setRefreshing(false);
                 Log.d("rrrdxc", "onResponse: " + t.getMessage());
             }
         });

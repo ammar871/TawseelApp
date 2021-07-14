@@ -29,6 +29,7 @@ import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
 import com.ammar.tawseel.ui.ContactUsActivity;
+import com.ammar.tawseel.ui.home.HomeActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -186,9 +187,17 @@ public class WhoUsActivity extends AppCompatActivity implements View.OnClickList
 
 
                 break;
+            case R.id.tv_home:
+
+
+                binding.draw.closeDrawer(Gravity.START);
+
+                startActivity(new Intent(WhoUsActivity.this, HomeActivity.class));
+
+                break;
             case R.id.nav_order:
 
-                startActivity(new Intent(WhoUsActivity.this, RatingUsersActivity.class));
+                    startActivity(new Intent(WhoUsActivity.this, OrdersActivity.class));
                 binding.draw.closeDrawer(Gravity.START);
 
                 break;
