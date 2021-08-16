@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
 
                     android:background="@drawable/draw_text_chose_file"
-                    android:drawableRight="@drawable/ic_person"
+                    android:drawableRight="@drawable/ic_person_chat"
                     android:drawablePadding="@dimen/_8sdp"
                     android:fontFamily="@font/medium"
                     android:paddingTop="@dimen/_8sdp"

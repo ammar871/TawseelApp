@@ -215,4 +215,6 @@
     <string name="delete_from_noty">It has been removed from the notification list</string>
     <string name="not_whats">he doesn\'t have whatsapp</string>
     <string name="try_again">فشل الارسال حاول مرة أخرى</string>
+    <string name="selected_method">اختر الية الدفع الالكتروني</string>
+    <string name="add">اضافة</string>
 </resources>

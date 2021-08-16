@@ -123,10 +123,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
     FusedLocationProviderClient mFusedLocationClient;
-
     int PERMISSION_ID = 44;
     private static final int REQUEST_LOCATION = 11;
     APIInterFace apiInterFace;
@@ -704,9 +704,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 
     protected void createMarker(String id, double latitude, double longitude, String title, String imageUrl, int color, GoogleMap mapp) {
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        int x = 0;
-        long DELAY = 10;
+
 
         View marker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_map, null);
 
@@ -714,11 +712,48 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         CardView card = (CardView) marker.findViewById(R.id.card_color);
 
         card.setCardBackgroundColor(color);
+     /*   Picasso.with(getActivity())
+                .load(imageUrl)
+                .into(new com.squareup.picasso.Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
-        if (imageUrl != null) {
+                        Log.d("ddddddddddddddd", "onBitmapLoaded: "+bitmap);
+                        // let's find marker for this user
+                        markerImage.setImageBitmap(bitmap);
+                            DisplayMetrics displayMetrics = new DisplayMetrics();
+                            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                            marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+                            marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                            marker.buildDrawingCache();
+                            Bitmap bitmapp = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(bitmap);
+                            marker.draw(canvas);
+
+
+                                            Marker marker = mapp.addMarker(new MarkerOptions().position(new
+                                                    LatLng(latitude, longitude)).title(title)
+                                                    .icon(BitmapDescriptorFactory.fromBitmap(
+                                                            bitmapp)));
+                                            marker.setTag(id + "");
+
+
+                    }
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        Log.d("ddddddddddddddd", "onBitmapFailed: "+errorDrawable);
+                    }
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        Log.d("ddddddddddddddd", "onBitmapFailed: "+"errrorpp");
+                    }
+                });*/
+        if (imageUrl != null&& !imageUrl.isEmpty()) {
             Glide.with(this)
                     .asBitmap()
-                    .load(imageUrl)
+                    .load(Cemmon.BASE_URL + imageUrl)
+                    .fitCenter()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap b, Transition<? super Bitmap> transition) {
@@ -733,26 +768,38 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                             Canvas canvas = new Canvas(bitmap);
                             marker.draw(canvas);
 
-                            handler.postDelayed(
-                                    new Runnable() {
-                                        @Override
-                                        public void run() {
+
                                             Marker marker = mapp.addMarker(new MarkerOptions().position(new
                                                     LatLng(latitude, longitude)).title(title)
                                                     .icon(BitmapDescriptorFactory.fromBitmap(
                                                             bitmap)));
                                             marker.setTag(id + "");
-                                        }
-                                    }, 3000);
+
 
 
                         }
                     });
 
         } else {
+            Log.d("wassaal", "createMarker: "+"ok");
             Bitmap icon = BitmapFactory.decodeResource(getActivity().getResources(),
-                    R.drawable.imagerat);
+                    R.drawable.ic_person);
             markerImage.setImageBitmap(icon);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            marker.setLayoutParams(new ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT));
+            marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+            marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+            marker.buildDrawingCache();
+            Bitmap bitmap = Bitmap.createBitmap(marker.getMeasuredWidth(), marker.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            marker.draw(canvas);
+            Marker marker2 = mapp.addMarker(new MarkerOptions().position(new
+                    LatLng(latitude, longitude)).title(title)
+                    .icon(BitmapDescriptorFactory.fromBitmap(
+                            bitmap)));
+            marker2.setTag(id + "");
+
         }
 
 
@@ -803,12 +850,13 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                                             Log.d(";;;;;;;;;;;;;;;", "onResponse: " + Cemmon.BASE_URL + response.body().getData().get(i).getAvatar());
 
 
-                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
-                                                    BitmapDescriptorFactory.fromBitmap(
-                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
-                                            marker.setTag(listDrivers.get(i).getId() + "");
+//                                            Marker marker = googleMapOff.addMarker(new MarkerOptions().position(latLng).title("off").icon(
+//                                                    BitmapDescriptorFactory.fromBitmap(
+//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",Color.RED))));
+//                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-                                    //        createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "off", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.RED, googleMapOff);
+
+                                      createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "off",  response.body().getData().get(i).getAvatar(), Color.RED, googleMapOff);
 
                                         } else if (response.body().getData().get(i).getStatus().equals("on")) {
                                             double lat = Double.parseDouble(response.body().getData().get(i).getGpsLat() + "");
@@ -816,13 +864,13 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                                             double lang = Double.parseDouble(response.body().getData().get(i).getGpsLng().toString().trim());
                                             LatLng latLng = new LatLng(lat, lang);
                                             googleMapOn = map;
+//
+//                                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
+//                                                    BitmapDescriptorFactory.fromBitmap(
+//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+//                                                                 Color.GREEN))));
 
-                                            Marker marker = googleMapOn.addMarker(new MarkerOptions().position(latLng).title("on").icon(
-                                                    BitmapDescriptorFactory.fromBitmap(
-                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
-                                                                 Color.GREEN))));
-
-                                    //        createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "on", Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GREEN, googleMapOn);
+                                   createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "on", response.body().getData().get(i).getAvatar(), Color.GREEN, googleMapOn);
 
 
 //                                            marker.setTag(listDrivers.get(i).getId() + "");
@@ -835,14 +883,14 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
                                             LatLng latLng = new LatLng(lat, lang);
 
                                             googleMapBusey = map;
-                                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
-                                                    BitmapDescriptorFactory.fromBitmap(
-                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
-                                                                    Color.GREEN))));
-                                            marker.setTag(listDrivers.get(i).getId() + "");
+//                                            Marker marker = googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").icon(
+//                                                    BitmapDescriptorFactory.fromBitmap(
+//                                                            createCustomMarker(getActivity(), Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "",
+//                                                                    Color.GREEN))));
+//                                            marker.setTag(listDrivers.get(i).getId() + "");
 
-//                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "busey"
-//                                                    , Cemmon.BASE_URL + response.body().getData().get(i).getAvatar() + "", Color.GRAY, map);
+                                            createMarker(response.body().getData().get(i).getId() + "", latLng.latitude, latLng.longitude, "busey"
+                                                    , response.body().getData().get(i).getAvatar(), Color.GRAY, map);
 
 
 //                                                googleMapBusey.addMarker(new MarkerOptions().position(latLng).title("busey").snippet(
@@ -1018,7 +1066,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
 //
 //        });
     }
-
+   Target mTarget;
     public Bitmap displayImage(String uri) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -1069,14 +1117,14 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
     }
 
     @SuppressLint("ResourceAsColor")
-    public static Bitmap createCustomMarker(Context context, String uri, int color) {
+    public static void createCustomMarker(Context context, String uri, int color) {
         View marker = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.image_map, null);
         CircleImageView markerImage = marker.findViewById(R.id.user_dp);
 
 
         markerImage.setBorderColor(color);
 
-        Picasso.with(context).load(uri).placeholder(R.drawable.imge_test).into(markerImage);
+
 
 //        try {
 //            URL url = new URL(uri);
@@ -1099,7 +1147,7 @@ public class TawseelMapsFragment extends Fragment implements GoogleMap.OnMarkerC
         Canvas canvas = new Canvas(bitmap);
         marker.draw(canvas);
 
-        return bitmap;
+
     }
 
 

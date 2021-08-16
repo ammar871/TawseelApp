@@ -51,34 +51,32 @@
 
 
                 <ImageView
-                    android:id="@+id/img_togless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_15ssp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:fontFamily="@font/bold"
-                    android:padding="@dimen/_5sdp"
-                    android:textColor="@color/white"
-
-                    android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_menu" />
-
-                <ImageView
                     android:id="@+id/img_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_15ssp"
-                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginEnd="@dimen/_15ssp"
                     android:background="@drawable/circle_image"
                     android:fontFamily="@font/bold"
                     android:scaleType="centerInside"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"
-                    app:srcCompat="@drawable/ic_arrow_back" />
+                    app:srcCompat="@drawable/ic_arrow_back_24px" />
+                <ImageView
+                    android:id="@+id/img_togless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginStart="@dimen/_15ssp"
+                    android:padding="@dimen/_5sdp"
+                    android:fontFamily="@font/bold"
+                    android:scaleType="centerInside"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15ssp"
+                    app:srcCompat="@drawable/ic_menu" />
 
             </RelativeLayout>
 
@@ -96,7 +94,7 @@
                     android:layout_margin="@dimen/_10sdp"
                     android:fontFamily="@font/light"
 
-                    android:text="@string/selected_method"
+                    android:text="اختر الية الدفع الالكتروني"
                     android:textSize="@dimen/_15ssp" />
 
                 <FrameLayout
@@ -150,7 +148,7 @@
                             android:fontFamily="@font/black"
                             android:gravity="center"
                             android:padding="@dimen/_8sdp"
-                            android:text="@string/add"
+                            android:text="اضافة"
                             android:textSize="@dimen/_13sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"

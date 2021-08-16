@@ -17,6 +17,7 @@ import com.ammar.tawseel.pojo.data.DriverRate;
 import com.ammar.tawseel.pojo.data.DriversSearch;
 import com.ammar.tawseel.pojo.data.FiltterData;
 import com.ammar.tawseel.pojo.data.Message;
+import com.ammar.tawseel.pojo.data.PayDataMethod;
 import com.ammar.tawseel.pojo.data.Rating;
 import com.ammar.tawseel.pojo.data.SendMessage;
 import com.ammar.tawseel.pojo.data.ShowOrder;
@@ -1224,6 +1225,45 @@ public class APIResponse {
         public void setData(List<Object> data) {
             this.data = data;
         }
+
+    }
+
+    public class PaymentMethodResponse {
+
+        @SerializedName("message")
+        @Expose
+        private List<Object> message = null;
+        @SerializedName("data")
+        @Expose
+        private List<PayDataMethod> data = null;
+        @SerializedName("status")
+        @Expose
+        private Boolean status;
+
+        public List<Object> getMessage() {
+            return message;
+        }
+
+        public void setMessage(List<Object> message) {
+            this.message = message;
+        }
+
+        public List<PayDataMethod> getData() {
+            return data;
+        }
+
+        public void setData(List<PayDataMethod> data) {
+            this.data = data;
+        }
+
+        public Boolean getStatus() {
+            return status;
+        }
+
+        public void setStatus(Boolean status) {
+            this.status = status;
+        }
+
 
     }
 }

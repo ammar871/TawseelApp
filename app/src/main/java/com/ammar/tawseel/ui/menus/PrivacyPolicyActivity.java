@@ -252,6 +252,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity implements View.OnC
 
         Call<APIResponse.LogOutResponse> call = apiInterFace.logOut("Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN));
         call.enqueue(new Callback<APIResponse.LogOutResponse>() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onResponse(Call<APIResponse.LogOutResponse> call, Response<APIResponse.LogOutResponse> response) {
                 if (response.code() == 200) {

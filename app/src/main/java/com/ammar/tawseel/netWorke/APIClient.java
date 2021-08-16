@@ -21,7 +21,7 @@ public class APIClient {
 
     private static Retrofit retrofit = null;
     private static Retrofit retrofit2 = null;
-    final static String BASE_URL = "https://tawseel.pal-dev.com/";
+    final static String BASE_URL = "https://tawseel.org/";
 
     public static Retrofit getClient() {
         Gson gson = new GsonBuilder()

@@ -33,6 +33,7 @@ public interface APIInterFace {
             @Field("fcm_token") String fcm_token
 
     );
+
     @FormUrlEncoded
     @POST("api/user/reset-password")
     Call<APIResponse.RestPassResponse> forgetPass(
@@ -44,7 +45,7 @@ public interface APIInterFace {
 
 
     @POST("api/user/logout")
-    Call<APIResponse.LogOutResponse>logOut(
+    Call<APIResponse.LogOutResponse> logOut(
             @Header("Authorization") String token
     );
 
@@ -88,12 +89,9 @@ public interface APIInterFace {
             @Part("gpsAddress") String gpsAddress,
             @Part("name") RequestBody name,
             @Part("phone") RequestBody phone
-            ,@Part  MultipartBody.Part avatar,
+            , @Part MultipartBody.Part avatar,
             @Header("Accept") String Accept,
             @Header("Authorization") String token);
-
-
-
 
 
     @FormUrlEncoded
@@ -136,17 +134,18 @@ public interface APIInterFace {
             @Part("to") int to,
             @Part("type") RequestBody type,
             @Part("order_id") int order_id,
-            @Part MultipartBody.Part  message,
+            @Part MultipartBody.Part message,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
+
     @Multipart
     @POST("api/user/send-message")
     Call<APIResponse.ResponseSendMessage> sendFileFirstMessage(
             @Part("to") int to,
             @Part("type") RequestBody type,
-            @Part MultipartBody.Part  message,
+            @Part MultipartBody.Part message,
             @Part("first") boolean first,
             @Header("Accept") String Accept,
             @Header("Authorization") String token,
@@ -277,9 +276,6 @@ public interface APIInterFace {
     );
 
 
-
-
-
     @GET("api/user/order/{id}")
     Call<APIResponse.ResponseShowOrder> showOrder(
             @Path("id") String id,
@@ -303,6 +299,7 @@ public interface APIInterFace {
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
+
     @POST("api/user/delete-chat/{idCaht}")
     Call<APIResponse.ResponseDeleteChat> deleteChat(
 
@@ -363,7 +360,7 @@ public interface APIInterFace {
 
     @GET("api/policies")
     Call<APIResponse.PoeloyProxyResponse> poeloyProxyResponse(
-           // @Header("Accept") String Accept,
+            // @Header("Accept") String Accept,
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
@@ -377,6 +374,7 @@ public interface APIInterFace {
             @Header("Authorization") String token,
             @Header("Accept-Language") String lang
     );
+
     @POST("api/user/confirm-deliverd-order/{id}")
     Call<APIResponse.ConfirmResponse> confirmOrder(
             @Path("id") String id,
@@ -414,9 +412,21 @@ public interface APIInterFace {
 
     @FormUrlEncoded
     @POST("api/map/static-image?")
-        Call<ResponseBody> getPhoto(
+    Call<ResponseBody> getPhoto(
             @Field("lat") String lat,
             @Field("lng") String lng
+
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/user/payment-methods")
+    Call<APIResponse.PaymentMethodResponse> getPaymentMethods(
+
+            @Field("InvoiceAmount") double InvoiceAmount,
+            @Header("Accept") String Accept,
+            @Header("Authorization") String token,
+            @Header("Accept-Language") String lang
 
     );
 }

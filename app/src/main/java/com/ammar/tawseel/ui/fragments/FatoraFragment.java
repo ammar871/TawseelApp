@@ -1,6 +1,7 @@
 package com.ammar.tawseel.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.ammar.tawseel.editor.ShardEditor;
 import com.ammar.tawseel.netWorke.APIClient;
 import com.ammar.tawseel.netWorke.APIInterFace;
 import com.ammar.tawseel.pojo.response.APIResponse;
+import com.ammar.tawseel.ui.checkout.ChckOutActivity;
 import com.ammar.tawseel.uitllis.Cemmon;
 
 import retrofit2.Call;
@@ -40,6 +42,8 @@ public class FatoraFragment extends Fragment {
     }
 
     String idBill = "";
+    String invoiceAmount = "";
+
     FragmentFatoraBinding binding;
     APIInterFace apiInterFace;
     ShardEditor shardEditor;
@@ -63,9 +67,14 @@ public class FatoraFragment extends Fragment {
         binding.layoutSucess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.prodSucces.setVisibility(View.VISIBLE);
-                binding.tvFinshOprator.setVisibility(View.GONE);
-                callPaidOrder();
+//                binding.prodSucces.setVisibility(View.VISIBLE);
+//                binding.tvFinshOprator.setVisibility(View.GONE);
+//                callPaidOrder();
+
+                Intent intent = new Intent(getActivity(), ChckOutActivity.class);
+                intent.putExtra("invoice", invoiceAmount);
+                intent.putExtra("orderId", idBill);
+                startActivity(intent);
             }
         });
         binding.layoutDone.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +111,7 @@ public class FatoraFragment extends Fragment {
     }
 
     private void callPaidOrder() {
-        Call<APIResponse.PaidOrderResponse> call=apiInterFace.finshOpreatoor(orderId,"cash"
+        Call<APIResponse.PaidOrderResponse> call = apiInterFace.finshOpreatoor(orderId, "cash"
                 , "application/json",
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG));
@@ -111,8 +120,8 @@ public class FatoraFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<APIResponse.PaidOrderResponse> call,
                                    @NonNull Response<APIResponse.PaidOrderResponse> response) {
-                if (response.code()==200){
-                    if (response.body().getStatus()){
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
 
                         Toast.makeText(getActivity(), R.string.succesOprator, Toast.LENGTH_SHORT).show();
                         binding.prodSucces.setVisibility(View.GONE);
@@ -120,20 +129,16 @@ public class FatoraFragment extends Fragment {
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStackImmediate();
 
-                    }else {
-                        Toast.makeText(getActivity(), ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "" + response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
                         binding.prodSucces.setVisibility(View.GONE);
                         binding.tvFinshOprator.setVisibility(View.VISIBLE);
                     }
 
 
-
-                }else if (response.code() == 401) {
+                } else if (response.code() == 401) {
                     LayoutInflater inflater = LayoutInflater.from(getActivity());
                     View view = inflater.inflate(R.layout.dialog_logout, null);
-
-
-
 
 
                     AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
@@ -174,7 +179,7 @@ public class FatoraFragment extends Fragment {
 
     private void callCancelOrder() {
 
-        Call<APIResponse.PaidOrderResponse> call=apiInterFace.cancelOpreatoor(orderId
+        Call<APIResponse.PaidOrderResponse> call = apiInterFace.cancelOpreatoor(orderId
                 , "application/json",
                 "Bearer" + " " + shardEditor.loadData().get(ShardEditor.KEY_TOKEN),
                 shardEditor.loadData().get(ShardEditor.KEY_LANG));
@@ -183,20 +188,19 @@ public class FatoraFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<APIResponse.PaidOrderResponse> call,
                                    @NonNull Response<APIResponse.PaidOrderResponse> response) {
-                if (response.code()==200){
-                    if (response.body().getStatus()){
+                if (response.code() == 200) {
+                    if (response.body().getStatus()) {
 
                         Toast.makeText(getActivity(), R.string.succesOprator, Toast.LENGTH_SHORT).show();
                         binding.prodone.setVisibility(View.GONE);
                         binding.tvCloseOprator.setVisibility(View.VISIBLE);
                         assert getFragmentManager() != null;
                         getFragmentManager().popBackStackImmediate();
-                    }else {
-                        Toast.makeText(getActivity(), ""+response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "" + response.body().getMessage().get(0), Toast.LENGTH_SHORT).show();
                         binding.prodone.setVisibility(View.GONE);
                         binding.tvCloseOprator.setVisibility(View.VISIBLE);
                     }
-
 
 
                 }
@@ -234,8 +238,8 @@ public class FatoraFragment extends Fragment {
                                    @NonNull Response<APIResponse.ResponseShowBill> response) {
                 if (response.code() == 200) {
                     if (response.body().getStatus()) {
-
-                        orderId=response.body().getData().getOrderId()+"";
+                        invoiceAmount = response.body().getData().getPrice() + "";
+                        orderId = response.body().getData().getOrderId() + "";
                         binding.tvNumberFatora.setText(response.body().getData().getId() + "");
                         binding.tvNameFatora.setText(response.body().getData().getName() + "");
                         binding.tvDevelaryFatora.setText(response.body().getData().getIDName() + "");

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_visa_method"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_alignParentStart="true"
+android:padding="@dimen/_5sdp"
+            android:src="@drawable/visa" />
+
+        <TextView
+            android:layout_toEndOf="@id/img_visa_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_15sdp"
+android:id="@+id/tv_name_method"
+            android:fontFamily="@font/medium"
+            android:text="فيزا كارد"
+            android:textSize="@dimen/_11sdp" />
+
+        <RadioButton
+            android:background="@null"
+             android:layout_alignParentEnd="true"
+            android:checked="false"
+
+            android:layout_centerHorizontal="true"
+            android:theme="@style/RadioButtonTheme"
+            android:id="@+id/radio_visa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerVertical="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/img_visa_method"
+            android:layout_marginTop="@dimen/_5sdp"
+
+            android:background="#707070" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

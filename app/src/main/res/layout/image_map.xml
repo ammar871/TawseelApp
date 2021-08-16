@@ -6,8 +6,8 @@
 
     android:layout_height="wrap_content">
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_44sdp"
-        android:layout_height="@dimen/_44sdp"
+        android:layout_width="@dimen/_42sdp"
+        android:layout_height="@dimen/_42sdp"
 
         app:cardCornerRadius="@dimen/_50ssp"
         android:id="@+id/card_color"
@@ -16,26 +16,19 @@
         <FrameLayout
 
             android:background="@drawable/cirvle_layout"
-            android:layout_width="@dimen/_43ssp"
+            android:layout_width="@dimen/_39ssp"
             android:layout_gravity="center"
-            android:layout_height="@dimen/_43ssp">
+            android:layout_height="@dimen/_39ssp">
             <de.hdodenhof.circleimageview.CircleImageView
 
                 android:id="@+id/user_dp"
-                android:layout_width="@dimen/_40ssp"
-                android:layout_height="@dimen/_40ssp"
-
-
-
+                android:layout_width="@dimen/_36ssp"
+                android:layout_height="@dimen/_36ssp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="@null"
                 />
         </FrameLayout>
     </androidx.cardview.widget.CardView>
-
-
-
-
 
 </RelativeLayout>
